@@ -13,7 +13,6 @@
       content="Home-Coming Cloud Kitchen, best restaurant, food delivery, online food order, North Indian food, home food, Kharagpur"
     />
     <meta name="author" content="Home-Coming Cloud Kitchen" />
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta
       property="og:title"
@@ -25,7 +24,6 @@
     />
     <meta property="og:image" content="logo.png" />
     <meta property="og:url" content="https://yourdomain.com/" />
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -36,18 +34,14 @@
       content="Order chef-crafted, homestyle meals delivered to your door. Explore our menu, track your order, and enjoy fresh flavors every day."
     />
     <meta name="twitter:image" content="logo.png" />
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png" />
-    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <!-- CSS Stylesheet -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Header & Navigation -->
     <header>
       <div class="logo">
         <img src="logo.png" alt="Home-Coming Logo" />
@@ -57,14 +51,13 @@
         <ul>
           <li><a href="#menu">Menu</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#order">Order Now</a></li>
+          <li><a href="#place-order-online">Order Now</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
       <h2>Delicious. Fast. Delivered.</h2>
       <p>
@@ -74,10 +67,9 @@
       <p>
         <strong>Order Online:</strong> Delivery available 10:00 AM – 11:00 PM
       </p>
-      <a href="#order" class="cta-button">Order Now</a>
+      <a href="#place-order-online" class="cta-button">Order Now</a>
     </section>
 
-    <!-- Why Choose Us -->
     <section class="usp-section">
       <h3>Why Choose Home-Coming?</h3>
       <ul>
@@ -88,7 +80,6 @@
       </ul>
     </section>
 
-    <!-- How It Works -->
     <section id="how-it-works" class="info-section">
       <h3>How It Works</h3>
       <ol>
@@ -97,7 +88,8 @@
           <strong>Customize:</strong> Choose add-ons and extras as you like.
         </li>
         <li>
-          <strong>Order:</strong> Call or use our order form for quick checkout.
+          <strong>Order:</strong> Use our online form for scheduled or quick
+          checkout.
         </li>
         <li>
           <strong>Enjoy:</strong> Get hot, home-style food delivered fast!
@@ -105,9 +97,135 @@
       </ol>
     </section>
 
-    <!-- Menu Section -->
+    <section id="place-order-online" class="place-order-online-section">
+      <h3>Place Your Order Online</h3>
+      <p>
+        We deliver delicious homestyle meals at specific time slots to ensure
+        freshness. You can also order from our regular menu for immediate
+        delivery if available.
+      </p>
+
+      <div class="timeslots">
+        <div class="timeslot">
+          <h4>Lunch</h4>
+          <p>13:00 - 14:00</p>
+          <small>
+            Today's slots:
+            <span id="lunch-orders-remaining">8</span> remaining
+          </small>
+        </div>
+        <div class="timeslot">
+          <h4>Dinner</h4>
+          <p>19:00 - 20:00</p>
+          <small>
+            Today's slots:
+            <span id="dinner-orders-remaining">12</span> remaining
+          </small>
+        </div>
+      </div>
+      <form id="scheduled-order-form">
+        <label for="delivery-date">Select Delivery Date:</label>
+        <select id="delivery-date" name="delivery-date" required></select>
+
+        <label for="delivery-time"
+          >Select Delivery Time Slot (for scheduled daily menu):</label
+        >
+        <select id="delivery-time" name="delivery-time">
+          <option value="">-- Select a time slot for Daily Menu --</option>
+          <option value="lunch">Lunch (13:00 - 14:00)</option>
+          <option value="dinner">Dinner (19:00 - 20:00)</option>
+        </select>
+
+        <div id="menu-of-the-day" class="hidden">
+          <h4>Menu of the Day (for selected slot)</h4>
+          <div id="daily-menu-items"></div>
+        </div>
+
+        <div id="general-menu-items" class="hidden">
+          <h4>Or Choose from Our Regular Menu</h4>
+        </div>
+
+        <div id="delivery-details" class="hidden">
+          <h4>Delivery Details</h4>
+          <label for="scheduled-name">Name:</label>
+          <input
+            type="text"
+            id="scheduled-name"
+            name="scheduled-name"
+            required
+          />
+
+          <label for="scheduled-phone">Phone Number:</label>
+          <input
+            type="tel"
+            id="scheduled-phone"
+            name="scheduled-phone"
+            required
+          />
+
+          <label for="scheduled-address">Delivery Address:</label>
+          <textarea
+            id="scheduled-address"
+            name="scheduled-address"
+            required
+          ></textarea>
+
+          <label for="special-instructions">Special Instructions:</label>
+          <textarea
+            id="special-instructions"
+            name="special-instructions"
+            placeholder="Any specific preferences or allergies?"
+          ></textarea>
+
+          <div class="order-summary">
+            <h5>Order Summary</h5>
+            <div id="summary-items"></div>
+            <div class="summary-total">
+              <p>Subtotal: <span id="subtotal">Rs. 0</span></p>
+              <p>Delivery Fee: <span id="delivery-fee">Rs. 30</span></p>
+              <p>
+                <strong>Total: <span id="total">Rs. 30</span></strong>
+              </p>
+            </div>
+          </div>
+
+          <button type="submit" class="cta-button">
+            Confirm & Place Order
+          </button>
+        </div>
+      </form>
+
+      <div class="place-order-info">
+        <h4>Important Information</h4>
+        <ul>
+          <li>
+            Scheduled orders (using time slots) can be placed up to 1 day in
+            advance.
+          </li>
+          <li>
+            Limited slots for scheduled daily menus ensure quality and
+            freshness.
+          </li>
+          <li>You'll receive confirmation via SMS (simulated for now).</li>
+          <li>
+            For other items or immediate delivery, please call us or await
+            general menu integration.
+          </li>
+        </ul>
+        <p style="text-align: center; margin-top: 20px">
+          Or call us to order at <strong>9002783349</strong>
+        </p>
+      </div>
+    </section>
+
     <section id="menu" class="menu-section">
-      <h3 class="menu-title">Menu</h3>
+      <h3 class="menu-title">Our Full Menu</h3>
+      <p style="text-align: center; margin-bottom: 20px">
+        Note: The online ordering form above currently features our special
+        daily menus for scheduled delivery. For items from the full menu below,
+        please call to order, or check back as we expand online ordering
+        options!
+      </p>
       <section class="section">
         <h3>Homely Specials</h3>
         <table>
@@ -378,7 +496,6 @@
       </footer>
     </section>
 
-    <!-- Testimonials -->
     <section id="testimonials" class="testimonials-section">
       <h3>What Our Customers Say</h3>
       <blockquote>
@@ -391,7 +508,6 @@
       </blockquote>
     </section>
 
-    <!-- Order Section -->
     <section id="order" class="order-section">
       <h3>Place Your Order</h3>
       <form>
@@ -420,7 +536,6 @@
       <p>Secure payments | Fast delivery</p>
     </section>
 
-    <!-- About Us -->
     <section id="about" class="about-section">
       <h3>About Home-Coming Cloud Kitchen</h3>
       <p>
@@ -431,16 +546,14 @@
       </p>
     </section>
 
-    <!-- Contact & Support -->
     <section id="contact" class="contact-section">
       <h3>Contact Us</h3>
       <p>
         <strong>Phone:</strong> 9002783349<br />
-        <strong>Email:</strong> info@homecomingcloudkitchen.com<br />
-        <strong>Address:</strong> Near Kharagpur Municipality Office, Kharagpur,
-        West Bengal
+        <strong>Email:</strong> homecomingcloudkitchen@gmail.com<br />
+        <strong>Address:</strong> IIT Campus, Kharagpur, West Bengal
       </p>
-      <p><strong>Hours:</strong> 10:00 AM – 11:00 PM (Open all days)</p>
+      <p><strong>Hours:</strong> 11 AM – 7:00 PM (Open all days)</p>
       <form>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required />
@@ -472,23 +585,25 @@
       </div>
       <div class="map-section">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.123456789!2d87.321234!3d22.346789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zMjLCsDIwJzQ4LjMiTiA4N8KwMTknMjAuNSJF!5e0!3m2!1sen!2sin!4v1581234567890"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.3700000000003!2d87.31000000000001!3d22.320000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d4416f2539969%3A0x8f6f044074c059ef!2sIIT%20Kharagpur!5e0!3m2!1sen!2sin!4v1620841000000!5m2!1sen!2sin"
           width="100%"
           height="250"
           style="border: 0"
           allowfullscreen=""
           loading="lazy"
+          title="Google Maps location of IIT Kharagpur"
         ></iframe>
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="main-footer">
-      <p>&copy; 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
       <p>
         <a href="#">Privacy Policy</a> |
         <a href="#">Terms & Conditions</a>
       </p>
     </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>

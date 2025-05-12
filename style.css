@@ -25,6 +25,7 @@ h4 {
 }
 
 /* Header & Navigation */
+
 header {
   background: #fff;
   box-shadow: 0 2px 8px rgba(25, 155, 116, 0.07);
@@ -176,12 +177,14 @@ section h3,
   box-shadow: 0 2px 16px rgba(25, 155, 116, 0.05);
 }
 .section {
+  /* General class for subsections within menu */
   padding: 0 20px 30px;
   background: none;
   box-shadow: none;
   margin: 0;
 }
 .section h3 {
+  /* Titles for menu subsections like "Homely Specials" */
   font-size: 1.4rem;
   color: #199b74;
   margin-bottom: 10px;
@@ -251,23 +254,19 @@ tbody tr:nth-child(even) {
   margin: 8px 0;
 }
 
-/* Order & Contact Forms */
-.order-section form,
+/* Contact Form (retains similar styling to old order form) */
 .contact-section form {
+  /* Applied to contact form, old order form styles removed */
   display: flex;
   flex-direction: column;
   gap: 14px;
   max-width: 400px;
   margin: 0 auto 10px auto;
 }
-.order-section label,
 .contact-section label {
   font-weight: 500;
   color: #199b74;
 }
-.order-section input,
-.order-section select,
-.order-section textarea,
 .contact-section input,
 .contact-section textarea {
   padding: 9px 12px;
@@ -278,14 +277,12 @@ tbody tr:nth-child(even) {
   background: #f6fbf4;
   transition: border-color 0.2s;
 }
-.order-section input:focus,
-.order-section select:focus,
-.order-section textarea:focus,
 .contact-section input:focus,
 .contact-section textarea:focus {
   border-color: #199b74;
   outline: none;
 }
+
 .about-section {
   text-align: center;
   padding-bottom: 18px;
@@ -321,7 +318,7 @@ tbody tr:nth-child(even) {
   padding: 18px 0 12px 0;
   font-size: 1rem;
   margin-top: 36px;
-  border-radius: 0 0 14px 14px;
+  border-radius: 0 0 14px 14px; /* Keep if body padding is 0, else can be full width */
 }
 .main-footer a {
   color: #fff;
@@ -376,6 +373,304 @@ tbody tr:nth-child(even) {
     padding: 0 8px;
   }
   .main-footer {
-    border-radius: 0;
+    border-radius: 0; /* Full width on small screens */
+  }
+}
+
+/* Styles for the new unified "Place Your Order Online" Section */
+.place-order-online-section {
+  /* Renamed from .scheduled-delivery-section */
+  background: #fff;
+  max-width: 1000px;
+  margin: 0 auto 3.5rem auto;
+  padding: 2rem 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(25, 155, 116, 0.05);
+}
+
+.timeslots {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+}
+
+.timeslot {
+  background: #f6fbf4;
+  padding: 15px 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 2px 10px rgba(25, 155, 116, 0.1);
+  transition: transform 0.2s;
+}
+
+.timeslot:hover {
+  transform: translateY(-5px);
+}
+
+.timeslot h4 {
+  color: #199b74;
+  margin: 0 0 5px 0;
+  font-family: "Merriweather", serif;
+}
+
+.timeslot p {
+  margin: 0 0 5px 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.timeslot small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Form styling for the unified order section */
+#scheduled-order-form {
+  /* This ID is kept for JS compatibility */
+  max-width: 600px;
+  margin: 0 auto;
+  background: #f6fbf4;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(25, 155, 116, 0.08);
+}
+
+/* Shared form field styles (select, input, textarea) within the order form */
+#scheduled-order-form label {
+  font-weight: 500;
+  color: #199b74;
+  display: block; /* Ensure labels take full width */
+  margin-bottom: 5px; /* Space below label */
+}
+
+#scheduled-order-form select,
+#scheduled-order-form input[type="text"],
+#scheduled-order-form input[type="tel"],
+#scheduled-order-form textarea {
+  width: 100%; /* Make form fields take full width */
+  padding: 9px 12px;
+  border: 1.5px solid #c1e899;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 14px; /* Space below each field */
+  background: #f6fbf4;
+  transition: border-color 0.2s;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+#scheduled-order-form select:focus,
+#scheduled-order-form input[type="text"]:focus,
+#scheduled-order-form input[type="tel"]:focus,
+#scheduled-order-form textarea:focus {
+  border-color: #199b74;
+  outline: none;
+}
+
+#menu-of-the-day {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e6f0dc;
+}
+
+#menu-of-the-day h4 {
+  color: #199b74;
+  margin-bottom: 15px;
+  font-family: "Merriweather", serif;
+  font-size: 1.4rem;
+}
+
+#daily-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu-item {
+  background: #fff;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #c1e899;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.menu-item:hover {
+  background: #e6f0dc;
+  border-color: #199b74;
+}
+
+.menu-item input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2); /* Make checkbox slightly larger */
+}
+
+.menu-item label {
+  /* Label for the checkbox */
+  font-weight: 500;
+  flex-grow: 1; /* Allow label to take available space */
+  margin-right: 10px; /* Space between label and quantity */
+  color: #333; /* Default label color */
+}
+
+.item-description {
+  margin-top: 5px;
+  padding-left: 30px; /* Align description under checkbox */
+  font-size: 0.9rem;
+  color: #666;
+  width: 100%; /* Make description take full width */
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push quantity to the right */
+  gap: 5px; /* Space between quantity label and input */
+}
+
+.quantity-selector label {
+  /* Label for quantity input */
+  font-weight: normal; /* Less emphasis on quantity label */
+  margin-right: 0;
+  color: #333; /* Default label color */
+}
+
+.quantity-selector input {
+  /* Quantity number input */
+  width: 60px;
+  padding: 5px 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1.5px solid #c1e899;
+  border-radius: 6px;
+  background: #f6fbf4;
+}
+.quantity-selector input:focus {
+  border-color: #199b74;
+  outline: none;
+}
+
+#delivery-details {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e6f0dc;
+}
+
+#delivery-details h4 {
+  color: #199b74;
+  margin-bottom: 15px;
+  font-family: "Merriweather", serif;
+  font-size: 1.4rem;
+}
+
+.order-summary {
+  background: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 20px 0;
+  border: 1px solid #c1e899;
+}
+
+.order-summary h5 {
+  color: #199b74;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-family: "Merriweather", serif;
+}
+
+.summary-total {
+  border-top: 1px dashed #c1e899;
+  padding-top: 10px;
+}
+
+.summary-total p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.place-order-info {
+  /* Renamed from .scheduled-delivery-info */
+  max-width: 600px;
+  margin: 2rem auto 0;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(25, 155, 116, 0.05);
+  border: 1px solid #e6f0dc; /* Added a light border */
+}
+
+.place-order-info h4 {
+  color: #199b74;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-family: "Merriweather", serif;
+}
+
+.place-order-info ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.place-order-info li {
+  margin-bottom: 8px;
+}
+
+/* Responsive adjustments for the order form section */
+@media (max-width: 600px) {
+  .place-order-online-section {
+    padding: 1.5rem 15px;
+  }
+  .timeslots {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  .timeslot {
+    width: 90%; /* Make timeslots wider on small screens */
+  }
+
+  #scheduled-order-form {
+    padding: 15px;
+  }
+
+  .menu-item {
+    flex-direction: column; /* Stack items vertically on small screens */
+    align-items: flex-start;
+  }
+
+  .menu-item label {
+    /* Checkbox label */
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .quantity-selector {
+    margin-left: 0; /* Remove auto margin */
+    margin-top: 10px; /* Add space above quantity */
+    width: 100%; /* Make quantity selector take full width */
+    justify-content: flex-start; /* Align quantity to the left below checkbox */
+  }
+
+  .quantity-selector label {
+    /* Quantity label */
+    margin-right: 5px;
+  }
+
+  .quantity-selector input {
+    /* Quantity input */
+    width: 80px; /* Adjust width for better touch target */
+  }
+
+  .place-order-info {
+    padding: 15px;
   }
 }

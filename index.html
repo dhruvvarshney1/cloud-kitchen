@@ -2,607 +2,771 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Home-Coming Cloud Kitchen – Delicious Delivered Fast</title>
-    <meta
-      name="description"
-      content="Home-Coming Cloud Kitchen: Order chef-crafted, homestyle meals delivered to your door. Explore our menu, track your order, and enjoy fresh flavors every day."
-    />
-    <meta
-      name="keywords"
-      content="Home-Coming Cloud Kitchen, best restaurant, food delivery, online food order, North Indian food, home food, Kharagpur"
-    />
-    <meta name="author" content="Home-Coming Cloud Kitchen" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:title"
-      content="Home-Coming Cloud Kitchen – Delicious Delivered Fast"
-    />
-    <meta
-      property="og:description"
-      content="Order chef-crafted, homestyle meals delivered to your door. Explore our menu, track your order, and enjoy fresh flavors every day."
-    />
-    <meta property="og:image" content="logo.png" />
-    <meta property="og:url" content="https://yourdomain.com/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Home-Coming Cloud Kitchen – Delicious Delivered Fast"
-    />
-    <meta
-      name="twitter:description"
-      content="Order chef-crafted, homestyle meals delivered to your door. Explore our menu, track your order, and enjoy fresh flavors every day."
-    />
-    <meta name="twitter:image" content="logo.png" />
-    <link rel="icon" type="image/png" href="logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home-Coming Cloud Kitchen</title>
+    <!-- Fonts to match the given webpage aesthetics -->
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Styles for notification component */
+      #notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        padding: var(--space-12) var(--space-24);
+        z-index: 2000;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--space-8);
+      }
+      .notification--success {
+        background-color: var(--color-bg-3);
+        border-left: 4px solid var(--color-success);
+      }
+      .notification--error {
+        background-color: var(--color-bg-4);
+        border-left: 4px solid var(--color-error);
+      }
+      #notification.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        pointer-events: auto;
+      }
+
+      /* Styles for loading overlay */
+      #loadingOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(var(--color-surface-rgb, 255, 255, 253), 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s;
+      }
+      [data-color-scheme="dark"] #loadingOverlay {
+        background: rgba(var(--color-surface-rgb, 38, 40, 40), 0.7);
+      }
+      .loader {
+        border: 4px solid var(--color-secondary);
+        border-top: 4px solid var(--color-primary);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <img src="logo.png" alt="Home-Coming Logo" />
-        <h1>Home-Coming Cloud Kitchen</h1>
-      </div>
-      <nav>
+    <!-- Public Landing Screen -->
+    <div id="publicScreen" class="screen">
+      <header class="site-header">
+        <div class="logo">
+          <img src="logo.png" alt="Home-Coming Logo" />
+          <h1>Home-Coming Cloud Kitchen</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#hero" class="nav-link">Home</a></li>
+            <li><a href="#place-order-online" class="nav-link">Order</a></li>
+            <li><a href="#menu" class="nav-link">Menu</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li>
+              <button
+                id="navLoginBtn"
+                class="btn btn--outline btn--sm"
+                type="button"
+              >
+                Login
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <section id="hero" class="hero">
+        <h2>Delicious. Fast. Delivered.</h2>
+        <p>Chef-crafted, homestyle meals delivered fresh to your doorstep.</p>
+        <p>
+          <strong>Order Online:</strong> Delivery available 10:00 AM – 11:00 PM
+        </p>
+        <a href="#place-order-online" class="cta-button">Order Now</a>
+      </section>
+
+      <section class="usp-section">
+        <h3>Why Choose Home-Coming?</h3>
         <ul>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#place-order-online">Order Now</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li>Authentic homestyle cooking</li>
+          <li>Fresh, hygienic ingredients</li>
+          <li>Quick delivery across Kharagpur</li>
+          <li>Customizable meals for every taste</li>
         </ul>
-      </nav>
-    </header>
+      </section>
 
-    <section class="hero">
-      <h2>Delicious. Fast. Delivered.</h2>
-      <p>
-        Chef-crafted, homestyle meals delivered fresh to your doorstep. Order
-        now and taste the difference!
-      </p>
-      <p>
-        <strong>Order Online:</strong> Delivery available 10:00 AM – 11:00 PM
-      </p>
-      <a href="#place-order-online" class="cta-button">Order Now</a>
-    </section>
+      <section id="how-it-works" class="info-section">
+        <h3>How It Works</h3>
+        <ol>
+          <li><strong>Browse:</strong> Explore our homely menu below.</li>
+          <li>
+            <strong>Customize:</strong> Choose add-ons and extras as you like.
+          </li>
+          <li>
+            <strong>Order:</strong> Use our online form for scheduled or quick
+            checkout.
+          </li>
+          <li>
+            <strong>Enjoy:</strong> Get hot, home-style food delivered fast!
+          </li>
+        </ol>
+      </section>
 
-    <section class="usp-section">
-      <h3>Why Choose Home-Coming?</h3>
-      <ul>
-        <li>Authentic homestyle cooking</li>
-        <li>Fresh, hygienic ingredients</li>
-        <li>Quick delivery across Kharagpur</li>
-        <li>Customizable meals for every taste</li>
-      </ul>
-    </section>
+      <section id="place-order-online" class="place-order-online-section">
+        <h3>Place Your Order Online</h3>
+        <p>
+          We deliver delicious homestyle meals at specific time slots to ensure
+          freshness.
+        </p>
 
-    <section id="how-it-works" class="info-section">
-      <h3>How It Works</h3>
-      <ol>
-        <li><strong>Browse:</strong> Explore our homely menu below.</li>
-        <li>
-          <strong>Customize:</strong> Choose add-ons and extras as you like.
-        </li>
-        <li>
-          <strong>Order:</strong> Use our online form for scheduled or quick
-          checkout.
-        </li>
-        <li>
-          <strong>Enjoy:</strong> Get hot, home-style food delivered fast!
-        </li>
-      </ol>
-    </section>
-
-    <section id="place-order-online" class="place-order-online-section">
-      <h3>Place Your Order Online</h3>
-      <p>
-        We deliver delicious homestyle meals at specific time slots to ensure
-        freshness. You can also order from our regular menu for immediate
-        delivery if available.
-      </p>
-
-      <div class="timeslots">
-        <div class="timeslot">
-          <h4>Lunch</h4>
-          <p>13:00 - 14:00</p>
-          <small>
-            Today's slots:
-            <span id="lunch-orders-remaining">8</span> remaining
-          </small>
-        </div>
-        <div class="timeslot">
-          <h4>Dinner</h4>
-          <p>19:00 - 20:00</p>
-          <small>
-            Today's slots:
-            <span id="dinner-orders-remaining">12</span> remaining
-          </small>
-        </div>
-      </div>
-      <form id="scheduled-order-form">
-        <label for="delivery-date">Select Delivery Date:</label>
-        <select id="delivery-date" name="delivery-date" required></select>
-
-        <label for="delivery-time"
-          >Select Delivery Time Slot (for scheduled daily menu):</label
-        >
-        <select id="delivery-time" name="delivery-time">
-          <option value="">-- Select a time slot for Daily Menu --</option>
-          <option value="lunch">Lunch (13:00 - 14:00)</option>
-          <option value="dinner">Dinner (19:00 - 20:00)</option>
-        </select>
-
-        <div id="menu-of-the-day" class="hidden">
-          <h4>Menu of the Day (for selected slot)</h4>
-          <div id="daily-menu-items"></div>
+        <div class="timeslots">
+          <div class="timeslot">
+            <h4>Lunch</h4>
+            <p>13:00 - 14:00</p>
+          </div>
+          <div class="timeslot">
+            <h4>Dinner</h4>
+            <p>19:00 - 20:00</p>
+          </div>
         </div>
 
-        <div id="general-menu-items" class="hidden">
-          <h4>Or Choose from Our Regular Menu</h4>
-        </div>
-
-        <div id="delivery-details" class="hidden">
-          <h4>Delivery Details</h4>
-          <label for="scheduled-name">Name:</label>
-          <input
-            type="text"
-            id="scheduled-name"
-            name="scheduled-name"
-            required
-          />
-
-          <label for="scheduled-phone">Phone Number:</label>
-          <input
-            type="tel"
-            id="scheduled-phone"
-            name="scheduled-phone"
-            required
-          />
-
-          <label for="scheduled-address">Delivery Address:</label>
-          <textarea
-            id="scheduled-address"
-            name="scheduled-address"
-            required
-          ></textarea>
-
-          <label for="special-instructions">Special Instructions:</label>
-          <textarea
-            id="special-instructions"
-            name="special-instructions"
-            placeholder="Any specific preferences or allergies?"
-          ></textarea>
-
-          <div class="order-summary">
-            <h5>Order Summary</h5>
-            <div id="summary-items"></div>
-            <div class="summary-total">
-              <p>Subtotal: <span id="subtotal">Rs. 0</span></p>
-              <p>Delivery Fee: <span id="delivery-fee">Rs. 30</span></p>
-              <p>
-                <strong>Total: <span id="total">Rs. 30</span></strong>
-              </p>
+        <form id="scheduled-order-form" class="order-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="delivery-date" class="form-label"
+                >Select Delivery Date</label
+              >
+              <select
+                id="delivery-date"
+                name="delivery-date"
+                class="form-control"
+                required
+              ></select>
+            </div>
+            <div class="form-group">
+              <label for="delivery-time" class="form-label"
+                >Select Delivery Time Slot</label
+              >
+              <select
+                id="delivery-time"
+                name="delivery-time"
+                class="form-control"
+              ></select>
             </div>
           </div>
 
-          <button type="submit" class="cta-button">
-            Confirm & Place Order
-          </button>
-        </div>
-      </form>
+          <div id="menu-of-the-day" class="card hidden">
+            <div class="card__body">
+              <h4>Menu of the Day</h4>
+              <div id="daily-menu-items" class="daily-menu-items"></div>
+            </div>
+          </div>
 
-      <div class="place-order-info">
-        <h4>Important Information</h4>
-        <ul>
-          <li>
-            Scheduled orders (using time slots) can be placed up to 1 day in
-            advance.
-          </li>
-          <li>
-            Limited slots for scheduled daily menus ensure quality and
-            freshness.
-          </li>
-          <li>You'll receive confirmation via SMS (simulated for now).</li>
-          <li>
-            For other items or immediate delivery, please call us or await
-            general menu integration.
-          </li>
-        </ul>
-        <p style="text-align: center; margin-top: 20px">
-          Or call us to order at <strong>9002783349</strong>
+          <div id="delivery-details" class="card hidden">
+            <div class="card__body">
+              <h4>Delivery Details</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="scheduled-name">Name</label>
+                  <input id="scheduled-name" class="form-control" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="scheduled-phone">Phone</label>
+                  <input id="scheduled-phone" class="form-control" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="scheduled-address"
+                  >Address</label
+                >
+                <input id="scheduled-address" class="form-control" required />
+              </div>
+              <div
+                class="form-row"
+                style="align-items: center; gap: var(--space-8)"
+              >
+                <div class="form-group">
+                  <button
+                    type="button"
+                    id="useCurrentLocationBtn"
+                    class="btn btn--secondary"
+                  >
+                    Use Current Location
+                  </button>
+                </div>
+                <p
+                  id="locationStatus"
+                  style="margin: 0; color: var(--color-text-secondary)"
+                ></p>
+                <input type="hidden" id="scheduled-geo" />
+              </div>
+              <div id="locationMapWrap" class="map-embed hidden">
+                <iframe
+                  id="locationMap"
+                  title="Delivery location map"
+                  width="100%"
+                  height="220"
+                  style="border: 0; border-radius: var(--radius-base)"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  src=""
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="special-instructions"
+                  >Special Instructions</label
+                >
+                <textarea
+                  id="special-instructions"
+                  class="form-control"
+                  rows="2"
+                  placeholder="Optional"
+                ></textarea>
+              </div>
+
+              <div class="order-summary">
+                <h5>Order Summary</h5>
+                <div id="summary-location" class="summary-location"></div>
+                <div id="summary-items"></div>
+                <div class="summary-totals">
+                  <div>
+                    <span>Subtotal</span><span id="subtotal">Rs. 0</span>
+                  </div>
+                  <div>
+                    <span>Delivery Fee</span
+                    ><span id="delivery-fee">Rs. 0</span>
+                  </div>
+                  <div class="summary-total">
+                    <span>Total</span><span id="total">Rs. 0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--full-width">
+                  Place Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section id="menu" class="menu-section">
+        <h3 class="menu-title">Our Full Menu</h3>
+        <p class="menu-note">
+          For full menu items, please call while we roll out online ordering.
         </p>
-      </div>
-    </section>
+      </section>
 
-    <section id="menu" class="menu-section">
-      <h3 class="menu-title">Our Full Menu</h3>
-      <p style="text-align: center; margin-bottom: 20px">
-        Note: The online ordering form above currently features our special
-        daily menus for scheduled delivery. For items from the full menu below,
-        please call to order, or check back as we expand online ordering
-        options!
-      </p>
-      <section class="section">
-        <h3>Homely Specials</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Food Item</th>
-              <th>Price (Rs.)</th>
-              <th>Add-ons</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Veg Franky</td>
-              <td>50</td>
-              <td>(Soya, Chole, Rajma)</td>
-            </tr>
-            <tr>
-              <td>Veg Thali</td>
-              <td>100</td>
-              <td>Dahi (+20)</td>
-            </tr>
-            <tr>
-              <td>Rice Bowls</td>
-              <td>60</td>
-              <td>(Rajma, Chole, Kadhi, Dal), Dahi (+20)</td>
-            </tr>
-            <tr>
-              <td>Atta Puri Sabzi (4)</td>
-              <td>40</td>
-              <td>Extra: 7/piece</td>
-            </tr>
-          </tbody>
-        </table>
+      <section id="testimonials" class="testimonials-section">
+        <h3>What Our Customers Say</h3>
+        <blockquote>
+          “The quality of food was just like home! Fast delivery and great
+          taste.”
+          <cite>– Priya S., Kharagpur</cite>
+        </blockquote>
       </section>
-      <section class="section">
-        <h3>Breads</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Food Item</th>
-              <th>Price (Rs.)</th>
-              <th>Add-ons</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Plain Roti</td>
-              <td>12</td>
-              <td>–</td>
-            </tr>
-            <tr>
-              <td>Ghee Roti / Butter Roti</td>
-              <td>15</td>
-              <td>–</td>
-            </tr>
-            <tr>
-              <td>Plain Paratha</td>
-              <td>25</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Ghee Plain Paratha</td>
-              <td>35</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Aloo Paratha</td>
-              <td>30</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Aloo-Paneer Paratha</td>
-              <td>45</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Ghee Aloo-Paneer Paratha</td>
-              <td>55</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Ghee Aloo Paratha</td>
-              <td>40</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Gobhi Paratha</td>
-              <td>30</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-            <tr>
-              <td>Ghee Gobhi Paratha</td>
-              <td>40</td>
-              <td>Dahi (+20), Butter (+10)</td>
-            </tr>
-          </tbody>
-        </table>
+
+      <section id="about" class="about-section">
+        <h3>About Home-Coming Cloud Kitchen</h3>
+        <p>
+          We’re a delivery-only kitchen serving fresh, homestyle meals with
+          care.
+        </p>
       </section>
-      <div class="cols">
-        <div class="col section">
-          <h3>Vegetable Dishes</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Food Item</th>
-                <th>Price (Rs.)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Paneer Sabzi</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>Bhindi Sabzi</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Jeera Aloo Sabzi</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>Baigan Bharta</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Mix Veg Sabzi</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>Lauki Sabzi</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Chana Dal Lauki</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Aloo Tamatar</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Kathal Sabzi</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Kaddhu Sabzi</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Bharwa Karela</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Gobhi Bhurji</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Paneer Bhurji</td>
-                <td>60</td>
-              </tr>
-              <tr>
-                <td>Arbi Sabzi</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Gobhi Aloo</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Aloo Palak</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Methi Aloo</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Beans Aloo</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Capsicum Aloo</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Masala Mushroom</td>
-                <td>70</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col section">
-          <h3>Snacks</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Food Item</th>
-                <th>Price (Rs.)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Pasta</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Maggi</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>Veg Sandwiches</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Pakore</td>
-                <td>30</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="bulk">
-            <thead>
-              <tr>
-                <th colspan="2">Bulk Order (Min 5)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Vada Pao</td>
-                <td>40</td>
-              </tr>
-              <tr>
-                <td>Pao Bhaji</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Chole Bhature</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Chowmein</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Poha / Upma / Sewei-Upma</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Dahi Vada</td>
-                <td>60</td>
-              </tr>
-              <tr>
-                <td>Ghugni Chaat</td>
-                <td>40</td>
-              </tr>
-              <tr>
-                <td>Idli</td>
-                <td>50</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <footer class="menu-footer">
-        <p>Order @ 9002783349</p>
-        <p>Customized Home Food Available on Demand!!!</p>
-        <p>Enjoy Your Meal!</p>
+
+      <section id="contact" class="contact-section">
+        <h3>Contact Us</h3>
+        <p>
+          <strong>Phone:</strong> 9002783349<br /><strong>Email:</strong>
+          homecomingcloudkitchen@gmail.com
+        </p>
+      </section>
+
+      <footer class="main-footer">
+        <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
       </footer>
-    </section>
-
-    <section id="testimonials" class="testimonials-section">
-      <h3>What Our Customers Say</h3>
-      <blockquote>
-        "The quality of food was just like home! Fast delivery and great taste."
-        <cite>– Priya S., Kharagpur</cite>
-      </blockquote>
-      <blockquote>
-        "Loved the variety and the freshness. Will order again!"
-        <cite>– Rohit M.</cite>
-      </blockquote>
-    </section>
-
-    <section id="order" class="order-section">
-      <h3>Place Your Order</h3>
-      <form>
-        <label for="dish">Select Dish:</label>
-        <input
-          type="text"
-          id="dish"
-          name="dish"
-          placeholder="Type your dish (e.g. Aloo Paratha)"
-          required
-        />
-        <label for="customization">Customization:</label>
-        <input
-          type="text"
-          id="customization"
-          name="customization"
-          placeholder="E.g., Less spicy, extra butter"
-        />
-        <label for="address">Delivery Address:</label>
-        <input type="text" id="address" name="address" required />
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" required />
-        <button type="submit" class="cta-button">Confirm Order</button>
-      </form>
-      <p>Or call us at <strong>9002783349</strong></p>
-      <p>Secure payments | Fast delivery</p>
-    </section>
-
-    <section id="about" class="about-section">
-      <h3>About Home-Coming Cloud Kitchen</h3>
-      <p>
-        Home-Coming is a delivery-only kitchen, focused on serving fresh,
-        delicious, and homestyle meals. Our chefs use the finest ingredients to
-        craft dishes that bring the taste of home to your table. We believe in
-        convenience, quality, and customer satisfaction.
-      </p>
-    </section>
-
-    <section id="contact" class="contact-section">
-      <h3>Contact Us</h3>
-      <p>
-        <strong>Phone:</strong> 9002783349<br />
-        <strong>Email:</strong> homecomingcloudkitchen@gmail.com<br />
-        <strong>Address:</strong> IIT Campus, Kharagpur, West Bengal
-      </p>
-      <p><strong>Hours:</strong> 11 AM – 7:00 PM (Open all days)</p>
-      <form>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" required></textarea>
-        <button type="submit" class="cta-button">Send Message</button>
-      </form>
-      <div class="social-media">
-        <a
-          href="https://instagram.com/yourprofile"
-          target="_blank"
-          aria-label="Instagram"
-          ><img src="instagram-icon.png" alt="Instagram"
-        /></a>
-        <a
-          href="https://facebook.com/yourprofile"
-          target="_blank"
-          aria-label="Facebook"
-          ><img src="facebook-icon.png" alt="Facebook"
-        /></a>
-        <a
-          href="https://twitter.com/yourprofile"
-          target="_blank"
-          aria-label="Twitter"
-          ><img src="twitter-icon.png" alt="Twitter"
-        /></a>
+    </div>
+    <div id="loginScreen" class="screen hidden">
+      <div class="login-container">
+        <div class="card">
+          <div class="card__body">
+            <div class="login-header">
+              <h1>Home-Coming Cloud Kitchen</h1>
+              <p>Welcome! Please login to continue</p>
+            </div>
+            <form id="loginForm" class="login-form">
+              <div class="form-group">
+                <label for="username" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="username"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn--primary btn--full-width">
+                Login
+              </button>
+              <div class="login-options">
+                <p>
+                  New customer?
+                  <button type="button" id="showRegisterBtn" class="link-btn">
+                    Register here
+                  </button>
+                </p>
+                <p class="demo-credentials">
+                  Log in with your Admin account to manage the store.
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="map-section">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.3700000000003!2d87.31000000000001!3d22.320000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d4416f2539969%3A0x8f6f044074c059ef!2sIIT%20Kharagpur!5e0!3m2!1sen!2sin!4v1620841000000!5m2!1sen!2sin"
-          width="100%"
-          height="250"
-          style="border: 0"
-          allowfullscreen=""
-          loading="lazy"
-          title="Google Maps location of IIT Kharagpur"
-        ></iframe>
-      </div>
-    </section>
+    </div>
 
-    <footer class="main-footer">
-      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
-      <p>
-        <a href="#">Privacy Policy</a> |
-        <a href="#">Terms & Conditions</a>
-      </p>
-    </footer>
+    <div id="registerScreen" class="screen hidden">
+      <div class="login-container">
+        <div class="card">
+          <div class="card__body">
+            <div class="login-header">
+              <h2>Customer Registration</h2>
+              <p>Create your account to start ordering</p>
+            </div>
+            <form id="registerForm" class="login-form">
+              <div class="form-group">
+                <label for="regName" class="form-label">Full Name</label>
+                <input type="text" id="regName" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="regEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="regEmail"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="regPhone" class="form-label">Phone</label>
+                <input type="tel" id="regPhone" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="regAddress" class="form-label">Address</label>
+                <textarea
+                  id="regAddress"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="regPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="regPassword"
+                  class="form-control"
+                  required
+                />
+                <p
+                  id="passwordError"
+                  class="status status--error hidden"
+                  style="
+                    font-size: var(--font-size-xs);
+                    margin-top: var(--space-4);
+                    padding: var(--space-4) var(--space-8);
+                    border: none;
+                  "
+                >
+                  Password must be at least 6 characters.
+                </p>
+              </div>
+              <button type="submit" class="btn btn--primary btn--full-width">
+                Register
+              </button>
+              <div class="login-options">
+                <p>
+                  Already have an account?
+                  <button type="button" id="showLoginBtn" class="link-btn">
+                    Login here
+                  </button>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="adminScreen" class="screen hidden">
+      <div class="admin-layout">
+        <header class="admin-header">
+          <div class="admin-nav">
+            <h1>Admin Dashboard - Home-Coming Kitchen</h1>
+            <button id="logoutBtn" class="btn btn--outline btn--sm">
+              Logout
+            </button>
+          </div>
+          <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="orders">Orders</button>
+            <button class="tab-btn" data-tab="menu">Menu Management</button>
+            <button class="tab-btn" data-tab="capacity">
+              Capacity Management
+            </button>
+            <button class="tab-btn" data-tab="reports">Reports</button>
+          </div>
+        </header>
+
+        <main class="admin-content">
+          <div id="ordersTab" class="tab-content active">
+            <div class="content-header">
+              <h2>Orders Management (Real-time)</h2>
+              <div class="filters">
+                <select id="orderDateFilter" class="form-control">
+                  <option value="">All Dates</option>
+                </select>
+                <select id="orderStatusFilter" class="form-control">
+                  <option value="">All Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Preparing">Preparing</option>
+                  <option value="Ready">Ready</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+              </div>
+            </div>
+            <div class="orders-container">
+              <div id="ordersList" class="orders-grid"></div>
+            </div>
+          </div>
+
+          <div id="menuTab" class="tab-content">
+            <div class="content-header">
+              <h2>Menu Management</h2>
+              <div class="menu-controls">
+                <input type="date" id="menuDate" class="form-control" />
+                <select id="menuTimeSlot" class="form-control">
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                </select>
+                <button id="addMenuItemBtn" class="btn btn--primary">
+                  Add Item
+                </button>
+              </div>
+            </div>
+            <div id="menuItemsList" class="menu-items-list"></div>
+          </div>
+
+          <div id="capacityTab" class="tab-content">
+            <div class="content-header">
+              <h2>Capacity Management</h2>
+              <div class="capacity-controls">
+                <input type="date" id="capacityDate" class="form-control" />
+                <button id="setCapacityBtn" class="btn btn--primary">
+                  Set Capacity
+                </button>
+              </div>
+            </div>
+            <div id="capacitySettings" class="capacity-grid"></div>
+          </div>
+
+          <div id="reportsTab" class="tab-content">
+            <div class="content-header">
+              <h2>Reports & Analytics</h2>
+            </div>
+            <div class="reports-grid">
+              <div class="card">
+                <div class="card__body">
+                  <h3>Daily Summary</h3>
+                  <div id="dailySummary"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card__body">
+                  <h3>Popular Items</h3>
+                  <div id="popularItems"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div id="customerScreen" class="screen hidden">
+      <div class="customer-layout">
+        <header class="customer-header">
+          <div class="customer-nav">
+            <h1>Home-Coming Cloud Kitchen</h1>
+            <div class="customer-info">
+              <span id="customerName"></span>
+              <button id="customerLogoutBtn" class="btn btn--outline btn--sm">
+                Logout
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="customer-content">
+          <div class="ordering-section">
+            <div class="order-header">
+              <h2>Place Your Order</h2>
+              <div class="date-time-selector">
+                <div class="form-group">
+                  <label for="orderDate" class="form-label">Select Date</label>
+                  <input type="date" id="orderDate" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label for="orderTimeSlot" class="form-label"
+                    >Time Slot</label
+                  >
+                  <select id="orderTimeSlot" class="form-control">
+                    <option value="">Select time slot</option>
+                    <option value="lunch">Lunch (13:00 - 14:00)</option>
+                    <option value="dinner">Dinner (19:00 - 20:00)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="menuDisplay" class="menu-display">
+              <p class="menu-message">
+                Please select date and time slot to view menu
+              </p>
+            </div>
+
+            <div id="cartSection" class="cart-section hidden">
+              <h3>Your Cart</h3>
+              <div id="cartItems" class="cart-items"></div>
+              <div class="cart-total">
+                <strong>Total: ₹<span id="cartTotal">0</span></strong>
+              </div>
+              <div class="order-form">
+                <div class="form-group">
+                  <label for="specialInstructions" class="form-label"
+                    >Special Instructions (Optional)</label
+                  >
+                  <textarea
+                    id="specialInstructions"
+                    class="form-control"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <button
+                  id="placeOrderBtn"
+                  class="btn btn--primary btn--full-width"
+                >
+                  Place Order
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-history">
+            <h3>Your Orders (Real-time)</h3>
+            <div id="customerOrdersList" class="customer-orders"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div id="menuItemModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="menuItemModalTitle">Add Menu Item</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="menuItemForm">
+            <div class="form-group">
+              <label for="itemName" class="form-label">Item Name</label>
+              <input type="text" id="itemName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="itemPrice" class="form-label">Price (₹)</label>
+              <input
+                type="number"
+                id="itemPrice"
+                class="form-control"
+                min="1"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="itemDescription" class="form-label"
+                >Description</label
+              >
+              <textarea
+                id="itemDescription"
+                class="form-control"
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn--outline modal-cancel">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn--primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="capacityModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Set Capacity</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="capacityForm">
+            <div class="form-group">
+              <label for="lunchCapacity" class="form-label"
+                >Lunch Capacity</label
+              >
+              <input
+                type="number"
+                id="lunchCapacity"
+                class="form-control"
+                min="1"
+                value="50"
+              />
+            </div>
+            <div class="form-group">
+              <label for="dinnerCapacity" class="form-label"
+                >Dinner Capacity</label
+              >
+              <input
+                type="number"
+                id="dinnerCapacity"
+                class="form-control"
+                min="1"
+                value="40"
+              />
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn--outline modal-cancel">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn--primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="notification" class="card">
+      <p id="notificationMessage" style="margin: 0"></p>
+    </div>
+
+    <div id="loadingOverlay" class="hidden">
+      <div class="loader"></div>
+    </div>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAK1I975QhmL0mPR7RmDblmmaWL1A-AiwY",
+        authDomain: "cloud-kitchen-a87.firebaseapp.com",
+        projectId: "cloud-kitchen-a87",
+        storageBucket: "cloud-kitchen-a87.firebasestorage.app",
+        messagingSenderId: "978027398378",
+        appId: "1:978027398378:web:50c7c81c165ce96c07c393",
+        measurementId: "G-3FJKJEMCKV",
+      };
+      // This makes the config available to the script.js file
+      window.firebaseConfig = firebaseConfig;
+    </script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        addDoc,
+        collection,
+        onSnapshot,
+        query,
+        where,
+        updateDoc,
+        deleteDoc,
+        writeBatch,
+        getDocs,
+        runTransaction,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // Make Firebase functions globally available for app.js
+      window.firebase = {
+        initializeApp,
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        addDoc,
+        collection,
+        onSnapshot,
+        query,
+        where,
+        updateDoc,
+        deleteDoc,
+        writeBatch,
+        getDocs,
+        runTransaction,
+      };
+    </script>
 
     <script src="script.js"></script>
   </body>

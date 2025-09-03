@@ -147,22 +147,59 @@ class RestaurantApp {
           this.showScreen("adminScreen");
           await this.loadAdminData();
         } else {
-          console.log("User is a customer. Loading customer screen.");
-          this.showScreen("customerScreen");
-          await this.loadCustomerData();
+          // MODIFICATION: Show public screen for customers
+          console.log("User is a customer. Showing public screen.");
+          this.showScreen("publicScreen");
+          this.updatePublicUIForUser(); // New function to update header and pre-fill form
         }
       } else {
         this.currentUser = null;
         this.detachListeners();
         console.log("No user is logged in. Showing public landing.");
         this.showScreen("publicScreen");
+        this.updatePublicUIForGuest(); // New function to reset UI
       }
 
-      // This is the crucial part for debugging the loader
       this.hideLoader();
       console.log("Auth state callback finished.");
     });
   }
+  
+  // NEW FUNCTION: Updates the public UI for a logged-in customer
+  updatePublicUIForUser() {
+      if (!this.currentUser) return;
+
+      // Update header buttons and display user name
+      document.getElementById('navLoginBtn').classList.add('hidden');
+      document.getElementById('publicLogoutBtn').classList.remove('hidden');
+      const userInfo = document.getElementById('userInfo');
+      userInfo.classList.remove('hidden');
+      document.getElementById('publicUserName').textContent = this.currentUser.name;
+
+      // Pre-fill the order form with user's details
+      document.getElementById('scheduled-name').value = this.currentUser.name;
+      document.getElementById('scheduled-phone').value = this.currentUser.phone;
+      document.getElementById('scheduled-address').value = this.currentUser.address;
+  }
+
+  // NEW FUNCTION: Resets the public UI for a guest or after logout
+  updatePublicUIForGuest() {
+      // Revert header buttons to default state
+      document.getElementById('navLoginBtn').classList.remove('hidden');
+      document.getElementById('publicLogoutBtn').classList.add('hidden');
+      document.getElementById('userInfo').classList.add('hidden');
+
+      // Clear any pre-filled data from the order form
+      const orderForm = document.getElementById('scheduled-order-form');
+      if (orderForm) {
+          orderForm.reset();
+      }
+      // Manually clear fields that reset() might not catch
+      document.getElementById('scheduled-name').value = '';
+      document.getElementById('scheduled-phone').value = '';
+      document.getElementById('scheduled-address').value = '';
+  }
+
 
   setupEventListeners() {
     const navLoginBtn = document.getElementById("navLoginBtn");
@@ -185,7 +222,7 @@ class RestaurantApp {
 
     this.setupLogoutButtons();
     this.setupAdminListeners();
-    this.setupCustomerListeners();
+    // this.setupCustomerListeners(); // This is no longer needed as customerScreen is not used
     this.setupModalListeners();
     this.setupPublicLanding();
   }
@@ -194,8 +231,9 @@ class RestaurantApp {
     document
       .getElementById("logoutBtn")
       .addEventListener("click", () => this.logout());
+    // MODIFICATION: Add event listener for the new public logout button
     document
-      .getElementById("customerLogoutBtn")
+      .getElementById("publicLogoutBtn")
       .addEventListener("click", () => this.logout());
   }
 
@@ -239,7 +277,9 @@ class RestaurantApp {
       .getElementById("capacityForm")
       .addEventListener("submit", (e) => this.saveCapacity(e));
   }
-
+  
+  // This function is no longer needed as the customerScreen is not in use
+  /*
   setupCustomerListeners() {
     document
       .getElementById("orderDate")
@@ -251,6 +291,7 @@ class RestaurantApp {
       .getElementById("placeOrderBtn")
       .addEventListener("click", () => this.placeOrder());
   }
+  */
 
   setupModalListeners() {
     document
@@ -329,10 +370,19 @@ class RestaurantApp {
     this.showLoader();
     await window.firebase.signOut(this.auth);
     this.cart = [];
-    this.updateCartDisplay();
+    // The onAuthStateChanged listener will handle UI updates
     this.hideLoader();
   }
-
+  
+  // The rest of the script.js file remains the same.
+  // ... (all other functions from the original script.js file) ...
+  // Make sure to include all the remaining functions from the original file here,
+  // as they are still needed for the Admin panel and other functionalities.
+  
+  // ... (getUserProfile, createUserProfile, showScreen, switchTab, loadAdminData, etc.) ...
+  
+  // PASTE THE REST OF YOUR ORIGINAL script.js FILE CONTENT HERE
+  // STARTING FROM THE `getUserProfile` FUNCTION
   async getUserProfile(uid) {
     const userDocRef = window.firebase.doc(this.db, "users", uid);
     const docSnap = await window.firebase.getDoc(userDocRef);
@@ -768,6 +818,9 @@ class RestaurantApp {
         : '<p class="menu-message">No orders yet.</p>';
   }
 
+  // The functions below this comment relate to the old customerScreen and are no longer used.
+  // You can safely remove them if you wish to clean up the code.
+  /*
   async loadCustomerData() {
     document.getElementById("customerName").textContent = this.currentUser.name;
     this.listenForCustomerOrders();
@@ -997,7 +1050,7 @@ class RestaurantApp {
                 <div class="customer-order-items">${order.items
                   .map((i) => `${i.name} x ${i.quantity}`)
                   .join(", ")}</div>
-                <div class="customer-order-footer">
+                <div class.customer-order-footer">
                     <div class="customer-order-total">₹${order.totalAmount.toFixed(
                       2
                     )}</div>
@@ -1009,7 +1062,8 @@ class RestaurantApp {
       )
       .join("");
   }
-
+  */
+  
   async populateOrderDateFilter() {
     const ordersSnapshot = await window.firebase.getDocs(
       window.firebase.collection(this.db, "orders")
@@ -1310,7 +1364,7 @@ class RestaurantApp {
         }</label>
           ${
             item.description
-              ? `<p class=\"item-description\">${item.description}</p>`
+              ? `<p class="item-description">${item.description}</p>`
               : ""
           }
           <div class="quantity-selector hidden">

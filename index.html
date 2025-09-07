@@ -47,6 +47,13 @@
                 Login
               </button>
               <button
+                id="navMessagesBtn"
+                class="btn btn--outline btn--sm hidden"
+                type="button"
+              >
+                Messages
+              </button>
+              <button
                 id="publicLogoutBtn"
                 class="btn btn--outline btn--sm hidden"
                 type="button"
@@ -692,6 +699,7 @@
               Capacity Management
             </button>
             <button class="tab-btn" data-tab="reports">Reports</button>
+            <button class="tab-btn" data-tab="messages">Messages</button>
           </div>
         </header>
 
@@ -767,12 +775,57 @@
               </div>
             </div>
           </div>
+
+          <div id="messagesTab" class="tab-content">
+            <div class="content-header">
+              <h2>Messages</h2>
+            </div>
+            <div class="messages-layout">
+              <aside class="conversation-list">
+                <h4 style="margin: 0 0 8px 0">Conversations</h4>
+                <ul id="conversationsList" class="conversations"></ul>
+              </aside>
+              <section class="chat-pane">
+                <div id="chatHeader" class="chat-header">
+                  Select a conversation
+                </div>
+                <div id="chatMessages" class="chat-messages"></div>
+                <form id="chatForm" class="chat-input-row">
+                  <input
+                    id="chatInput"
+                    class="form-control"
+                    placeholder="Type a message..."
+                  />
+                  <button type="submit" class="btn btn--primary">Send</button>
+                </form>
+              </section>
+            </div>
+          </div>
         </main>
       </div>
     </div>
 
     <div id="customerScreen" class="screen hidden">
-      <p>Loading...</p>
+      <div class="container" style="padding: 24px">
+        <h2>Messages</h2>
+        <div class="chat-pane">
+          <div id="customerChatMessages" class="chat-messages"></div>
+          <form id="customerChatForm" class="chat-input-row">
+            <input
+              id="customerChatInput"
+              class="form-control"
+              placeholder="Type a message to admin..."
+            />
+            <button type="submit" class="btn btn--primary">Send</button>
+          </form>
+          <p
+            id="customerChatNotice"
+            class="menu-note"
+            style="margin-top: 8px"
+          ></p>
+          \
+        </div>
+      </div>
     </div>
 
     <div id="menuItemModal" class="modal hidden">

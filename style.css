@@ -1027,6 +1027,11 @@ select.form-control {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-16);
+}
+
+.menu-item-info {
+  flex: 1;
 }
 
 .menu-item-info h4 {

@@ -423,6 +423,11 @@ class RestaurantApp {
       .getElementById("menuItemForm")
       .addEventListener("submit", (e) => this.saveMenuItem(e));
 
+    // Populate menuTimeSlot options
+    const menuTimeSlot = document.getElementById("menuTimeSlot");
+    menuTimeSlot.innerHTML = '<option value="">Select time slot</option>' +
+      this.timeSlots.map(slot => `<option value="${slot.id}">${slot.name}</option>`).join("");
+
     document
       .getElementById("setCapacityBtn")
       .addEventListener("click", () => this.showCapacityModal());
@@ -491,9 +496,73 @@ class RestaurantApp {
   }
 
   setupOrderingSystem() {
-    // Sample daily menu data
-    const dailyMenu = {
-      [this.getTomorrowDate()]: {
+    this.populateDeliveryDates();
+    this.initializeOrderForm();
+  }
+
+  getTomorrowDate() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split("T")[0];
+  }
+
+  async loadMenuForDateTime(date, timeSlot) {
+    if (!date || !timeSlot || !this.db) return [];
+    try {
+      const q = window.firebase.query(
+        window.firebase.collection(this.db, "menuItems"),
+        window.firebase.where("date", "==", date),
+        window.firebase.where("timeSlot", "==", timeSlot)
+      );
+      const snap = await window.firebase.getDocs(q);
+      let items = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // If no admin-set items, add default menu
+      if (items.length === 0) {
+        const defaultMenu = {
+          lunch: [
+            {
+              name: "Veg Thali",
+              price: 100,
+              description: "Complete meal with rice, dal, sabzi, roti",
+            },
+            {
+              name: "Rajma Rice Bowl",
+              price: 60,
+              description: "Spicy rajma with steamed rice",
+            },
+            {
+              name: "Aloo Paratha with Dahi",
+              price: 50,
+              description: "Fresh aloo paratha served with yogurt",
+            },
+          ],
+          dinner: [
+            {
+              name: "Paneer Sabzi with Roti",
+              price: 85,
+              description: "Paneer curry with 2 rotis",
+            },
+            {
+              name: "Chole Rice",
+              price: 60,
+              description: "Spicy chickpea curry with rice",
+            },
+            {
+              name: "Mix Veg with Paratha",
+              price: 75,
+              description: "Mixed vegetables with butter paratha",
+            },
+          ],
+        };
+        items = defaultMenu[timeSlot] || [];
+      }
+
+      return items;
+    } catch (e) {
+      console.error("Error loading menu:", e);
+      // Return default menu on error
+      const defaultMenu = {
         lunch: [
           {
             name: "Veg Thali",
@@ -528,17 +597,9 @@ class RestaurantApp {
             description: "Mixed vegetables with butter paratha",
           },
         ],
-      },
-    };
-
-    this.populateDeliveryDates();
-    this.initializeOrderForm(dailyMenu);
-  }
-
-  getTomorrowDate() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split("T")[0];
+      };
+      return defaultMenu[timeSlot] || [];
+    }
   }
 
   populateDeliveryDates() {
@@ -567,7 +628,7 @@ class RestaurantApp {
     }
   }
 
-  initializeOrderForm(dailyMenu) {
+  initializeOrderForm() {
     const deliveryDateSelect = document.getElementById("delivery-date");
     const deliveryTimeSelect = document.getElementById("delivery-time");
     const menuOfTheDaySection = document.getElementById("menu-of-the-day");
@@ -581,6 +642,15 @@ class RestaurantApp {
     const summaryLocationElement = document.getElementById("summary-location");
 
     const deliveryFee = 30;
+
+    // Populate time slots
+    deliveryTimeSelect.innerHTML = '<option value="">-- Select delivery time slot --</option>';
+    this.timeSlots.forEach(slot => {
+      const option = document.createElement("option");
+      option.value = slot.id;
+      option.textContent = slot.name;
+      deliveryTimeSelect.appendChild(option);
+    });
 
     const hasSelectedItems = () => {
       return (
@@ -631,7 +701,7 @@ class RestaurantApp {
       }
     };
 
-    const renderMenu = (date, time) => {
+    const renderMenu = async (date, time) => {
       dailyMenuItemsContainer.innerHTML = "";
       menuOfTheDaySection.classList.add("hidden");
 
@@ -640,19 +710,10 @@ class RestaurantApp {
         return;
       }
 
-      const menuForDay = dailyMenu[date];
-      if (!menuForDay || !menuForDay[time]) {
-        dailyMenuItemsContainer.innerHTML =
-          '<p class="no-menu">No special daily menu available for this slot.</p>';
-        menuOfTheDaySection.classList.remove("hidden");
-        updateOrderSummary();
-        return;
-      }
-
-      const menuItems = menuForDay[time] || [];
+      const menuItems = await this.loadMenuForDateTime(date, time);
       if (!menuItems.length) {
         dailyMenuItemsContainer.innerHTML =
-          '<p class="no-menu">No items on the special daily menu for this slot.</p>';
+          '<p class="no-menu">No special daily menu available for this slot.</p>';
         menuOfTheDaySection.classList.remove("hidden");
         updateOrderSummary();
         return;
@@ -708,12 +769,12 @@ class RestaurantApp {
     };
 
     // Event listeners for form
-    deliveryDateSelect.addEventListener("change", function () {
+    deliveryDateSelect.addEventListener("change", async function () {
       const selectedDate = this.value;
       const selectedTime = deliveryTimeSelect.value;
 
       if (selectedDate && selectedTime) {
-        renderMenu(selectedDate, selectedTime);
+        await renderMenu(selectedDate, selectedTime);
       } else if (selectedDate && !selectedTime) {
         menuOfTheDaySection.classList.add("hidden");
         dailyMenuItemsContainer.innerHTML = "";
@@ -726,12 +787,12 @@ class RestaurantApp {
       updateOrderSummary();
     });
 
-    deliveryTimeSelect.addEventListener("change", function () {
+    deliveryTimeSelect.addEventListener("change", async function () {
       const selectedTime = this.value;
       const selectedDate = deliveryDateSelect.value;
 
       if (selectedDate && selectedTime) {
-        renderMenu(selectedDate, selectedTime);
+        await renderMenu(selectedDate, selectedTime);
         deliveryDetailsSection.classList.remove("hidden");
       } else if (selectedDate && !selectedTime) {
         menuOfTheDaySection.classList.add("hidden");
@@ -753,7 +814,7 @@ class RestaurantApp {
     // Form submission
     form.addEventListener(
       "submit",
-      function (event) {
+      async function (event) {
         event.preventDefault();
 
         const selectedDateValue = deliveryDateSelect.value;
@@ -801,7 +862,21 @@ class RestaurantApp {
           subtotal: subtotalElement.textContent,
           deliveryFee: deliveryFeeElement.textContent,
           total: totalElement.textContent,
+          status: "Pending",
+          timestamp: new Date().toISOString(),
+          customerName: document.getElementById("scheduled-name").value,
+          customerPhone: document.getElementById("scheduled-phone").value,
+          customerAddress: document.getElementById("scheduled-address").value,
         };
+
+        try {
+          await window.firebase.addDoc(window.firebase.collection(this.db, "orders"), orderDetails);
+          this.showNotification("Order placed successfully!", "success");
+        } catch (error) {
+          console.error("Error placing order:", error);
+          this.showNotification("Failed to place order. Please try again.", "error");
+          return;
+        }
 
         console.log("Order Details (public):", orderDetails);
         alert(
@@ -996,7 +1071,33 @@ class RestaurantApp {
   }
 
   async loadMenuItems() {
-    // Implementation for loading menu items
+    const date = document.getElementById("menuDate").value;
+    const timeSlot = document.getElementById("menuTimeSlot").value;
+    const container = document.getElementById("menuItemsList");
+
+    if (!date || !timeSlot) {
+      container.innerHTML = "<p>Select date and time slot to view menu items.</p>";
+      return;
+    }
+
+    const items = await this.loadMenuForDateTime(date, timeSlot);
+    if (!items.length) {
+      container.innerHTML = "<p>No menu items for this date and time slot.</p>";
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="menu-item-card">
+        <div class="menu-item-info">
+          <h4>${item.name}</h4>
+          <p>${item.description || ''}</p>
+        </div>
+        <div class="menu-item-price">Rs. ${item.price}</div>
+        <div class="menu-item-actions">
+          <button onclick="app.deleteMenuItem('${item.id}')">Delete</button>
+        </div>
+      </div>
+    `).join("");
   }
 
   async loadCapacitySettings() {
@@ -1016,8 +1117,41 @@ class RestaurantApp {
 
   async saveMenuItem(e) {
     e.preventDefault();
-    // Implementation for saving menu item
+    const date = document.getElementById("menuDate").value;
+    const timeSlot = document.getElementById("menuTimeSlot").value;
+    const name = document.getElementById("itemName").value.trim();
+    const price = parseInt(document.getElementById("itemPrice").value);
+    const description = document.getElementById("itemDescription").value.trim();
+
+    if (!date || !timeSlot || !name || isNaN(price)) {
+      this.showNotification("Please fill all required fields.", "error");
+      return;
+    }
+
+    try {
+      await window.firebase.addDoc(window.firebase.collection(this.db, "menuItems"), {
+        date, timeSlot, name, price, description
+      });
+      this.showNotification("Menu item added successfully.", "success");
+      document.getElementById("menuItemForm").reset();
+      this.loadMenuItems();
+    } catch (error) {
+      console.error("Error saving menu item:", error);
+      this.showNotification("Failed to save menu item.", "error");
+    }
     this.closeModals();
+  }
+
+  async deleteMenuItem(id) {
+    if (!confirm("Are you sure you want to delete this menu item?")) return;
+    try {
+      await window.firebase.deleteDoc(window.firebase.doc(this.db, "menuItems", id));
+      this.showNotification("Menu item deleted.", "success");
+      this.loadMenuItems();
+    } catch (error) {
+      console.error("Error deleting menu item:", error);
+      this.showNotification("Failed to delete menu item.", "error");
+    }
   }
 
   async saveCapacity(e) {

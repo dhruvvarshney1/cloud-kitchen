@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layouts.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  </head>
+  <body data-page="landing">
+    <header class="home-header">Home-Coming Cloud Kitchen</header>
+
+    <nav class="home-nav">
+      <ul class="home-nav__list">
+        <li><a class="home-nav__link" href="#why">Why Us?</a></li>
+        <li><a class="home-nav__link" href="#how">How It Works</a></li>
+        <li><a class="home-nav__link" href="#menu">Menu</a></li>
+        <li><a class="home-nav__link" href="#order">Order</a></li>
+        <li><a class="home-nav__link" href="#track">Track Order</a></li>
+        <li><a class="home-nav__link" href="#about">About</a></li>
+        <li><a class="home-nav__link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section class="home-hero">
+      <h1>Delicious. Fast. Delivered.</h1>
+      <p>
+        Freshly cooked dishes made to meet your cravings.<br />Order now and
+        relish the difference!
+      </p>
+      <p><strong>Online Delivery available 10:00 AM - 10:00 PM</strong></p>
+      <button
+        type="button"
+        class="home-hero__cta"
+        onclick="document.getElementById('order').scrollIntoView({ behavior: 'smooth' });"
+      >
+        Order Now
+      </button>
+    </section>
+
+    <section id="why" class="home-section">
+      <h2>Why Choose Home-Coming?</h2>
+      <ul>
+        <li>Great taste &amp; freshness</li>
+        <li>Fast delivery</li>
+        <li>Economical prices</li>
+        <li>Customizable meals &amp; combos</li>
+      </ul>
+    </section>
+
+    <section id="how" class="home-section">
+      <h2>How It Works</h2>
+      <ol>
+        <li>Choose dishes from our menu</li>
+        <li>Place your order online or via WhatsApp</li>
+        <li>Track your order in real-time</li>
+        <li>Enjoy hot meals delivered to your door</li>
+      </ol>
+    </section>
+
+    <section id="menu" class="home-section">
+      <h2>Our Full Menu</h2>
+      <table class="home-menu-table">
+        <tbody>
+          <tr class="home-menu-category"><td colspan="2">Bowl Specials</td></tr>
+          <tr><td>Rice Bowl</td><td>₹49</td></tr>
+          <tr><td>Daal Bowl</td><td>₹49</td></tr>
+          <tr><td>Curry Bowl</td><td>₹49</td></tr>
+          <tr><td>Aloo Ki Sabji Bowl</td><td>₹49</td></tr>
+          <tr class="home-menu-category"><td colspan="2">Thalis</td></tr>
+          <tr><td>Mini Thali</td><td>₹79</td></tr>
+          <tr><td>Full Thali</td><td>₹119</td></tr>
+          <tr><td>Special Full Thali</td><td>₹139</td></tr>
+          <tr class="home-menu-category"><td colspan="2">Vegetable Dishes</td></tr>
+          <tr><td>Aloo Ki Sabji</td><td>₹39</td></tr>
+          <tr><td>Daal</td><td>₹39</td></tr>
+          <tr><td>Mixed Veg</td><td>₹44</td></tr>
+          <tr><td>Paneer Butter Masala</td><td>₹79</td></tr>
+          <tr><td>Chhole Masala</td><td>₹44</td></tr>
+          <tr class="home-menu-category"><td colspan="2">Snacks</td></tr>
+          <tr><td>Paratha</td><td>₹29</td></tr>
+          <tr><td>Roti</td><td>₹9</td></tr>
+          <tr><td>Poori</td><td>₹12</td></tr>
+          <tr><td>Papad</td><td>₹7</td></tr>
+          <tr><td>Salad Plate (Single)</td><td>₹19</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="order" class="home-section">
+      <h2>Place Your Order Online</h2>
+      <form class="home-form" id="place-order-form">
+        <label for="dish">Select Dish:</label>
+        <select id="dish" name="dish"></select>
+        <label for="qty">Quantity:</label>
+        <input type="number" id="qty" name="qty" min="1" value="1" />
+        <label for="address">Delivery Address:</label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="Flat/Hostel, Kharagpur"
+          required
+        />
+        <label for="phone">Phone Number:</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="10-digit number"
+          required
+          pattern="[0-9]{10}"
+        />
+        <button type="submit" class="home-form-button">Place Order</button>
+      </form>
+      <p style="margin-top: 16px">
+        Or WhatsApp us: <strong>+91 8209XXXXXX</strong>
+      </p>
+    </section>
+
+    <section id="track" class="home-section">
+      <h2>Track Your Order</h2>
+      <p>Enter the Order ID you received after placing your order.</p>
+      <form id="track-order-form" class="home-form">
+        <label for="order-id-input">Order ID:</label>
+        <input type="text" id="order-id-input" placeholder="e.g., HCCK12345" required />
+        <button type="submit" class="home-form-button">Track</button>
+      </form>
+      <div id="home-order-status">
+        <p id="home-current-status">Order Placed</p>
+        <ul class="home-progress">
+          <li class="home-progress__step active" id="home-step-1">Placed</li>
+          <li class="home-progress__step" id="home-step-2">Preparing</li>
+          <li class="home-progress__step" id="home-step-3">Out for Delivery</li>
+          <li class="home-progress__step" id="home-step-4">Delivered</li>
+        </ul>
+        <p style="text-align: center; font-size: 0.9em; color: #577d56">
+          Your order status will update automatically.
+        </p>
+      </div>
+      <p id="home-track-error" class="home-form-note error">
+        Order ID not found. Please check and try again.
+      </p>
+    </section>
+
+    <section class="home-section">
+      <h2>What Our Customers Say</h2>
+      <div class="home-testimonial">
+        "Great taste, fast service, and the live tracking is amazing!"
+      </div>
+      <div class="home-testimonial">"Healthy and homely food, just like home."</div>
+      <div class="home-testimonial">
+        "Prompt delivery and reasonable pricing. I love knowing exactly when my
+        food will arrive."
+      </div>
+    </section>
+
+    <section id="about" class="home-section">
+      <h2>About Home-Coming Cloud Kitchen</h2>
+      <p>
+        Home-Coming is a cloud kitchen based in Kharagpur, dedicated to
+        delivering healthy, delicious, and affordable food to students and
+        residents. Our mission is to bring the flavors of home to your doorstep,
+        every day. Enjoy customizable meals, speedy service, and a wide
+        variety—discover the Home-Coming difference!
+      </p>
+    </section>
+
+    <section id="contact" class="home-section">
+      <h2>Contact Us</h2>
+      <p>
+        WhatsApp: <strong>+91 8209XXXXXX</strong><br />
+        Email: <strong>homecoming@gmail.com</strong><br />
+        Address: Kharagpur, WB
+      </p>
+      <form class="home-form" id="contact-form">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" rows="3" placeholder="Your Message"></textarea>
+        <button type="submit" class="home-form-button">Send Message</button>
+      </form>
+      <div style="text-align: center; margin: 16px 0">
+        <a href="#" style="text-decoration: none; margin: 0 10px">Instagram</a>
+        <a href="#" style="text-decoration: none; margin: 0 10px">Facebook</a>
+        <a href="#" style="text-decoration: none; margin: 0 10px">Twitter</a>
+      </div>
+    </section>
+
+    <div class="home-footer">
+      &copy; 2025 Home-Coming Cloud Kitchen, Kharagpur.<br />Made with &hearts;
+      by Dhruv Varshney
+    </div>
+
+    <div id="order-modal" class="home-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+      <div class="home-modal__content">
+        <button type="button" class="home-modal__close" aria-label="Close order confirmation">&times;</button>
+        <h3 id="order-modal-title">Order Confirmed!</h3>
+        <p>Thank you for your order. Your food is on its way!</p>
+        <p>Your Order ID is: <strong id="new-order-id"></strong></p>
+        <p style="font-size: 0.9em">Please use this ID to track your order's progress.</p>
+      </div>
+    </div>
+
+    <script type="module" src="js/pages/landing.js"></script>
+  </body>
+</html>

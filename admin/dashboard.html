@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Admin Dashboard | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/design-system.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layouts.css" />
+  </head>
+  <body data-page="admin-dashboard">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="../logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="../index.html">Home</a></li>
+          <li><a data-nav href="../menu.html">Menu</a></li>
+          <li><a data-nav href="../order.html">Order</a></li>
+          <li><a data-nav href="../login.html">Login</a></li>
+          <li><a data-nav href="../customer/account.html">Customer Portal</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="admin-layout">
+      <header class="admin-header">
+        <div class="admin-nav">
+          <div>
+            <p class="overline">Admin Console</p>
+            <h1>Today&apos;s Overview</h1>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--outline btn--sm" type="button">
+              Export Data
+            </button>
+            <button id="adminLogoutBtn" class="btn btn--primary btn--sm" type="button">
+              Sign Out
+            </button>
+          </div>
+        </div>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
+          <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
+          <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
+          <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
+        </nav>
+      </header>
+
+      <section class="admin-content">
+        <div class="content-header">
+          <div>
+            <h2>Operations snapshot</h2>
+            <p class="text-subtle">Live metrics refresh every 60 seconds</p>
+          </div>
+          <div class="filters">
+            <label class="sr-only" for="snapshotRange">Time range</label>
+            <select id="snapshotRange" class="form-control">
+              <option value="today" selected>Today</option>
+              <option value="week">This week</option>
+              <option value="month">This month</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="reports-grid">
+          <article class="card">
+            <div class="card__body">
+              <h3>Orders in progress</h3>
+              <p class="stat-value" aria-live="polite">12</p>
+              <p class="text-subtle">6 pending · 4 preparing · 2 ready</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__body">
+              <h3>Average fulfillment time</h3>
+              <p class="stat-value">32 min</p>
+              <p class="status status--info">Up 5% vs yesterday</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__body">
+              <h3>Capacity</h3>
+              <div class="capacity-info">
+                <span>Lunch</span>
+                <strong>76% booked</strong>
+              </div>
+              <div class="capacity-bar">
+                <div class="capacity-fill" style="width: 76%"></div>
+              </div>
+              <div class="capacity-info">
+                <span>Dinner</span>
+                <strong>54% booked</strong>
+              </div>
+              <div class="capacity-bar">
+                <div class="capacity-fill" style="width: 54%"></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <section class="orders-container" aria-labelledby="latestOrdersHeading">
+          <div class="content-header">
+            <div>
+              <h2 id="latestOrdersHeading">Latest orders</h2>
+              <p class="text-subtle">Track status and reassign pickup windows</p>
+            </div>
+            <div class="filters">
+              <label class="sr-only" for="orderFilter">Filter orders</label>
+              <select id="orderFilter" class="form-control">
+                <option value="all" selected>All statuses</option>
+                <option value="priority">Priority</option>
+                <option value="pending">Pending</option>
+                <option value="ready">Ready</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="orders-grid" role="list">
+            <article class="order-card" role="listitem">
+              <header class="order-header">
+                <span class="order-id">Order #1042</span>
+                <span class="order-time">Scheduled · 1:00 PM</span>
+              </header>
+              <div class="order-customer">
+                <h4>Arjun Singh</h4>
+                <p>Combo thali · 2 add-ons</p>
+              </div>
+              <footer class="order-footer">
+                <span class="status status--warning">Preparing</span>
+                <button class="btn btn--sm btn--outline" type="button">
+                  View details
+                </button>
+              </footer>
+            </article>
+
+            <article class="order-card" role="listitem">
+              <header class="order-header">
+                <span class="order-id">Order #1041</span>
+                <span class="order-time">Scheduled · 12:30 PM</span>
+              </header>
+              <div class="order-customer">
+                <h4>Neha Verma</h4>
+                <p>Family platter · express delivery</p>
+              </div>
+              <footer class="order-footer">
+                <span class="status status--success">Ready</span>
+                <button class="btn btn--sm btn--outline" type="button">
+                  Mark delivered
+                </button>
+              </footer>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="../js/pages/admin-dashboard.js"></script>
+    <script src="../script.js" defer></script>
+  </body>
+</html>

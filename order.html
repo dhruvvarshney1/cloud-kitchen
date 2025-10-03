@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Schedule an Order | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layouts.css" />
+  </head>
+  <body data-page="order">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="index.html">Home</a></li>
+          <li><a data-nav href="menu.html">Menu</a></li>
+          <li><a data-nav href="order.html">Order</a></li>
+          <li>
+            <a id="navLoginBtn" data-nav href="login.html">Login</a>
+          </li>
+          <li id="userInfo" class="hidden">
+            <span class="nav-user">Hi, <span id="publicUserName"></span></span>
+          </li>
+          <li>
+            <a
+              id="navMessagesBtn"
+              class="btn btn--outline btn--sm hidden"
+              href="customer/account.html"
+            >
+              Messages
+            </a>
+          </li>
+          <li>
+            <button
+              id="publicLogoutBtn"
+              class="btn btn--primary btn--sm hidden"
+              type="button"
+            >
+              Logout
+            </button>
+          </li>
+          <li><a data-nav href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="mainContent">
+      <section class="place-order-online-section">
+        <h2>Schedule Your Delivery</h2>
+        <p>
+          Choose a time slot, pick from the daily specials, and we’ll bring
+          homestyle goodness straight to your doorstep.
+        </p>
+
+        <div class="timeslots">
+          <div class="timeslot">
+            <h4>Lunch</h4>
+            <p>13:00 - 14:00</p>
+          </div>
+          <div class="timeslot">
+            <h4>Dinner</h4>
+            <p>19:00 - 20:00</p>
+          </div>
+        </div>
+
+        <form id="scheduled-order-form" class="order-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="delivery-date" class="form-label"
+                >Select Delivery Date</label
+              >
+              <select
+                id="delivery-date"
+                name="delivery-date"
+                class="form-control"
+                required
+              ></select>
+            </div>
+            <div class="form-group">
+              <label for="delivery-time" class="form-label"
+                >Select Delivery Time Slot</label
+              >
+              <select
+                id="delivery-time"
+                name="delivery-time"
+                class="form-control"
+              ></select>
+            </div>
+          </div>
+
+          <div id="menu-of-the-day" class="card hidden">
+            <div class="card__body">
+              <h4>Menu of the Day</h4>
+              <div id="daily-menu-items" class="daily-menu-items"></div>
+            </div>
+          </div>
+
+          <div id="delivery-details" class="card hidden">
+            <div class="card__body">
+              <h4>Delivery Details</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="scheduled-name">Name</label>
+                  <input
+                    id="scheduled-name"
+                    class="form-control"
+                    type="text"
+                    name="customer-name"
+                    autocomplete="name"
+                    inputmode="text"
+                    required
+                  />
+                  </div>
+                <div class="form-group">
+                  <label class="form-label" for="scheduled-phone">Phone</label>
+                  <input
+                    id="scheduled-phone"
+                    class="form-control"
+                    type="tel"
+                    name="customer-phone"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="scheduled-address">Address</label>
+                <textarea
+                  id="scheduled-address"
+                  class="form-control"
+                  name="customer-address"
+                  rows="3"
+                  placeholder="House number, street, landmark"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="scheduled-preferences"
+                  >Food Preferences</label
+                >
+                <textarea
+                  id="scheduled-preferences"
+                  class="form-control"
+                  name="customer-preferences"
+                  rows="2"
+                  placeholder="Allergies, spice levels, special requests"
+                ></textarea>
+              </div>
+
+              <div id="locationMapWrap" class="map-embed hidden">
+                <iframe
+                  title="Delivery area map"
+                  width="100%"
+                  height="240"
+                  style="border: 0"
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="order-notes">Order Notes</label>
+                <textarea
+                  id="order-notes"
+                  class="form-control"
+                  name="order-notes"
+                  rows="2"
+                  placeholder="Optional instructions for delivery"
+                ></textarea>
+              </div>
+
+              <div class="order-summary">
+                <h5>Order Summary</h5>
+                <div id="summary-items" class="summary-items"></div>
+                <div id="summary-location" class="summary-location"></div>
+                <div class="summary-totals">
+                  <div>
+                    <span>Subtotal</span>
+                    <span id="subtotal">₹0</span>
+                  </div>
+                  <div>
+                    <span>Delivery Fee</span>
+                    <span id="delivery-fee">₹30</span>
+                  </div>
+                  <div class="summary-total">
+                    <span>Total</span>
+                    <span id="total">₹30</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--full-width">
+                  Place Scheduled Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/pages/order.js"></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>

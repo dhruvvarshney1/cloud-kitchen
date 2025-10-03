@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Customer Messaging | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/design-system.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layouts.css" />
+  </head>
+  <body data-page="admin-messaging">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="../logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="../index.html">Home</a></li>
+          <li><a data-nav href="../menu.html">Menu</a></li>
+          <li><a data-nav href="../order.html">Order</a></li>
+          <li><a data-nav href="../login.html">Login</a></li>
+          <li><a data-nav href="../customer/account.html">Customer Portal</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="admin-layout">
+      <header class="admin-header">
+        <div class="admin-nav">
+          <div>
+            <p class="overline">Admin Console</p>
+            <h1>Customer messaging</h1>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--outline btn--sm" type="button">
+              Compose broadcast
+            </button>
+            <button id="adminMessagingLogoutBtn" class="btn btn--primary btn--sm" type="button">
+              Sign Out
+            </button>
+          </div>
+        </div>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
+          <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
+          <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
+          <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
+        </nav>
+      </header>
+
+      <section class="admin-content">
+        <div class="content-header">
+          <div>
+            <h2>Conversation center</h2>
+            <p class="text-subtle">Reply to customers and track follow-ups</p>
+          </div>
+          <div class="filters">
+            <label class="sr-only" for="conversationFilter">Filter conversations</label>
+            <select id="conversationFilter" class="form-control">
+              <option value="open" selected>Open chats</option>
+              <option value="unread">Unread</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+        </div>
+
+        <section class="messages-layout">
+          <aside class="conversation-list" aria-label="Conversations">
+            <ul class="conversations">
+              <li class="active">
+                <h3>Arjun Singh</h3>
+                <p>“Can I get an extra portion of dal?”</p>
+                <span class="status status--success">VIP · 11:45 AM</span>
+              </li>
+              <li>
+                <h3>Neha Verma</h3>
+                <p>“Do you deliver to IIT campus hostels?”</p>
+                <span class="status status--info">New · 11:30 AM</span>
+              </li>
+              <li>
+                <h3>Jay Patel</h3>
+                <p>“Order delivered with one item missing.”</p>
+                <span class="status status--warning">Action needed</span>
+              </li>
+            </ul>
+          </aside>
+
+          <section class="chat-pane" aria-label="Message thread">
+            <header class="chat-header">
+              <div>
+                <h2>Arjun Singh</h2>
+                <p class="text-subtle">3 orders · Last order yesterday</p>
+              </div>
+              <button class="btn btn--outline btn--sm" type="button">
+                Mark resolved
+              </button>
+            </header>
+            <div class="chat-messages">
+              <div class="msg them">
+                <p>Hi! Can I get an extra portion of dal with today&apos;s thali?</p>
+                <span class="meta">11:44 AM</span>
+              </div>
+              <div class="msg me">
+                <p>Absolutely! I&apos;ll add it to your order at no extra charge.</p>
+                <span class="meta">11:45 AM</span>
+              </div>
+              <div class="msg them">
+                <p>Thanks so much!</p>
+                <span class="meta">11:45 AM</span>
+              </div>
+            </div>
+            <form class="chat-input-row" aria-label="Reply to customer">
+              <label class="sr-only" for="chatMessage">Message</label>
+              <textarea
+                id="chatMessage"
+                class="form-control"
+                rows="3"
+                placeholder="Type your reply..."
+                required
+              ></textarea>
+              <div class="flex flex-col gap-8">
+                <button class="btn btn--secondary" type="button">
+                  Save draft
+                </button>
+                <button class="btn btn--primary" type="submit">Send reply</button>
+              </div>
+            </form>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="../js/pages/admin-messaging.js"></script>
+    <script src="../script.js" defer></script>
+  </body>
+</html>

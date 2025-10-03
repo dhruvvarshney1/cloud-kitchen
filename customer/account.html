@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Customer Portal | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/design-system.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layouts.css" />
+  </head>
+  <body data-page="customer-account">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="../logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="../index.html">Home</a></li>
+          <li><a data-nav href="../menu.html">Menu</a></li>
+          <li><a data-nav href="../order.html">Order</a></li>
+          <li><a data-nav href="../login.html">Login</a></li>
+          <li><a data-nav href="account.html">Customer Portal</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="customer-layout">
+      <section class="customer-hero">
+        <div class="customer-welcome">
+          <h2>Welcome back!</h2>
+          <p class="text-subtle">
+            Track your upcoming deliveries, reorder favourites, and message the kitchen.
+          </p>
+          <div class="flex gap-8">
+            <a class="btn btn--primary" href="../order.html">Place a new order</a>
+            <a class="btn btn--outline" href="../menu.html">View today&apos;s menu</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="customer-content" aria-labelledby="orderHistoryHeading">
+        <div class="content-header">
+          <div>
+            <h2 id="orderHistoryHeading">Recent orders</h2>
+            <p class="text-subtle">Download invoices or duplicate an earlier order</p>
+          </div>
+          <button class="btn btn--outline btn--sm" type="button">
+            View all
+          </button>
+        </div>
+
+        <div class="orders-grid" role="list">
+          <article class="order-card" role="listitem">
+            <header class="order-header">
+              <span class="order-id">Order #1042</span>
+              <span class="order-time">Scheduled · Today, 1:00 PM</span>
+            </header>
+            <div class="order-customer">
+              <p>Mains: Chef&apos;s Thali · Add-ons: Masala chai</p>
+            </div>
+            <footer class="order-footer">
+              <span class="status status--warning">Preparing</span>
+              <div class="menu-item-actions">
+                <button class="btn btn--outline btn--sm" type="button">Track</button>
+                <button class="btn btn--outline btn--sm" type="button">Reorder</button>
+              </div>
+            </footer>
+          </article>
+          <article class="order-card" role="listitem">
+            <header class="order-header">
+              <span class="order-id">Order #1036</span>
+              <span class="order-time">Delivered · Feb 8</span>
+            </header>
+            <div class="order-customer">
+              <p>Family Platter · Dessert sampler</p>
+            </div>
+            <footer class="order-footer">
+              <span class="status status--success">Delivered</span>
+              <div class="menu-item-actions">
+                <button class="btn btn--outline btn--sm" type="button">Invoice</button>
+                <button class="btn btn--outline btn--sm" type="button">Rate</button>
+              </div>
+            </footer>
+          </article>
+        </div>
+      </section>
+
+      <section class="customer-content" aria-labelledby="messagesHeading">
+        <div class="content-header">
+          <div>
+            <h2 id="messagesHeading">Messages</h2>
+            <p class="text-subtle">Ask the kitchen a question or share feedback</p>
+          </div>
+          <button class="btn btn--primary btn--sm" type="button">
+            New message
+          </button>
+        </div>
+
+        <div class="messages-layout">
+          <div class="conversation-list">
+            <strong>Latest conversations</strong>
+            <ul class="conversations">
+              <li class="active">Delivery timing · Yesterday</li>
+              <li>Menu query · Feb 5</li>
+              <li>Feedback · Jan 28</li>
+            </ul>
+          </div>
+          <div class="chat-pane">
+            <header class="chat-header">
+              <h3>Delivery timing</h3>
+              <p class="text-subtle">Asked yesterday · Response time 5 mins</p>
+            </header>
+            <div class="chat-messages">
+              <div class="msg them">
+                <p>Can I prepone delivery to 12:30 PM?</p>
+                <span class="meta">You · Yesterday 10:15 AM</span>
+              </div>
+              <div class="msg me">
+                <p>Absolutely! We&apos;ll arrive by 12:30 PM.</p>
+                <span class="meta">Kitchen · Yesterday 10:18 AM</span>
+              </div>
+            </div>
+            <form class="chat-input-row">
+              <label class="sr-only" for="customerMessage">Message</label>
+              <textarea
+                id="customerMessage"
+                class="form-control"
+                rows="3"
+                placeholder="Ask the kitchen..."
+              ></textarea>
+              <button class="btn btn--primary" type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="../js/pages/account.js"></script>
+    <script src="../script.js" defer></script>
+  </body>
+</html>

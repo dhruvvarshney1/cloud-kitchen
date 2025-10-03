@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Menu Management | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/design-system.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layouts.css" />
+  </head>
+  <body data-page="admin-menu">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="../logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="../index.html">Home</a></li>
+          <li><a data-nav href="../menu.html">Menu</a></li>
+          <li><a data-nav href="../order.html">Order</a></li>
+          <li><a data-nav href="../login.html">Login</a></li>
+          <li><a data-nav href="../customer/account.html">Customer Portal</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="admin-layout">
+      <header class="admin-header">
+        <div class="admin-nav">
+          <div>
+            <p class="overline">Admin Console</p>
+            <h1>Menu management</h1>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--outline btn--sm" type="button">
+              Draft new menu
+            </button>
+            <button id="adminMenuLogoutBtn" class="btn btn--primary btn--sm" type="button">
+              Sign Out
+            </button>
+          </div>
+        </div>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
+          <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
+          <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
+          <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
+        </nav>
+      </header>
+
+      <section class="admin-content">
+        <div class="content-header">
+          <div>
+            <h2>Active catalogue</h2>
+            <p class="text-subtle">Organize categories, pricing, and availability</p>
+          </div>
+          <div class="menu-controls">
+            <label class="sr-only" for="menuFilter">Filter category</label>
+            <select id="menuFilter" class="form-control">
+              <option value="all" selected>All items</option>
+              <option value="combos">Combos</option>
+              <option value="specials">Weekly specials</option>
+              <option value="beverages">Beverages</option>
+            </select>
+            <button class="btn btn--primary btn--sm" type="button">
+              Add item
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-items-list" role="list">
+          <article class="menu-item-card" role="listitem">
+            <div class="menu-item-info">
+              <h4>Chef&apos;s Thali</h4>
+              <p>Seasonal vegetables, dal, rice, rotis, chutney</p>
+              <span class="status status--success">Available</span>
+            </div>
+            <div class="menu-item-actions">
+              <span class="menu-item-price">₹249</span>
+              <button class="btn btn--outline btn--sm" type="button">Edit</button>
+              <button class="btn btn--outline btn--sm" type="button">Archive</button>
+            </div>
+          </article>
+
+          <article class="menu-item-card" role="listitem">
+            <div class="menu-item-info">
+              <h4>Family Platter</h4>
+              <p>Feeds 4 · includes dessert add-on</p>
+              <span class="status status--warning">Low stock</span>
+            </div>
+            <div class="menu-item-actions">
+              <span class="menu-item-price">₹599</span>
+              <button class="btn btn--outline btn--sm" type="button">Edit</button>
+              <button class="btn btn--outline btn--sm" type="button">Duplicate</button>
+            </div>
+          </article>
+        </div>
+
+        <section class="capacity-grid" aria-labelledby="prepCapacityHeading">
+          <div class="content-header">
+            <div>
+              <h2 id="prepCapacityHeading">Prep capacity</h2>
+              <p class="text-subtle">Balance kitchen load across popular dishes</p>
+            </div>
+          </div>
+          <article class="capacity-card">
+            <h4>Signature curries</h4>
+            <p>Batch size: 24 portions</p>
+            <div class="capacity-bar">
+              <div class="capacity-fill" style="width: 42%"></div>
+            </div>
+          </article>
+          <article class="capacity-card">
+            <h4>Fresh rotis</h4>
+            <p>Batch size: 120 units</p>
+            <div class="capacity-bar">
+              <div class="capacity-fill" style="width: 68%"></div>
+            </div>
+          </article>
+          <article class="capacity-card">
+            <h4>Regional specials</h4>
+            <p>Batch size: 12 portions</p>
+            <div class="capacity-bar">
+              <div class="capacity-fill" style="width: 30%"></div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="../js/pages/admin-menu.js"></script>
+    <script src="../script.js" defer></script>
+  </body>
+</html>

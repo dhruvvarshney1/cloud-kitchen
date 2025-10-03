@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Account Access | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layouts.css" />
+  </head>
+  <body data-page="login">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="index.html">Home</a></li>
+          <li><a data-nav href="menu.html">Menu</a></li>
+          <li><a data-nav href="order.html">Order</a></li>
+          <li>
+            <a
+              id="navLoginBtn"
+              data-nav
+              href="login.html"
+              aria-current="page"
+              >Login</a
+            >
+          </li>
+          <li id="userInfo" class="hidden">
+            <span class="nav-user">Hi, <span id="publicUserName"></span></span>
+          </li>
+          <li>
+            <a
+              id="navMessagesBtn"
+              class="btn btn--outline btn--sm hidden"
+              href="customer/account.html"
+            >
+              Messages
+            </a>
+          </li>
+          <li>
+            <button
+              id="publicLogoutBtn"
+              class="btn btn--primary btn--sm hidden"
+              type="button"
+            >
+              Logout
+            </button>
+          </li>
+          <li><a data-nav href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="mainContent">
+      <section>
+        <div id="loginScreen" class="screen">
+          <div class="login-container">
+            <div class="card">
+              <div class="card__body">
+                <div class="login-header">
+                  <h2>Welcome back</h2>
+                  <p>Sign in to view your orders and manage your account.</p>
+                </div>
+                <form id="loginForm" class="login-form">
+                  <div class="form-group">
+                    <label class="form-label" for="username">Email</label>
+                    <input
+                      id="username"
+                      class="form-control"
+                      type="email"
+                      name="username"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input
+                      id="password"
+                      class="form-control"
+                      type="password"
+                      name="password"
+                      autocomplete="current-password"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn--primary btn--full-width">
+                    Sign In
+                  </button>
+                </form>
+                <div class="login-options">
+                  <p>Don't have an account yet?</p>
+                  <button id="showRegisterBtn" type="button" class="link-btn">
+                    Create one now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="registerScreen" class="screen hidden">
+          <div class="login-container">
+            <div class="card">
+              <div class="card__body">
+                <div class="login-header">
+                  <h2>Create an account</h2>
+                  <p>Share your details so we can deliver without a hitch.</p>
+                </div>
+                <form id="registerForm" class="login-form">
+                  <div class="form-group">
+                    <label class="form-label" for="regName">Full Name</label>
+                    <input
+                      id="regName"
+                      class="form-control"
+                      type="text"
+                      name="name"
+                      autocomplete="name"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regEmail">Email</label>
+                    <input
+                      id="regEmail"
+                      class="form-control"
+                      type="email"
+                      name="email"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regPhone">Phone Number</label>
+                    <input
+                      id="regPhone"
+                      class="form-control"
+                      type="tel"
+                      name="phone"
+                      autocomplete="tel"
+                      inputmode="tel"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regAddress">Delivery Address</label>
+                    <textarea
+                      id="regAddress"
+                      class="form-control"
+                      name="address"
+                      rows="3"
+                      autocomplete="street-address"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regPassword">Password</label>
+                    <input
+                      id="regPassword"
+                      class="form-control"
+                      type="password"
+                      name="password"
+                      autocomplete="new-password"
+                      required
+                    />
+                  </div>
+                  <p id="passwordError" class="hidden" role="alert">
+                    Password must be at least 6 characters long.
+                  </p>
+                  <button type="submit" class="btn btn--primary btn--full-width">
+                    Create Account
+                  </button>
+                </form>
+                <div class="login-options">
+                  <p>Already registered?</p>
+                  <button id="showLoginBtn" type="button" class="link-btn">
+                    Sign in instead
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/pages/login.js"></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>

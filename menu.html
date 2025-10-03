@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Menu | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layouts.css" />
+  </head>
+  <body data-page="menu">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="index.html">Home</a></li>
+          <li><a data-nav href="menu.html">Menu</a></li>
+          <li><a data-nav href="order.html">Order</a></li>
+          <li>
+            <a id="navLoginBtn" data-nav href="login.html">Login</a>
+          </li>
+          <li id="userInfo" class="hidden">
+            <span class="nav-user">Hi, <span id="publicUserName"></span></span>
+          </li>
+          <li>
+            <a
+              id="navMessagesBtn"
+              class="btn btn--outline btn--sm hidden"
+              href="customer/account.html"
+            >
+              Messages
+            </a>
+          </li>
+          <li>
+            <button
+              id="publicLogoutBtn"
+              class="btn btn--primary btn--sm hidden"
+              type="button"
+            >
+              Logout
+            </button>
+          </li>
+          <li><a data-nav href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="mainContent">
+      <section class="info-section">
+        <h2>Full Menu</h2>
+        <p>
+          Explore our full spread of homestyle specials, breads, seasonal
+          vegetable dishes, and snacks. Call us for bulk orders or visit the
+          ordering page to schedule a daily menu delivery.
+        </p>
+      </section>
+
+      <section class="menu-section">
+        <h3 class="menu-title">Homely Specials</h3>
+        <div class="table-wrap">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th>Meal</th>
+                <th>Price (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rice with Chicken Curry, Dal Fry &amp; Salad</td>
+                <td>220</td>
+              </tr>
+              <tr>
+                <td>Rice with Fish Curry, Dal &amp; Seasonal Veg</td>
+                <td>230</td>
+              </tr>
+              <tr>
+                <td>Rice with Paneer Butter Masala &amp; Dal Makhani</td>
+                <td>210</td>
+              </tr>
+              <tr>
+                <td>Paratha Combo: Aloo Paratha (2) with Dahi &amp; Achar</td>
+                <td>140</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Breads</h3>
+        <div class="table-wrap">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Price (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Butter Roti (per piece)</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Plain Roti (per piece)</td>
+                <td>15</td>
+              </tr>
+              <tr>
+                <td>Phulka (per piece)</td>
+                <td>14</td>
+              </tr>
+              <tr>
+                <td>Plain Paratha</td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>Lachha Paratha</td>
+                <td>40</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cols">
+          <div class="col section">
+            <h3>Vegetable Dishes</h3>
+            <div class="table-wrap">
+              <table class="menu-table">
+                <tbody>
+                  <tr>
+                    <td>Chana Masala</td>
+                    <td>150</td>
+                  </tr>
+                  <tr>
+                    <td>Paneer Bhurji</td>
+                    <td>170</td>
+                  </tr>
+                  <tr>
+                    <td>Mixed Veg Curry</td>
+                    <td>150</td>
+                  </tr>
+                  <tr>
+                    <td>Dal Fry</td>
+                    <td>130</td>
+                  </tr>
+                  <tr>
+                    <td>Dal Tadka</td>
+                    <td>130</td>
+                  </tr>
+                  <tr>
+                    <td>Rajma Masala</td>
+                    <td>150</td>
+                  </tr>
+                  <tr>
+                    <td>Aloo Parwal Masala</td>
+                    <td>150</td>
+                  </tr>
+                  <tr>
+                    <td>Paneer Butter Masala</td>
+                    <td>190</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col section">
+            <h3>Snacks</h3>
+            <div class="table-wrap">
+              <table class="menu-table">
+                <tbody>
+                  <tr>
+                    <td>Aloo Samosa (2 pcs)</td>
+                    <td>40</td>
+                  </tr>
+                  <tr>
+                    <td>Paneer Pakora (6 pcs)</td>
+                    <td>120</td>
+                  </tr>
+                  <tr>
+                    <td>Mixed Veg Pakora (8 pcs)</td>
+                    <td>90</td>
+                  </tr>
+                  <tr>
+                    <td>Veg Cutlet (2 pcs)</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Chicken Pakora (6 pcs)</td>
+                    <td>140</td>
+                  </tr>
+                  <tr>
+                    <td>Chicken Cutlet (2 pcs)</td>
+                    <td>100</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrap">
+              <table class="menu-table bulk">
+                <thead>
+                  <tr>
+                    <th>Bulk Orders</th>
+                    <th>Price (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Veg Pulao (serves 10)</td>
+                    <td>900</td>
+                  </tr>
+                  <tr>
+                    <td>Chicken Biryani (serves 10)</td>
+                    <td>1400</td>
+                  </tr>
+                  <tr>
+                    <td>Paneer Butter Masala (serves 10)</td>
+                    <td>1300</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <footer class="menu-footer">
+          <p>Order @ 9002783349</p>
+          <p>Customized Home Food Available on Demand!!!</p>
+          <p>Enjoy Your Meal!</p>
+        </footer>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/pages/menu.js"></script>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  <meta name="theme-color" content="#357a38" />
+    <title>Reports &amp; Insights | Home-Coming Cloud Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/design-system.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layouts.css" />
+  </head>
+  <body data-page="admin-reports">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+
+    <header class="site-header">
+      <div class="logo">
+        <img src="../logo.png" alt="Home-Coming Logo" />
+        <h1>Home-Coming Cloud Kitchen</h1>
+      </div>
+      <button
+        class="btn btn--outline btn--sm nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="siteNav"
+      >
+        Menu
+      </button>
+      <nav id="siteNav" data-site-nav>
+        <ul>
+          <li><a data-nav href="../index.html">Home</a></li>
+          <li><a data-nav href="../menu.html">Menu</a></li>
+          <li><a data-nav href="../order.html">Order</a></li>
+          <li><a data-nav href="../login.html">Login</a></li>
+          <li><a data-nav href="../customer/account.html">Customer Portal</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="admin-layout">
+      <header class="admin-header">
+        <div class="admin-nav">
+          <div>
+            <p class="overline">Admin Console</p>
+            <h1>Reports &amp; insights</h1>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--outline btn--sm" type="button">
+              Download CSV
+            </button>
+            <button id="adminReportsLogoutBtn" class="btn btn--primary btn--sm" type="button">
+              Sign Out
+            </button>
+          </div>
+        </div>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
+          <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
+          <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
+          <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
+        </nav>
+      </header>
+
+      <section class="admin-content">
+        <div class="content-header">
+          <div>
+            <h2>Performance analytics</h2>
+            <p class="text-subtle">Understand demand, retention, and revenue</p>
+          </div>
+          <div class="filters">
+            <label class="sr-only" for="reportRange">Time range</label>
+            <select id="reportRange" class="form-control">
+              <option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="reports-grid" role="list">
+          <article class="card" role="listitem">
+            <header class="card__header">
+              <h3>Revenue</h3>
+              <span class="status status--success">+11.4%</span>
+            </header>
+            <div class="card__body">
+              <p class="stat-value">₹2,48,300</p>
+              <p class="text-subtle">vs ₹2,23,100 last month</p>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <header class="card__header">
+              <h3>Repeat customers</h3>
+              <span class="status status--info">Stable</span>
+            </header>
+            <div class="card__body">
+              <p class="stat-value">38%</p>
+              <p class="text-subtle">Target 45% by next quarter</p>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <header class="card__header">
+              <h3>Average order value</h3>
+              <span class="status status--warning">Slight dip</span>
+            </header>
+            <div class="card__body">
+              <p class="stat-value">₹417</p>
+              <p class="text-subtle">Plan promotions to lift basket size</p>
+            </div>
+          </article>
+        </div>
+
+        <section class="orders-container" aria-labelledby="reportHighlights">
+          <div class="content-header">
+            <div>
+              <h2 id="reportHighlights">Highlights</h2>
+              <p class="text-subtle">Weekly insights surfaced from order data</p>
+            </div>
+          </div>
+          <div class="orders-grid">
+            <article class="order-card">
+              <h4>Top combo of the week</h4>
+              <p>Punjabi Comfort Meal · 92 orders</p>
+              <p class="text-subtle">Recommend pairing with lassi upsell</p>
+            </article>
+            <article class="order-card">
+              <h4>Peak ordering window</h4>
+              <p>12:00 PM – 1:00 PM · +19% order volume</p>
+              <p class="text-subtle">Staff second prep line to reduce delays</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="../js/pages/admin-reports.js"></script>
+    <script src="../script.js" defer></script>
+  </body>
+</html>

@@ -486,6 +486,36 @@ select.form-control {
   margin-bottom: var(--space-16);
 }
 
+.password-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.password-toggle-btn {
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.password-toggle-btn:hover,
+.password-toggle-btn:focus-visible {
+  outline: none;
+  background-color: rgba(var(--color-primary-rgb), 0.12);
+}
+
+.password-toggle-btn[aria-pressed="true"] {
+  color: var(--color-btn-primary-text);
+  background-color: var(--color-primary);
+}
+
 .theme-toggle {
   position: fixed;
   bottom: calc(var(--safe-area-bottom) + var(--space-16));

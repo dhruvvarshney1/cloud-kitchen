@@ -25,7 +25,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   
   <!-- Firebase Configuration -->
-  <script src="firebase-config.js"></script>
   </head>
   <body data-page="login" class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
     <button
@@ -90,16 +89,25 @@
                       required
                     />
                   </div>
-                  <div class="form-group">
+                  <div class="form-group password-field">
                     <label class="form-label" for="password">Password</label>
-                    <input
-                      id="password"
-                      class="form-control"
-                      type="password"
-                      name="password"
-                      autocomplete="current-password"
-                      required
-                    />
+                    <div class="password-input-wrapper">
+                      <input
+                        id="password"
+                        class="form-control"
+                        type="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle-btn"
+                        data-password-toggle="password"
+                        aria-pressed="false"
+                        aria-label="Show password"
+                      >Show</button>
+                    </div>
                   </div>
                   <button type="submit" class="btn btn--primary btn--full-width">
                     Sign In
@@ -156,7 +164,6 @@
                       name="phone"
                       autocomplete="tel"
                       inputmode="tel"
-                      required
                     />
                   </div>
                   <div class="form-group">
@@ -167,19 +174,27 @@
                       name="address"
                       rows="3"
                       autocomplete="street-address"
-                      required
                     ></textarea>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group password-field">
                     <label class="form-label" for="regPassword">Password</label>
-                    <input
-                      id="regPassword"
-                      class="form-control"
-                      type="password"
-                      name="password"
-                      autocomplete="new-password"
-                      required
-                    />
+                    <div class="password-input-wrapper">
+                      <input
+                        id="regPassword"
+                        class="form-control"
+                        type="password"
+                        name="password"
+                        autocomplete="new-password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle-btn"
+                        data-password-toggle="regPassword"
+                        aria-pressed="false"
+                        aria-label="Show password"
+                      >Show</button>
+                    </div>
                   </div>
                   <p id="passwordError" class="hidden" role="alert">
                     Password must be at least 6 characters long.

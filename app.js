@@ -1,3 +1,4 @@
+import './firebase-config.js';
 class RestaurantApp {
   constructor() {
     this.currentUser = null;
@@ -38,14 +39,41 @@ class RestaurantApp {
     this.isOnline = navigator.onLine;
     this.foregroundMessagingBound = false;
     this.pwaListenersAttached = false;
+
     this.offlineToastVisible = false;
     this.themeMediaListener = null;
-  this.notificationTimeout = null;
+    this.firebaseInitialized = false;
+    this.firebaseInitPromise = null;
+    this.firebaseApp = null;
+    this.notificationTimeout = null;
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => this.initialize());
     } else {
       this.initialize();
+    }
+  }
+
+  async getUserProfile(uid) {
+    if (!uid || !this.db) return null;
+    try {
+      const userDocRef = this.db.collection("users").doc(uid);
+      const doc = await userDocRef.get();
+      return doc.exists ? doc.data() : null;
+    } catch (error) {
+      console.error("Error getting user profile:", error);
+      throw error;
+    }
+  }
+
+  async createUserProfile(uid, data) {
+    if (!uid || !data || !this.db) return;
+    try {
+        const userDocRef = this.db.collection("users").doc(uid);
+        await userDocRef.set(data, { merge: true });
+    } catch (error) {
+        console.error("Error creating user profile:", error);
+        throw error;
     }
   }
 
@@ -78,7 +106,7 @@ class RestaurantApp {
       }
 
       console.log("Firebase config found. Waiting for Firebase SDK...");
-      const ready = this.waitForFirebase(5000);
+      const ready = await this.waitForFirebase(5000);
       if (!ready) {
         this.showNotification(
           "Could not load SDK. Refresh the page or check your network.",
@@ -88,9 +116,16 @@ class RestaurantApp {
       }
 
       console.log("Firebase SDK ready. Initializing Firebase app...");
-      const app = window.firebase.initializeApp(window.firebaseConfig);
-      this.auth = window.firebase.auth();
-      this.db = window.firebase.firestore();
+      const initialized = await this.ensureFirebaseInitialized();
+      if (!initialized) {
+        this.showNotification(
+          "Firebase failed to initialize. Check console for details.",
+          "error"
+        );
+        return;
+      }
+
+  const app = this.firebaseApp || (typeof window.firebase.app === "function" ? window.firebase.app() : null);
 
       if (window.firebase.isMessagingSupported) {
         try {
@@ -106,8 +141,8 @@ class RestaurantApp {
         }
       }
 
-  await this.registerServiceWorker();
-  this.setupForegroundMessaging();
+    await this.registerServiceWorker();
+    this.setupForegroundMessaging();
       this.refreshNotificationToggle();
 
       console.log(
@@ -122,11 +157,72 @@ class RestaurantApp {
 
   // Firebase helper methods
   waitForFirebase(timeout = 5000) {
-    const start = Date.now();
-    while (!window.firebase && Date.now() - start < timeout) {
-      // Busy wait for Firebase to load
+    if (window.firebase) return Promise.resolve(true);
+
+    return new Promise((resolve) => {
+      const start = Date.now();
+
+      const check = () => {
+        if (window.firebase) {
+          resolve(true);
+          return;
+        }
+
+        if (Date.now() - start >= timeout) {
+          resolve(false);
+          return;
+        }
+
+        window.setTimeout(check, 50);
+      };
+
+      check();
+    });
+  }
+
+  async ensureFirebaseInitialized() {
+    if (this.firebaseInitialized && this.auth && this.db) {
+      return true;
     }
-    return !!window.firebase;
+
+    if (this.firebaseInitPromise) {
+      return this.firebaseInitPromise;
+    }
+
+    this.firebaseInitPromise = (async () => {
+      try {
+        const ready = await this.waitForFirebase(10000); // Increased timeout
+        if (!ready) {
+          console.error("Firebase SDK did not load in time.");
+          this.showNotification("Could not connect to services. Please refresh.", "error");
+          return false;
+        }
+
+        if (!window.firebase.apps || window.firebase.apps.length === 0) {
+          console.log("Initializing new Firebase app...");
+          this.firebaseApp = window.firebase.initializeApp(window.firebaseConfig);
+        } else {
+          console.log("Re-using existing Firebase app...");
+          this.firebaseApp = window.firebase.app();
+        }
+
+        this.auth = window.firebase.auth();
+        this.db = window.firebase.firestore();
+        
+        this.firebaseInitialized = true;
+        console.log("Firebase services are ready.");
+        return true;
+      } catch (error) {
+        console.error("Failed to initialize Firebase services:", error);
+        this.firebaseInitialized = false;
+        this.showNotification("Failed to initialize services. Check console.", "error");
+        return false;
+      } finally {
+        this.firebaseInitPromise = null; // Clear promise after completion
+      }
+    })();
+
+    return this.firebaseInitPromise;
   }
 
   detectHostingEnvironment() {
@@ -229,7 +325,24 @@ class RestaurantApp {
   }
 
   // Authentication methods
-  listenToAuthState() {
+  async listenToAuthState() {
+    console.log("Preparing to listen for auth state...");
+    
+    const initialized = await this.ensureFirebaseInitialized();
+    if (!initialized) {
+        console.error("Cannot listen to auth state, Firebase not initialized.");
+        this.hideLoader();
+        // If on a protected page, redirect, otherwise show public view.
+        const path = window.location.pathname;
+        const isProtectedPage = path.includes('/admin/') || path.includes('/customer/');
+        if (isProtectedPage) {
+            window.location.href = 'login.html';
+        } else {
+            this.updatePublicUIForGuest();
+        }
+        return;
+    }
+
     console.log(
       "Auth listener is active. Waiting for response from Firebase..."
     );
@@ -259,29 +372,20 @@ class RestaurantApp {
         try {
           userProfile = await this.getUserProfile(user.uid);
         } catch (e) {
-          console.error("Error fetching user profile (permissions?):", e);
-          this.showNotification(
-            "Cannot access your profile. Check database permissions.",
-            "error"
-          );
-          await this.logout();
-          this.hideLoader();
-          return;
+          console.error("Error fetching user profile:", e);
+          userProfile = await this.recoverProfileAfterReadFailure(user, e);
+          if (!userProfile) {
+            await this.logout();
+            this.hideLoader();
+            return;
+          }
         }
 
-        console.log("User profile fetched:", userProfile);
+        console.log("User profile resolved:", userProfile);
 
         if (!userProfile) {
           try {
-            const defaultProfile = {
-              name:
-                user.displayName ||
-                (user.email ? user.email.split("@")[0] : "Customer"),
-              email: user.email || "",
-              phone: "",
-              address: "",
-              role: "customer",
-            };
+            const defaultProfile = this.getDefaultProfileForUser(user);
             await this.createUserProfile(user.uid, defaultProfile);
             userProfile = defaultProfile;
             this.showNotification(
@@ -301,49 +405,56 @@ class RestaurantApp {
         }
 
         this.currentUser = { uid: user.uid, email: user.email, ...userProfile };
-
-        const pageContext = document.body?.dataset?.page || "";
-        const hasAdminScreen = document.getElementById("adminScreen");
-        const hasPublicScreen = document.getElementById("publicScreen");
+        const onLoginPage = document.body.dataset.page === 'login';
 
         if (this.currentUser.role === "admin") {
-          console.log("User is admin. Preparing admin experience.");
-
-          if (hasAdminScreen) {
-            this.showScreen("adminScreen");
+          // If on login page, redirect to admin dashboard
+          if (onLoginPage) {
+            window.location.href = 'admin/dashboard.html';
+            return; // Stop further execution on this page
           }
-
-          if (pageContext.startsWith("admin-") || hasAdminScreen) {
-            await this.loadAdminData();
-            this.startConversationsListener?.();
-          } else if (pageContext === "login") {
-            this.hideLoader();
-            this.navigateTo("admin/dashboard.html");
-            return;
-          }
+          // Otherwise, just setup the admin screen (if it exists on the page)
+          console.log("User is admin. Loading admin screen.");
+          this.showScreen("adminScreen");
+          await this.loadAdminData();
+          this.startConversationsListener?.();
         } else {
-          console.log("User is a customer. Preparing customer experience.");
-
-          if (hasPublicScreen) {
-            this.showScreen("publicScreen");
+          // If on login page, redirect to home page for customers
+          if (onLoginPage) {
+            window.location.href = 'index.html';
+            return; // Stop further execution on this page
           }
-
+          // Otherwise, just update the public UI for the logged-in user
+          console.log("User is a customer. Updating UI.");
           this.updatePublicUIForUser();
-
-          if (pageContext === "login" && !hasPublicScreen) {
-            this.hideLoader();
-            this.navigateTo("customer/account.html");
-            return;
-          }
         }
       } else {
         this.currentUser = null;
         this.detachListeners();
-        console.log("No user is logged in. Showing public landing.");
-        const hasPublicScreen = document.getElementById("publicScreen");
-        if (hasPublicScreen) {
-          this.showScreen("publicScreen");
+        
+        const path = window.location.pathname;
+        const onLoginPage = document.body.dataset.page === 'login';
+        
+        // Check if on a page that requires login
+        const isProtectedPage = path.includes('/admin/') || path.includes('/customer/');
+
+        if (isProtectedPage) {
+          console.log("User is not logged in. Redirecting from protected page.");
+          // Adjust path for redirection from nested directories
+          const relativePathToRoot = path.split('/').length > 2 ? '../' : './';
+          window.location.href = `${relativePathToRoot}login.html`;
+          return; // Stop further execution
         }
+        
+        if (onLoginPage) {
+          // If we are on the login page and the user is null, this is the correct state.
+          // The page is already visible, so we just hide the loader and stop.
+          this.hideLoader();
+          console.log("On login page and user is not logged in. UI is correct.");
+          return;
+        }
+        
+        console.log("No user is logged in. Showing public landing.");
         this.updatePublicUIForGuest();
       }
 
@@ -354,32 +465,88 @@ class RestaurantApp {
 
   async handleLogin(e) {
     e.preventDefault();
+    
+    const initialized = await this.ensureFirebaseInitialized();
+    if (!initialized) {
+        this.showNotification("Services are not ready. Please try again in a moment.", "error");
+        return;
+    }
+
     this.showLoader();
 
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
-  const email = usernameInput ? usernameInput.value.trim() : "";
-  const password = passwordInput ? passwordInput.value.trim() : "";
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const email = usernameInput ? usernameInput.value.trim() : "";
+    const password = passwordInput ? passwordInput.value.trim() : "";
 
+    console.info("Attempting login for", email || "<empty email>");
     try {
-      if (!this.auth ||
-          typeof this.auth.signInWithEmailAndPassword !== "function") {
-        this.showNotification(
-          "Service not ready yet. Please wait a moment and try again.",
-          "error"
+      const ready = await this.ensureFirebaseInitialized();
+      if (!ready ||
+          typeof this.auth?.signInWithEmailAndPassword !== "function") {
+        const unavailableError = new Error(
+          "Authentication service is not ready."
         );
-        this.hideLoader();
-        return;
+        unavailableError.code = "auth/service-unavailable";
+        throw unavailableError;
       }
+
+      if (!email) {
+        const invalidEmailError = new Error("Email is required.");
+        invalidEmailError.code = "auth/invalid-email";
+        throw invalidEmailError;
+      }
+
+      if (!password) {
+        const missingPasswordError = new Error("Password is required.");
+        missingPasswordError.code = "auth/missing-password";
+        throw missingPasswordError;
+      }
+
+      if (typeof this.auth.fetchSignInMethodsForEmail === "function") {
+        const signInMethods = await this.auth.fetchSignInMethodsForEmail(email);
+        if (!Array.isArray(signInMethods) || signInMethods.length === 0) {
+          const userNotFoundError = new Error("User not found.");
+          userNotFoundError.code = "auth/user-not-found";
+          throw userNotFoundError;
+        }
+      }
+
       await this.auth.signInWithEmailAndPassword(email, password);
+      console.info("Login request accepted by Firebase for", email);
     } catch (error) {
-      this.showNotification(this.getFriendlyAuthError(error.code), "error");
+      let normalizedError = error;
+
+      if (error?.code === "auth/wrong-password") {
+        normalizedError = new Error("Password mismatch");
+        normalizedError.code = "auth/password-mismatch";
+      } else if (error?.code === "auth/user-not-found") {
+        normalizedError = new Error("User not found");
+        normalizedError.code = "auth/user-not-found";
+      }
+
+      console.error("Login failed:", normalizedError);
+      this.showNotification(
+        this.getFriendlyAuthError(
+          normalizedError.code,
+          normalizedError.message
+        ),
+        "error"
+      );
+      throw normalizedError;
+    } finally {
       this.hideLoader();
     }
   }
 
   async handleRegister(e) {
     e.preventDefault();
+
+    const initialized = await this.ensureFirebaseInitialized();
+    if (!initialized) {
+        this.showNotification("Services are not ready. Please try again in a moment.", "error");
+        return;
+    }
 
     const password = document.getElementById("regPassword").value.trim();
     const passwordError = document.getElementById("passwordError");
@@ -400,28 +567,51 @@ class RestaurantApp {
       role: "customer",
     };
 
+    let userCredential = null;
     try {
-      if (!this.auth ||
-          typeof this.auth.createUserWithEmailAndPassword !== "function") {
+      const ready = await this.ensureFirebaseInitialized();
+      if (!ready ||
+          typeof this.auth?.createUserWithEmailAndPassword !== "function") {
         this.showNotification(
           "Service not ready yet. Please wait a moment and try again.",
           "error"
         );
-        this.hideLoader();
         return;
       }
-      const userCredential =
+
+      userCredential =
         await this.auth.createUserWithEmailAndPassword(
           userData.email,
           password
         );
-      await this.createUserProfile(userCredential.user.uid, userData);
+      
+      console.log("Firebase Auth user created:", userCredential.user.uid);
+
+      try {
+        await this.createUserProfile(userCredential.user.uid, userData);
+        console.log("Firestore user profile created successfully.");
+      } catch (profileError) {
+        console.error("Firestore profile creation failed, but auth user was created.", profileError);
+        this.showNotification("Account created, but profile setup failed. Please contact support.", "warning");
+        // The user is technically logged in, so we don't throw here.
+        // The listenToAuthState will handle the missing profile.
+      }
+
       this.showNotification(
         "Registration successful! You are now logged in.",
         "success"
       );
     } catch (error) {
+      console.error("Registration failed:", error);
+      if (userCredential?.user?.uid) {
+        try {
+          await this.auth.signOut();
+        } catch (signOutError) {
+          console.warn("Failed to sign out after registration error:", signOutError);
+        }
+      }
       this.showNotification(this.getFriendlyAuthError(error.code), "error");
+    } finally {
       this.hideLoader();
     }
   }
@@ -455,21 +645,35 @@ class RestaurantApp {
     }
   }
 
-  getFriendlyAuthError(errorCode) {
+  getFriendlyAuthError(errorCode, fallbackMessage) {
     switch (errorCode) {
-      case "auth/user-not-found":
+      case "auth/password-mismatch":
       case "auth/wrong-password":
-        return "Invalid email or password";
+        return "Password doesn't match our records.";
+      case "auth/user-not-found":
+        return "No account was found for that email address.";
       case "auth/email-already-in-use":
         return "Email address is already registered";
       case "auth/weak-password":
         return "Password should be at least 6 characters";
       case "auth/invalid-email":
         return "Please enter a valid email address";
+      case "auth/missing-password":
+        return "Please enter your password.";
+      case "auth/operation-not-allowed":
+        return "Email/password auth is disabled or this domain isn't authorized in Firebase.";
+      case "auth/unauthorized-domain":
+        return "Add your development domain to Firebase Authentication > Settings > Authorized domains.";
+      case "auth/admin-restricted-operation":
+        return "This action is restricted. Check Firebase Authentication settings.";
       case "auth/network-request-failed":
         return "Network error. Please check your connection";
+      case "auth/service-unavailable":
+        return "Authentication service is not ready yet. Please try again.";
       default:
-        return "Authentication failed. Please try again";
+        return (
+          fallbackMessage || "Authentication failed. Please try again"
+        );
     }
   }
 
@@ -560,6 +764,74 @@ class RestaurantApp {
     }
 
     return payload;
+  }
+
+  isFirestorePermissionError(error) {
+    if (!error) return false;
+    const code = error.code || error?.status || "";
+    const message = typeof error.message === "string" ? error.message : "";
+    return (
+      code === "permission-denied" ||
+      /Missing or insufficient permissions/i.test(message)
+    );
+  }
+
+  getDefaultProfileForUser(user) {
+    if (!user) {
+      return {
+        name: "Customer",
+        email: "",
+        phone: "",
+        address: "",
+        role: "customer",
+      };
+    }
+
+    return {
+      name:
+        user.displayName ||
+        (user.email ? user.email.split("@")[0] : "Customer"),
+      email: user.email || "",
+      phone: "",
+      address: "",
+      role: "customer",
+    };
+  }
+
+  async recoverProfileAfterReadFailure(user, error) {
+    if (!user) return null;
+
+    if (this.isFirestorePermissionError(error)) {
+      console.warn(
+        "Firestore denied profile read. Attempting to seed a default profile.",
+        error
+      );
+      const fallbackProfile = this.getDefaultProfileForUser(user);
+      try {
+        await this.createUserProfile(user.uid, fallbackProfile);
+        this.showNotification(
+          "Created a basic profile, but Firestore is blocking profile reads. Update your security rules (see FIREBASE_SETUP.md).",
+          "warning"
+        );
+        return fallbackProfile;
+      } catch (writeError) {
+        console.error(
+          "Failed to create fallback profile after permission error:",
+          writeError
+        );
+        this.showNotification(
+          "Your account exists, but Firestore denied profile access. Update database rules and try again.",
+          "error"
+        );
+        return null;
+      }
+    }
+
+    this.showNotification(
+      "Cannot access your profile right now. Please try again later.",
+      "error"
+    );
+    return null;
   }
 
   // UI Management methods
@@ -714,14 +986,20 @@ class RestaurantApp {
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
-      loginForm.addEventListener("submit", (e) => this.handleLogin(e));
+      loginForm.addEventListener("submit", (e) => {
+        this.handleLogin(e).catch((err) => {
+          console.error("Unhandled login error:", err);
+        });
+      });
     }
 
     const registerForm = document.getElementById("registerForm");
     if (registerForm) {
-      registerForm.addEventListener("submit", (e) =>
-        this.handleRegister(e)
-      );
+      registerForm.addEventListener("submit", (e) => {
+        this.handleRegister(e).catch((err) => {
+          console.error("Unhandled registration error:", err);
+        });
+      });
     }
 
     const showRegisterBtn = document.getElementById("showRegisterBtn");
@@ -743,6 +1021,45 @@ class RestaurantApp {
     this.setupModalListeners();
     this.setupPublicLanding();
     this.setupChatListeners();
+    this.setupPasswordVisibilityToggles();
+  }
+
+  setupPasswordVisibilityToggles() {
+    const toggles = document.querySelectorAll("[data-password-toggle]");
+    toggles.forEach((btn) => {
+      if (!btn || btn.dataset.toggleBound === "true") return;
+
+      const targetId = btn.getAttribute("data-password-toggle");
+      if (!targetId) return;
+
+      const input = document.getElementById(targetId);
+      if (!input) return;
+
+      const setState = (visible) => {
+        btn.setAttribute("aria-pressed", visible ? "true" : "false");
+        btn.textContent = visible ? "Hide" : "Show";
+        btn.setAttribute(
+          "aria-label",
+          visible ? "Hide password" : "Show password"
+        );
+      };
+
+      btn.addEventListener("click", () => {
+        const willShow = input.getAttribute("type") === "password";
+        input.setAttribute("type", willShow ? "text" : "password");
+        setState(willShow);
+        if (willShow) {
+          try {
+            input.focus({ preventScroll: true });
+          } catch (_) {
+            input.focus();
+          }
+        }
+      });
+
+      setState(false);
+      btn.dataset.toggleBound = "true";
+    });
   }
 
   setupLogoutButtons() {

@@ -1,15 +1,12 @@
-// Firebase Configuration
-// This file sets up Firebase using the compat SDK for compatibility with existing code
-
-// Your web app's Firebase configuration
+// firebase-config.js
 window.firebaseConfig = {
-  apiKey: "AIzaSyAK1I975QhmL0mPR7RmDblmmaWL1A-AiwY",
-  authDomain: "cloud-kitchen-a87.firebaseapp.com",
-  projectId: "cloud-kitchen-a87",
-  storageBucket: "cloud-kitchen-a87.firebasestorage.app",
-  messagingSenderId: "978027398378",
-  appId: "1:978027398378:web:50c7c81c165ce96c07c393",
-  measurementId: "G-3FJKJEMCKV"
+  apiKey: "AIzaSyCSUMVGI2FeX7bEszJnFKyLrAUogh6rp4Q",
+  authDomain: "cloud-kitchen-55f46.firebaseapp.com",
+  projectId: "cloud-kitchen-55f46",
+  storageBucket: "cloud-kitchen-55f46.appspot.com",
+  messagingSenderId: "798275621079",
+  appId: "1:798275621079:web:266a54d27a6fb735612092",
+  measurementId: "G-JHC5YSXYFP"
 };
 
 console.log("Firebase config loaded successfully");

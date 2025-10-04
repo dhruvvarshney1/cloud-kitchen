@@ -1,0 +1,23 @@
+{
+  "name": "v1",
+  "version": "1.0.0",
+  "description": "- `styles.css` – Consolidated tokens, components, layouts, and themes.\r - `app.js` – Unified application controller plus page initialisers.\r - `customer/account.html` – Customer portal entry point (legacy `customer/index.html` redirects here).\r - `admin/` – Dedicated admin console pages (`dashboard`, `menu-management`, `reports`, `messaging`).\r - `manifest.json` & `sw.js` – PWA manifest and service worker for offline caching.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhruvvarshney1/cloud-kitchen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhruvvarshney1/cloud-kitchen/issues"
+  },
+  "homepage": "https://github.com/dhruvvarshney1/cloud-kitchen#readme",
+  "dependencies": {
+    "vite": "^7.1.9"
+  }
+}

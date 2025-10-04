@@ -1,4 +1,4 @@
-const CACHE_NAME = "cloud-kitchen-v1";
+const CACHE_NAME = "cloud-kitchen-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -10,22 +10,8 @@ const ASSETS = [
   "./admin/menu-management.html",
   "./admin/reports.html",
   "./admin/messaging.html",
-  "./css/design-system.css",
-  "./css/components.css",
-  "./css/layouts.css",
-  "./css/themes.css",
-  "./js/utils.js",
-  "./js/components/header.js",
-  "./js/components/admin-nav.js",
-  "./js/pages/landing.js",
-  "./js/pages/menu.js",
-  "./js/pages/order.js",
-  "./js/pages/login.js",
-  "./js/pages/account.js",
-  "./js/pages/admin-dashboard.js",
-  "./js/pages/admin-menu.js",
-  "./js/pages/admin-reports.js",
-  "./js/pages/admin-messaging.js",
+  "./styles.css",
+  "./app.js",
   "./logo.png"
 ];
 

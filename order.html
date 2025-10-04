@@ -15,11 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
-  <link rel="stylesheet" href="css/design-system.css" />
-  <link rel="stylesheet" href="css/themes.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/layouts.css" />
-  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="styles.css" />
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -50,11 +46,11 @@
 
           <!-- Global Navigation -->
           <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="index.html" class="global-nav__link">Home</a>
-            <a href="menu.html" class="global-nav__link">Menu</a>
-            <a href="order.html" class="global-nav__link" aria-current="page">Orders</a>
-            <a href="customer/account.html" class="global-nav__link">Account</a>
-            <a href="login.html" class="global-nav__link" data-variant="cta">Login</a>
+            <a href="index.html" class="global-nav__link" data-nav>Home</a>
+            <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="order.html" class="global-nav__link" data-nav aria-current="page">Orders</a>
+            <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
+            <a href="login.html" class="global-nav__link" data-nav data-variant="cta">Login</a>
             <button
               type="button"
               id="publicLogoutBtn"
@@ -232,7 +228,6 @@
       <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
     </footer>
 
-  <script type="module" src="js/pages/order.js"></script>
-  <script src="script.js" defer></script>
+  <script src="app.js" defer></script>
   </body>
 </html>

@@ -19,12 +19,7 @@
     />
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
-  <link rel="stylesheet" href="css/design-system.css" />
-  <link rel="stylesheet" href="css/themes.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/layouts.css" />
-  <link rel="stylesheet" href="css/home.css" />
-  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="styles.css" />
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -56,11 +51,11 @@
 
           <!-- Global Navigation -->
           <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="index.html" class="global-nav__link" aria-current="page">Home</a>
-            <a href="menu.html" class="global-nav__link">Menu</a>
-            <a href="order.html" class="global-nav__link">Orders</a>
-            <a href="customer/account.html" class="global-nav__link">Account</a>
-            <a href="login.html" class="global-nav__link" data-variant="cta">Login</a>
+            <a href="index.html" class="global-nav__link" data-nav aria-current="page">Home</a>
+            <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="order.html" class="global-nav__link" data-nav>Orders</a>
+            <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
+            <a href="login.html" class="global-nav__link" data-nav data-variant="cta">Login</a>
             <button
               type="button"
               id="publicLogoutBtn"
@@ -333,7 +328,6 @@
       </div>
     </div>
 
-  <script type="module" src="js/pages/landing.js"></script>
-  <script src="script.js" defer></script>
+  <script src="app.js" defer></script>
   </body>
 </html>

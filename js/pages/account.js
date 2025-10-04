@@ -1,9 +1,8 @@
-import { initThemeToggle, setActiveNavLink } from "../utils.js";
-import { initSiteHeader } from "../components/header.js";
+import { setActiveNavLink } from "../utils.js";
 
-initThemeToggle();
-initSiteHeader();
-setActiveNavLink("[data-nav]");
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveNavLink();
+});
 
 const accountForm = document.querySelector("#customerMessage");
 if (accountForm) {

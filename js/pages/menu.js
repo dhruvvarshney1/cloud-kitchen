@@ -1,5 +1,3 @@
-import { initThemeToggle } from "../utils.js";
-import { initSiteHeader } from "../components/header.js";
-
-initThemeToggle();
-initSiteHeader();
+document.addEventListener("DOMContentLoaded", () => {
+  // Menu page specific logic
+});

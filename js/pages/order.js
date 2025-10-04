@@ -1,5 +1,6 @@
-import { initThemeToggle } from "../utils.js";
 import { initSiteHeader } from "../components/header.js";
 
-initThemeToggle();
+document.addEventListener("DOMContentLoaded", () => {
+  // Order page specific logic
+});
 initSiteHeader();

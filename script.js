@@ -243,7 +243,13 @@ class RestaurantApp {
       );
     }, 10000);
 
-    window.firebase.onAuthStateChanged(this.auth, async (user) => {
+    if (!this.auth || typeof this.auth.onAuthStateChanged !== "function") {
+      console.error("Firebase auth not initialized correctly.");
+      this.hideLoader();
+      return;
+    }
+
+    this.auth.onAuthStateChanged(async (user) => {
       clearTimeout(authTimeout);
       console.log("Auth state changed. User object:", user);
 
@@ -328,7 +334,8 @@ class RestaurantApp {
   const password = passwordInput ? passwordInput.value.trim() : "";
 
     try {
-      if (!this.auth) {
+      if (!this.auth ||
+          typeof this.auth.signInWithEmailAndPassword !== "function") {
         this.showNotification(
           "Service not ready yet. Please wait a moment and try again.",
           "error"
@@ -336,11 +343,7 @@ class RestaurantApp {
         this.hideLoader();
         return;
       }
-      await window.firebase.signInWithEmailAndPassword(
-        this.auth,
-        email,
-        password
-      );
+      await this.auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
       this.showNotification(this.getFriendlyAuthError(error.code), "error");
       this.hideLoader();
@@ -370,9 +373,17 @@ class RestaurantApp {
     };
 
     try {
+      if (!this.auth ||
+          typeof this.auth.createUserWithEmailAndPassword !== "function") {
+        this.showNotification(
+          "Service not ready yet. Please wait a moment and try again.",
+          "error"
+        );
+        this.hideLoader();
+        return;
+      }
       const userCredential =
-        await window.firebase.createUserWithEmailAndPassword(
-          this.auth,
+        await this.auth.createUserWithEmailAndPassword(
           userData.email,
           password
         );
@@ -393,8 +404,8 @@ class RestaurantApp {
     let didSignOut = false;
 
     try {
-      if (window.firebase?.signOut && this.auth) {
-        await window.firebase.signOut(this.auth);
+      if (this.auth?.signOut) {
+        await this.auth.signOut();
         didSignOut = true;
       } else {
         console.warn("Firebase auth not ready; falling back to guest state logout");

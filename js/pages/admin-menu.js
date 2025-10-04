@@ -1,10 +1,13 @@
-import { initThemeToggle } from "../utils.js";
+import { setActiveAdminNavLink } from "../utils.js";
 import { initSiteHeader } from "../components/header.js";
 import { initAdminNav } from "../components/admin-nav.js";
 
-initThemeToggle();
 initSiteHeader();
 initAdminNav("menu");
+
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveAdminNavLink("menu-management");
+});
 
 const menuFilter = document.getElementById("menuFilter");
 if (menuFilter) {

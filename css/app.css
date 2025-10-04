@@ -54,6 +54,100 @@ html:not(.dark) .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
     border-color: #c8e6c9 !important;
 }
 
+/* Dark mode - forest slate theme */
+html.dark body {
+    background-color: #0f1b10 !important;
+    color: #e4f6e4 !important;
+}
+
+html.dark header,
+html.dark .global-header {
+    background-color: #152a15 !important;
+    border-color: rgba(209, 250, 229, 0.18) !important;
+}
+
+html.dark .bg-white,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 {
+    background-color: #1b2d1c !important;
+}
+
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-gray-600,
+html.dark .text-gray-500 {
+    color: #c6f2c8 !important;
+}
+
+html.dark .global-nav__link {
+    color: #d6ffe3 !important;
+}
+
+html.dark .card,
+html.dark .order-card,
+html.dark .menu-item,
+html.dark .menu-item-card,
+html.dark .messages-panel,
+html.dark .conversation-list,
+html.dark .chat-pane,
+html.dark .reports-panel,
+html.dark .orders-grid > article,
+html.dark .customer-content,
+html.dark .customer-hero,
+html.dark .messages-layout {
+    background-color: #1b2d1c !important;
+    border-color: rgba(133, 233, 166, 0.25) !important;
+}
+
+html.dark .theme-toggle {
+    border-color: rgba(186, 247, 210, 0.3) !important;
+    background-color: rgba(21, 42, 21, 0.9) !important;
+    color: #e8ffe8 !important;
+}
+
+html.dark .btn--primary {
+    background-color: #49b86a !important;
+    color: #081408 !important;
+}
+
+html.dark .btn--primary:hover {
+    background-color: #67d587 !important;
+}
+
+html.dark .btn--outline {
+    border-color: rgba(168, 252, 196, 0.45) !important;
+    color: #c6f2c8 !important;
+}
+
+html.dark .btn--outline:hover {
+    background-color: rgba(90, 177, 120, 0.18) !important;
+}
+
+html.dark .form-control {
+    background-color: #101f12 !important;
+    border-color: rgba(168, 252, 196, 0.35) !important;
+    color: #e4f6e4 !important;
+}
+
+html.dark .form-control:focus {
+    border-color: #67d587 !important;
+    box-shadow: 0 0 0 3px rgba(103, 213, 135, 0.2) !important;
+}
+
+html.dark .form-label {
+    color: #9ce7a7 !important;
+}
+
+html.dark .status--warning {
+    background: rgba(255, 193, 7, 0.22) !important;
+    color: #ffd479 !important;
+}
+
+html.dark .status--success {
+    background: rgba(103, 213, 135, 0.22) !important;
+    color: #67d587 !important;
+}
+
 /* Page-specific overrides from order.html */
 html:not(.dark) body[data-page="order"] .site-header {
     background-color: #ffffff !important;
@@ -163,6 +257,57 @@ html:not(.dark) body[data-page="order"] .summary-total {
     font-weight: 700 !important;
 }
 
+html.dark body[data-page="order"] .site-header {
+    background-color: #152a15 !important;
+    border-bottom: 1px solid rgba(168, 252, 196, 0.22) !important;
+}
+
+html.dark body[data-page="order"] .place-order-online-section,
+html.dark body[data-page="order"] .card,
+html.dark body[data-page="order"] .order-summary {
+    background-color: #142314 !important;
+    border: 1px solid rgba(113, 210, 148, 0.32) !important;
+}
+
+html.dark body[data-page="order"] .timeslot {
+    background-color: rgba(113, 210, 148, 0.18) !important;
+    border: 1px solid rgba(113, 210, 148, 0.28) !important;
+}
+
+html.dark body[data-page="order"] .timeslot h4 {
+    color: #7df2a2 !important;
+}
+
+html.dark body[data-page="order"] .form-control {
+    background-color: #101f12 !important;
+    border-color: rgba(113, 210, 148, 0.35) !important;
+    color: #e4f6e4 !important;
+}
+
+html.dark body[data-page="order"] .form-control:focus {
+    border-color: #7df2a2 !important;
+    box-shadow: 0 0 0 3px rgba(125, 242, 162, 0.18) !important;
+}
+
+html.dark body[data-page="order"] .btn--primary {
+    background-color: #49b86a !important;
+    color: #081408 !important;
+}
+
+html.dark body[data-page="order"] .btn--outline {
+    border-color: #7df2a2 !important;
+    color: #9ce7a7 !important;
+}
+
+html.dark body[data-page="order"] .btn--outline:hover {
+    background-color: rgba(125, 242, 162, 0.14) !important;
+}
+
+html.dark body[data-page="order"] .main-footer {
+    background-color: #081408 !important;
+    color: #9ce7a7 !important;
+}
+
 /* Page-specific overrides from account.html */
 html:not(.dark) body[data-page="customer-account"] .customer-hero {
     background: linear-gradient(135deg, rgba(76, 175, 80, 0.12), rgba(76, 175, 80, 0.04));
@@ -186,6 +331,25 @@ html:not(.dark) body[data-page="customer-account"] .status--warning {
 html:not(.dark) body[data-page="customer-account"] .status--success {
     background: rgba(56, 142, 60, 0.16) !important;
     color: #218838 !important;
+}
+
+html.dark body[data-page="customer-account"] .customer-hero {
+    background: linear-gradient(135deg, rgba(76, 175, 120, 0.16), rgba(23, 54, 32, 0.32));
+    border: 1px solid rgba(120, 233, 168, 0.28);
+}
+
+html.dark body[data-page="customer-account"] .text-subtle {
+    color: #9ce7a7 !important;
+}
+
+html.dark body[data-page="customer-account"] .status--warning {
+    background: rgba(255, 193, 7, 0.26) !important;
+    color: #ffd479 !important;
+}
+
+html.dark body[data-page="customer-account"] .status--success {
+    background: rgba(103, 213, 135, 0.24) !important;
+    color: #67d587 !important;
 }
 
 /* Page-specific overrides from admin pages */
@@ -221,4 +385,22 @@ html:not(.dark) body[data-page^="admin"] .status--success {
 }
 html:not(.dark) body[data-page^="admin"] .text-subtle {
     color: #2d5f3f !important;
+}
+
+html.dark body[data-page^="admin"] .admin-header {
+    background-color: #152a15 !important;
+    border-color: rgba(113, 210, 148, 0.28) !important;
+}
+
+html.dark body[data-page^="admin"] .admin-content {
+    background-color: #0f1b10 !important;
+}
+
+html.dark body[data-page^="admin"] .tab-btn.active {
+    background: linear-gradient(135deg, #49b86a, #2f8a4c) !important;
+    color: #081408 !important;
+}
+
+html.dark body[data-page^="admin"] .text-subtle {
+    color: #9ce7a7 !important;
 }

@@ -1,1 +1,3 @@
-import "./admin-dashboard.js";
+document.addEventListener("DOMContentLoaded", () => {
+  // Admin-specific logic can go here
+});

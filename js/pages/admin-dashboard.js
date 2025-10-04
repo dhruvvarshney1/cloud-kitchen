@@ -1,8 +1,11 @@
-import { initThemeToggle } from "../utils.js";
+import { setActiveAdminNavLink } from "../utils.js";
 import { initSiteHeader } from "../components/header.js";
 import { initAdminNav } from "../components/admin-nav.js";
 
-initThemeToggle();
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveAdminNavLink("dashboard");
+});
+
 initSiteHeader();
 initAdminNav("dashboard");
 

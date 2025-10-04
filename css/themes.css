@@ -57,7 +57,8 @@
   }
 }
 
-[data-color-scheme="dark"] {
+[data-color-scheme="dark"],
+html.dark {
   /* RGB versions for opacity control (dark mode) */
   --color-gray-400-rgb: 134, 190, 134;
   --color-teal-300-rgb: 138, 223, 138;
@@ -115,7 +116,8 @@
   --color-primary-rgb: var(--color-teal-300-rgb);
 }
 
-[data-color-scheme="light"] {
+[data-color-scheme="light"],
+html:not(.dark) {
   /* RGB versions for opacity control (light mode) */
   --color-brown-600-rgb: 94, 82, 64;
   --color-teal-500-rgb: 33, 128, 141;

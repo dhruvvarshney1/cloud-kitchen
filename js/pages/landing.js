@@ -1,3 +1,7 @@
+import { initThemeToggle } from "../utils.js";
+
+initThemeToggle();
+
 const orders = new Map();
 
 const orderStatuses = [

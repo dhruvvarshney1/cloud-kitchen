@@ -22,6 +22,11 @@
   );
 }
 
+/* Hide Order link on login page */
+[data-page="login"] .site-header a[href="order.html"] {
+  display: none;
+}
+
 .login-container .card {
   width: 100%;
   max-width: 400px;
@@ -807,6 +812,45 @@
 .site-header [data-nav][aria-current="page"] {
   background: #d3f7d3;
   color: #145c24;
+}
+
+/* Navigation toggle button */
+.nav-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .site-header nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #eaffea;
+    border-bottom: 1px solid #b5e7b5;
+    box-shadow: 0 4px 8px rgba(53, 109, 52, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .site-header nav[data-open="true"] {
+    max-height: 500px;
+  }
+
+  .site-header nav ul {
+    flex-direction: column;
+    padding: var(--space-16);
+    gap: var(--space-12);
+  }
+
+  .site-header nav ul li {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Public Landing - Hero */

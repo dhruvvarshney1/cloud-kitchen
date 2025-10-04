@@ -6,11 +6,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-  <meta name="theme-color" content="#357a38" />
-    <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#4CAF50" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>Home-Coming Cloud Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,21 +24,55 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/layouts.css" />
   <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/app.css" />
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
   </head>
   <body data-page="landing">
-    <header class="home-header">Home-Coming Cloud Kitchen</header>
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+    </button>
 
-    <nav class="home-nav">
-      <ul class="home-nav__list">
-        <li><a class="home-nav__link" href="#why">Why Us?</a></li>
-        <li><a class="home-nav__link" href="#how">How It Works</a></li>
-        <li><a class="home-nav__link" href="#menu">Menu</a></li>
-        <li><a class="home-nav__link" href="#order">Order</a></li>
-        <li><a class="home-nav__link" href="#track">Track Order</a></li>
-        <li><a class="home-nav__link" href="#about">About</a></li>
-        <li><a class="home-nav__link" href="#contact">Contact</a></li>
-      </ul>
-    </nav>
+    <!-- Header -->
+    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="py-6 flex flex-col items-center gap-5 text-center">
+          <!-- Logo and Company Name -->
+          <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Home-Coming Cloud Kitchen</h1>
+          </div>
+
+          <!-- Global Navigation -->
+          <nav class="global-nav mx-auto" aria-label="Primary navigation">
+            <a href="index.html" class="global-nav__link" aria-current="page">Home</a>
+            <a href="menu.html" class="global-nav__link">Menu</a>
+            <a href="order.html" class="global-nav__link">Orders</a>
+            <a href="customer/account.html" class="global-nav__link">Account</a>
+            <a href="login.html" class="global-nav__link" data-variant="cta">Login</a>
+            <button
+              type="button"
+              id="publicLogoutBtn"
+              class="global-nav__link"
+              data-variant="cta"
+            >
+              Logout
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
 
     <section class="home-hero">
       <h1>Delicious. Fast. Delivered.</h1>
@@ -50,7 +84,7 @@
       <button
         type="button"
         class="home-hero__cta"
-        onclick="document.getElementById('order').scrollIntoView({ behavior: 'smooth' });"
+        onclick="window.location.href='order.html';"
       >
         Order Now
       </button>
@@ -60,7 +94,7 @@
       <h2>Why Choose Home-Coming?</h2>
       <ul>
         <li>Great taste &amp; freshness</li>
-        <li>Fast delivery</li>
+        <li>Homemade quality</li>
         <li>Economical prices</li>
         <li>Customizable meals &amp; combos</li>
       </ul>
@@ -69,10 +103,11 @@
     <section id="how" class="home-section">
       <h2>How It Works</h2>
       <ol>
-        <li>Choose dishes from our menu</li>
+        <li>Choose dishes from the menu</li>
+        <li>Contact us via Messages or via Whatsapp</li>
         <li>Place your order online or via WhatsApp</li>
-        <li>Track your order in real-time</li>
-        <li>Enjoy hot meals delivered to your door</li>
+        <li>Make payment through our secure gateway</li>
+        <li>Enjoy homemade meals delivered to your door</li>
       </ol>
     </section>
 
@@ -106,58 +141,137 @@
     </section>
 
     <section id="order" class="home-section">
-      <h2>Place Your Order Online</h2>
-      <form class="home-form" id="place-order-form">
-        <label for="dish">Select Dish:</label>
-        <select id="dish" name="dish"></select>
-        <label for="qty">Quantity:</label>
-        <input type="number" id="qty" name="qty" min="1" value="1" />
-        <label for="address">Delivery Address:</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          placeholder="Flat/Hostel, Kharagpur"
-          required
-        />
-        <label for="phone">Phone Number:</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          placeholder="10-digit number"
-          required
-          pattern="[0-9]{10}"
-        />
-        <button type="submit" class="home-form-button">Place Order</button>
-      </form>
-      <p style="margin-top: 16px">
-        Or WhatsApp us: <strong>+91 8209XXXXXX</strong>
+      <h2>Schedule Your Delivery</h2>
+      <p>
+        Choose a time slot, pick from the daily specials, and we'll bring
+        homestyle goodness straight to your doorstep.
       </p>
-    </section>
 
-    <section id="track" class="home-section">
-      <h2>Track Your Order</h2>
-      <p>Enter the Order ID you received after placing your order.</p>
-      <form id="track-order-form" class="home-form">
-        <label for="order-id-input">Order ID:</label>
-        <input type="text" id="order-id-input" placeholder="e.g., HCCK12345" required />
-        <button type="submit" class="home-form-button">Track</button>
-      </form>
-      <div id="home-order-status">
-        <p id="home-current-status">Order Placed</p>
-        <ul class="home-progress">
-          <li class="home-progress__step active" id="home-step-1">Placed</li>
-          <li class="home-progress__step" id="home-step-2">Preparing</li>
-          <li class="home-progress__step" id="home-step-3">Out for Delivery</li>
-          <li class="home-progress__step" id="home-step-4">Delivered</li>
-        </ul>
-        <p style="text-align: center; font-size: 0.9em; color: #577d56">
-          Your order status will update automatically.
-        </p>
+      <div class="timeslots">
+        <div class="timeslot">
+          <h4>Lunch</h4>
+          <p>13:00 - 14:00</p>
+        </div>
+        <div class="timeslot">
+          <h4>Dinner</h4>
+          <p>19:00 - 20:00</p>
+        </div>
       </div>
-      <p id="home-track-error" class="home-form-note error">
-        Order ID not found. Please check and try again.
+
+      <form id="scheduled-order-form" class="order-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="delivery-date" class="form-label"
+              >Select Delivery Date</label
+            >
+            <select
+              id="delivery-date"
+              name="delivery-date"
+              class="form-control"
+              required
+            ></select>
+          </div>
+          <div class="form-group">
+            <label for="delivery-time" class="form-label"
+              >Select Delivery Time Slot</label
+            >
+            <select
+              id="delivery-time"
+              name="delivery-time"
+              class="form-control"
+            ></select>
+          </div>
+        </div>
+
+        <div id="menu-of-the-day" class="card hidden">
+          <div class="card__body">
+            <h4>Menu of the Day</h4>
+            <div id="daily-menu-items" class="daily-menu-items"></div>
+          </div>
+        </div>
+
+        <div id="delivery-details" class="card hidden">
+          <div class="card__body">
+            <h4>Delivery Details</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="scheduled-name">Name</label>
+                <input
+                  id="scheduled-name"
+                  class="form-control"
+                  type="text"
+                  name="customer-name"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="scheduled-phone">Phone</label>
+                <input
+                  id="scheduled-phone"
+                  class="form-control"
+                  type="tel"
+                  name="customer-phone"
+                  autocomplete="tel"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="scheduled-address">Address</label>
+              <textarea
+                id="scheduled-address"
+                class="form-control"
+                name="customer-address"
+                rows="3"
+                placeholder="House number, street, landmark"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="special-instructions"
+                >Special Instructions</label
+              >
+              <textarea
+                id="special-instructions"
+                class="form-control"
+                name="special-instructions"
+                rows="2"
+                placeholder="Allergies, spice levels, special requests"
+              ></textarea>
+            </div>
+
+            <div class="order-summary">
+              <h5>Order Summary</h5>
+              <div id="summary-items" class="summary-items"></div>
+              <div id="summary-location" class="summary-location"></div>
+              <div class="summary-totals">
+                <div>
+                  <span>Subtotal:</span>
+                  <span id="subtotal">Rs. 0</span>
+                </div>
+                <div>
+                  <span>Delivery Fee:</span>
+                  <span id="delivery-fee">Rs. 0</span>
+                </div>
+                <div class="summary-total">
+                  <span>Total:</span>
+                  <span id="total">Rs. 0</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--full-width">
+              Place Order
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <p style="margin-top: 24px; text-align: center;">
+        Or WhatsApp us: <strong>+91 8209XXXXXX</strong>
       </p>
     </section>
 
@@ -219,6 +333,7 @@
       </div>
     </div>
 
-    <script type="module" src="js/pages/landing.js"></script>
+  <script type="module" src="js/pages/landing.js"></script>
+  <script src="script.js" defer></script>
   </body>
 </html>

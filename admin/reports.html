@@ -6,20 +6,35 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-  <meta name="theme-color" content="#357a38" />
+    <meta name="theme-color" content="#4CAF50" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>Reports &amp; Insights | Home-Coming Cloud Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../logo.png" />
     <link rel="stylesheet" href="../css/design-system.css" />
     <link rel="stylesheet" href="../css/themes.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/layouts.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase Config -->
+    <script src="../firebase-config.js"></script>
   </head>
-  <body data-page="admin-reports">
+  <body
+    data-page="admin-reports"
+    class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300"
+  >
     <button
       id="themeToggle"
       class="theme-toggle"
@@ -29,32 +44,35 @@
       title="Switch to dark mode"
     >
       <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
-      <span class="theme-toggle__label">Dark</span>
     </button>
 
-    <header class="site-header">
-      <div class="logo">
-        <img src="../logo.png" alt="Home-Coming Logo" />
-        <h1>Home-Coming Cloud Kitchen</h1>
+  <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="py-6 flex flex-col items-center gap-5 text-center">
+          <div class="flex items-center gap-3">
+            <img src="../logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
+              Home-Coming Cloud Kitchen
+            </h1>
+          </div>
+
+          <nav class="global-nav mx-auto" aria-label="Primary navigation">
+            <a href="../index.html" class="global-nav__link" data-nav>Home</a>
+            <a href="../menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="../order.html" class="global-nav__link" data-nav>Orders</a>
+            <a href="../customer/account.html" class="global-nav__link" data-nav>Account</a>
+            <a href="../login.html" class="global-nav__link" data-nav data-variant="cta">Login</a>
+            <button
+              type="button"
+              id="publicLogoutBtn"
+              class="global-nav__link"
+              data-variant="cta"
+            >
+              Logout
+            </button>
+          </nav>
+        </div>
       </div>
-      <button
-        class="btn btn--outline btn--sm nav-toggle"
-        type="button"
-        data-nav-toggle
-        aria-expanded="false"
-        aria-controls="siteNav"
-      >
-        Menu
-      </button>
-      <nav id="siteNav" data-site-nav>
-        <ul>
-          <li><a data-nav href="../index.html">Home</a></li>
-          <li><a data-nav href="../menu.html">Menu</a></li>
-          <li><a data-nav href="../order.html">Order</a></li>
-          <li><a data-nav href="../login.html">Login</a></li>
-          <li><a data-nav href="../customer/account.html">Customer Portal</a></li>
-        </ul>
-      </nav>
     </header>
 
     <main class="admin-layout">

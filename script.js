@@ -88,8 +88,8 @@ class RestaurantApp {
 
       console.log("Firebase SDK ready. Initializing Firebase app...");
       const app = window.firebase.initializeApp(window.firebaseConfig);
-      this.auth = window.firebase.getAuth(app);
-      this.db = window.firebase.getFirestore(app);
+      this.auth = window.firebase.auth();
+      this.db = window.firebase.firestore();
 
       if (window.firebase.isMessagingSupported) {
         try {
@@ -153,6 +153,14 @@ class RestaurantApp {
     const applyTheme = (mode, persist = true) => {
       const scheme = mode === "dark" ? "dark" : "light";
       document.documentElement.setAttribute("data-color-scheme", scheme);
+      
+      // Add/remove dark class for Tailwind CSS compatibility
+      if (scheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      
       toggle.setAttribute("aria-pressed", scheme === "dark" ? "true" : "false");
 
       const labelText = scheme === "dark" ? "Light" : "Dark";
@@ -381,9 +389,31 @@ class RestaurantApp {
 
   async logout() {
     this.showLoader();
-    await window.firebase.signOut(this.auth);
-    this.cart = [];
-    this.hideLoader();
+
+    let didSignOut = false;
+
+    try {
+      if (window.firebase?.signOut && this.auth) {
+        await window.firebase.signOut(this.auth);
+        didSignOut = true;
+      } else {
+        console.warn("Firebase auth not ready; falling back to guest state logout");
+        didSignOut = true;
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+      this.showNotification(
+        "We couldn't sign you out. Please try again.",
+        "error"
+      );
+    } finally {
+      if (didSignOut) {
+        this.currentUser = null;
+        this.cart = [];
+        this.updatePublicUIForGuest();
+      }
+      this.hideLoader();
+    }
   }
 
   getFriendlyAuthError(errorCode) {

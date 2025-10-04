@@ -18,15 +18,21 @@ export function initThemeToggle(toggleSelector = "#themeToggle") {
   const applyTheme = (mode, persist = true) => {
     const scheme = mode === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-color-scheme", scheme);
+    
+    // Add/remove dark class for Tailwind CSS compatibility
+    if (scheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    
     toggle.setAttribute("aria-pressed", scheme === "dark" ? "true" : "false");
 
-    const labelText = scheme === "dark" ? "Light" : "Dark";
     const iconText = scheme === "dark" ? "🌞" : "🌙";
     const controlLabel =
       scheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
 
     if (iconEl) iconEl.textContent = iconText;
-    if (labelEl) labelEl.textContent = labelText;
     toggle.setAttribute("aria-label", controlLabel);
     toggle.setAttribute("title", controlLabel);
 

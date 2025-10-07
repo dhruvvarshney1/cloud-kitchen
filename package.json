@@ -4,6 +4,9 @@
   "description": "- `styles.css` – Consolidated tokens, components, layouts, and themes.\r - `app.js` – Unified application controller plus page initialisers.\r - `customer/account.html` – Customer portal entry point (legacy `customer/index.html` redirects here).\r - `admin/` – Dedicated admin console pages (`dashboard`, `menu-management`, `reports`, `messaging`).\r - `manifest.json` & `sw.js` – PWA manifest and service worker for offline caching.",
   "main": "app.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

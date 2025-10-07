@@ -1,55 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-color-scheme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up - Firebase Authentication</title>
-    <link rel="stylesheet" href="auth/styles.css" />
+    <meta name="theme-color" content="#4CAF50" />
+    <title>Sign Up | Home-Coming Cloud Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="auth-body">
-    <div class="container">
-      <div class="form-box">
-        <h2>Create Account</h2>
-        <form id="signupForm">
-          <div class="input-group">
-            <label for="signupName">Full Name</label>
-            <input type="text" id="signupName" placeholder="Enter your full name" required />
+  <body data-page="signup" class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+    </button>
+
+    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="py-6 flex flex-col items-center gap-5 text-center">
+          <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
+              Home-Coming Cloud Kitchen
+            </h1>
           </div>
-          <div class="input-group">
-            <label for="signupPhone">Phone Number</label>
-            <input type="tel" id="signupPhone" placeholder="Enter your phone number" required />
-          </div>
-          <div class="input-group">
-            <label for="signupAddress">Delivery Address</label>
-            <textarea id="signupAddress" rows="3" placeholder="Enter your address" required></textarea>
-          </div>
-          <div class="input-group">
-            <label for="signupEmail">Email</label>
-            <input type="email" id="signupEmail" placeholder="Enter your email" required />
-          </div>
-          <div class="input-group">
-            <label for="signupPassword">Password</label>
-            <div class="password-container">
-              <input type="password" id="signupPassword" placeholder="Enter your password" required />
-              <span class="toggle-password" id="toggleSignupPassword">👁️</span>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <div class="password-container">
-              <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
-              <span class="toggle-password" id="toggleConfirmPassword">👁️</span>
-            </div>
-          </div>
-          <button type="submit" class="btn">Sign Up</button>
-          <p class="message" id="signupMessage"></p>
-          <p class="switch-form">
-            Already have an account?
-            <a href="login.html">Login</a>
-          </p>
-        </form>
+
+          <nav class="global-nav mx-auto" aria-label="Primary navigation">
+            <a href="index.html" class="global-nav__link" data-nav>Home</a>
+            <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="order.html" class="global-nav__link" data-nav>Orders</a>
+            <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
+            <a href="login.html" class="global-nav__link" data-nav>Login</a>
+          </nav>
+        </div>
       </div>
-    </div>
-    <script type="module" src="auth/signup.js"></script>
+    </header>
+
+    <main class="auth-main">
+      <section class="auth-hero">
+        <h1>Join Home-Coming!</h1>
+        <p>Create your account to order delicious homemade meals delivered to your doorstep.</p>
+        <div class="auth-meta">
+          <span class="status status--success">Fast & Easy</span>
+          <span class="status status--info">Start Ordering</span>
+        </div>
+      </section>
+
+      <section class="auth-card card">
+        <div class="card__body">
+          <div class="auth-form__header">
+            <h2>Create your account</h2>
+            <p>Fill in your details to get started.</p>
+          </div>
+          <form id="signupForm" class="auth-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="signupName">Full Name</label>
+              <input
+                class="form-control"
+                type="text"
+                id="signupName"
+                name="name"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signupPhone">Phone Number</label>
+              <input
+                class="form-control"
+                type="tel"
+                id="signupPhone"
+                name="phone"
+                placeholder="Enter your phone number"
+                autocomplete="tel"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signupAddress">Delivery Address</label>
+              <textarea
+                id="signupAddress"
+                name="address"
+                class="form-control"
+                rows="3"
+                placeholder="Enter your delivery address"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signupEmail">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                id="signupEmail"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signupPassword">Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  class="form-control"
+                  type="password"
+                  id="signupPassword"
+                  name="password"
+                  placeholder="At least 6 characters"
+                  autocomplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggleSignupPassword"
+                  aria-pressed="false"
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirmPassword">Confirm Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  class="form-control"
+                  type="password"
+                  id="confirmPassword"
+                  name="confirm-password"
+                  placeholder="Re-enter your password"
+                  autocomplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggleConfirmPassword"
+                  aria-pressed="false"
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn--primary btn--full-width">
+              Create Account
+            </button>
+            <p class="message" id="signupMessage" role="status" aria-live="polite"></p>
+            <div class="auth-links">
+              <span>Already have an account?</span>
+              <a href="login.html">Log in</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="src/services/theme-toggle.js"></script>
+    <script type="module" src="src/auth/signup.js"></script>
   </body>
 </html>

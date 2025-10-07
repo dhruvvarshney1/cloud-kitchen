@@ -20,12 +20,6 @@
       <link rel="manifest" href="manifest.json" />
       <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
     <link rel="stylesheet" href="styles.css" />
-      <!-- Firebase SDKs -->
-      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-      <!-- Firebase Config -->
-      <script src="firebase-config.js"></script>
     </head>
     <body data-page="landing">
       <button
@@ -339,6 +333,7 @@
       <!-- Notification container -->
       <div id="notification"></div>
 
-    <script type="module" src="app.js"></script>
+    <script type="module" src="src/services/theme-toggle.js"></script>
+    <script type="module" src="src/services/app-init.js"></script>
     </body>
   </html>

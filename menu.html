@@ -43,6 +43,14 @@
         </button>
 
         <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+            <button
+                type="button"
+                id="headerLogoutBtn"
+                class="header-logout-btn hidden"
+                aria-label="Log out"
+            >
+                Logout
+            </button>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="py-6 flex flex-col items-center gap-5 text-center">
                     <div class="flex items-center gap-3">
@@ -59,15 +67,15 @@
                         >
                         <a href="order.html" class="global-nav__link" data-nav>Orders</a>
                         <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
-                        <a href="login.html" class="global-nav__link" data-nav data-variant="cta">Login</a>
-                        <button
-                            type="button"
-                            id="publicLogoutBtn"
+                        <a
+                            id="navAuthBtn"
                             class="global-nav__link"
-                            data-variant="cta"
+                            data-nav
+                            href="login.html"
+                            data-login-href="login.html"
                         >
-                            Logout
-                        </button>
+                            Login
+                        </a>
                     </nav>
                 </div>
             </div>
@@ -257,6 +265,6 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
-        <script src="app.js" defer></script>
+                <script type="module" src="app.js"></script>
   </body>
 </html>

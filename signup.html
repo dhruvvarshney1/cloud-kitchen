@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Firebase Authentication</title>
+    <link rel="stylesheet" href="auth/styles.css" />
+  </head>
+  <body class="auth-body">
+    <div class="container">
+      <div class="form-box">
+        <h2>Create Account</h2>
+        <form id="signupForm">
+          <div class="input-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" placeholder="Enter your full name" required />
+          </div>
+          <div class="input-group">
+            <label for="signupPhone">Phone Number</label>
+            <input type="tel" id="signupPhone" placeholder="Enter your phone number" required />
+          </div>
+          <div class="input-group">
+            <label for="signupAddress">Delivery Address</label>
+            <textarea id="signupAddress" rows="3" placeholder="Enter your address" required></textarea>
+          </div>
+          <div class="input-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" required />
+          </div>
+          <div class="input-group">
+            <label for="signupPassword">Password</label>
+            <div class="password-container">
+              <input type="password" id="signupPassword" placeholder="Enter your password" required />
+              <span class="toggle-password" id="toggleSignupPassword">👁️</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="password-container">
+              <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
+              <span class="toggle-password" id="toggleConfirmPassword">👁️</span>
+            </div>
+          </div>
+          <button type="submit" class="btn">Sign Up</button>
+          <p class="message" id="signupMessage"></p>
+          <p class="switch-form">
+            Already have an account?
+            <a href="login.html">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+    <script type="module" src="auth/signup.js"></script>
+  </body>
+</html>

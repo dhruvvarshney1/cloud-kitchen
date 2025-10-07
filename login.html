@@ -6,10 +6,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-  <meta name="theme-color" content="#4CAF50" />
+    <meta name="theme-color" content="#4CAF50" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Account Access | Home-Coming Cloud Kitchen</title>
+    <title>Login | Home-Coming Cloud Kitchen</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,16 +17,14 @@
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
-  <link rel="stylesheet" href="styles.css" />
-  
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  
-  <!-- Firebase Configuration -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-page="login" class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+  <body
+    data-page="login"
+    class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300"
+  >
     <button
       id="themeToggle"
       class="theme-toggle"
@@ -38,180 +36,107 @@
       <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
     </button>
 
-    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
+      <button
+        type="button"
+        id="headerLogoutBtn"
+        class="header-logout-btn hidden"
+        aria-label="Log out"
+      >
+        Logout
+      </button>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="py-6 flex flex-col items-center gap-5 text-center">
-          <!-- Logo and Company Name -->
           <div class="flex items-center gap-3">
             <img src="logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
-            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Home-Coming Cloud Kitchen</h1>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
+              Home-Coming Cloud Kitchen
+            </h1>
           </div>
 
-          <!-- Global Navigation -->
           <nav class="global-nav mx-auto" aria-label="Primary navigation">
             <a href="index.html" class="global-nav__link" data-nav>Home</a>
             <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
             <a href="order.html" class="global-nav__link" data-nav>Orders</a>
             <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
-            <a href="login.html" class="global-nav__link" data-nav data-variant="cta">Login</a>
-            <button
-              type="button"
-              id="publicLogoutBtn"
+            <a
+              id="navAuthBtn"
               class="global-nav__link"
-              data-variant="cta"
+              data-nav
+              href="login.html"
+              aria-current="page"
+              data-login-href="login.html"
             >
-              Logout
-            </button>
+              Login
+            </a>
           </nav>
         </div>
       </div>
     </header>
 
-    <main id="mainContent">
-      <section>
-        <div id="loginScreen" class="screen">
-          <div class="login-container">
-            <div class="card">
-              <div class="card__body">
-                <div class="login-header">
-                  <h2>Welcome back</h2>
-                  <p>Sign in to view your orders and manage your account.</p>
-                </div>
-                <form id="loginForm" class="login-form">
-                  <div class="form-group">
-                    <label class="form-label" for="username">Email</label>
-                    <input
-                      id="username"
-                      class="form-control"
-                      type="email"
-                      name="username"
-                      autocomplete="email"
-                      required
-                    />
-                  </div>
-                  <div class="form-group password-field">
-                    <label class="form-label" for="password">Password</label>
-                    <div class="password-input-wrapper">
-                      <input
-                        id="password"
-                        class="form-control"
-                        type="password"
-                        name="password"
-                        autocomplete="current-password"
-                        required
-                      />
-                      <button
-                        type="button"
-                        class="password-toggle-btn"
-                        data-password-toggle="password"
-                        aria-pressed="false"
-                        aria-label="Show password"
-                      >Show</button>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn--primary btn--full-width">
-                    Sign In
-                  </button>
-                </form>
-                <div class="login-options">
-                  <p>Don't have an account yet?</p>
-                  <button id="showRegisterBtn" type="button" class="link-btn">
-                    Create one now
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+    <main class="auth-main">
+      <section class="auth-hero">
+        <h1>Welcome back!</h1>
+        <p>
+          Sign in to schedule your next meal, manage customer conversations, and
+          keep the kitchen running smoothly.
+        </p>
+        <div class="auth-meta">
+          <span class="status status--success">Secure access</span>
+          <span class="status status--info">24×7 ordering</span>
         </div>
+      </section>
 
-        <div id="registerScreen" class="screen hidden">
-          <div class="login-container">
-            <div class="card">
-              <div class="card__body">
-                <div class="login-header">
-                  <h2>Create an account</h2>
-                  <p>Share your details so we can deliver without a hitch.</p>
-                </div>
-                <form id="registerForm" class="login-form">
-                  <div class="form-group">
-                    <label class="form-label" for="regName">Full Name</label>
-                    <input
-                      id="regName"
-                      class="form-control"
-                      type="text"
-                      name="name"
-                      autocomplete="name"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label" for="regEmail">Email</label>
-                    <input
-                      id="regEmail"
-                      class="form-control"
-                      type="email"
-                      name="email"
-                      autocomplete="email"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label" for="regPhone">Phone Number</label>
-                    <input
-                      id="regPhone"
-                      class="form-control"
-                      type="tel"
-                      name="phone"
-                      autocomplete="tel"
-                      inputmode="tel"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label" for="regAddress">Delivery Address</label>
-                    <textarea
-                      id="regAddress"
-                      class="form-control"
-                      name="address"
-                      rows="3"
-                      autocomplete="street-address"
-                    ></textarea>
-                  </div>
-                  <div class="form-group password-field">
-                    <label class="form-label" for="regPassword">Password</label>
-                    <div class="password-input-wrapper">
-                      <input
-                        id="regPassword"
-                        class="form-control"
-                        type="password"
-                        name="password"
-                        autocomplete="new-password"
-                        required
-                      />
-                      <button
-                        type="button"
-                        class="password-toggle-btn"
-                        data-password-toggle="regPassword"
-                        aria-pressed="false"
-                        aria-label="Show password"
-                      >Show</button>
-                    </div>
-                  </div>
-                  <p id="passwordError" class="hidden" role="alert">
-                    Password must be at least 6 characters long.
-                  </p>
-                  <button type="submit" class="btn btn--primary btn--full-width">
-                    Create Account
-                  </button>
-                </form>
-                <div class="login-options">
-                  <p>Already registered?</p>
-                  <button id="showLoginBtn" type="button" class="link-btn">
-                    Sign in instead
-                  </button>
-                </div>
+      <section class="auth-card card">
+        <div class="card__body">
+          <div class="auth-form__header">
+            <h2>Log in to your account</h2>
+            <p>Use the same credentials for customer and admin dashboards.</p>
+          </div>
+          <form id="loginForm" class="auth-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="password">Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  class="form-control"
+                  type="password"
+                  id="password"
+                  name="password"
+                  autocomplete="current-password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="togglePassword"
+                  aria-pressed="false"
+                >
+                  Show
+                </button>
               </div>
             </div>
-          </div>
+            <button type="submit" class="btn btn--primary btn--full-width">
+              Log in
+            </button>
+            <p class="message" id="message" role="status" aria-live="polite"></p>
+            <div class="auth-links">
+              <span>New to Home-Coming?</span>
+              <a href="signup.html">Create an account</a>
+            </div>
+          </form>
         </div>
       </section>
     </main>
@@ -220,14 +145,7 @@
       <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
     </footer>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="hidden" style="display: none;">
-      <div class="loader"></div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification"></div>
-
-  <script src="app.js" defer></script>
+    <script type="module" src="auth/theme-toggle.js"></script>
+    <script type="module" src="auth/login.js"></script>
   </body>
 </html>

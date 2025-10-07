@@ -1,0 +1,141 @@
+/* Auth experience styles scoped to auth pages */
+body.auth-body *,
+body.auth-body *::before,
+body.auth-body *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.auth-body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body.auth-body .container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+body.auth-body .form-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+body.auth-body h2 {
+  text-align: center;
+  color: #333333;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+body.auth-body .input-group {
+  margin-bottom: 20px;
+}
+
+body.auth-body label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555555;
+  font-weight: 500;
+}
+
+body.auth-body input[type="email"],
+body.auth-body input[type="password"],
+body.auth-body input[type="text"],
+body.auth-body textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #dddddd;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+body.auth-body input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+body.auth-body textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+body.auth-body .password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+body.auth-body .password-container input {
+  padding-right: 40px;
+}
+
+body.auth-body .toggle-password {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+}
+
+body.auth-body .btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+body.auth-body .btn:hover {
+  transform: translateY(-2px);
+}
+
+body.auth-body .btn:active {
+  transform: translateY(0);
+}
+
+body.auth-body .message {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  min-height: 20px;
+}
+
+body.auth-body .message.error {
+  color: #e74c3c;
+}
+
+body.auth-body .message.success {
+  color: #27ae60;
+}
+
+body.auth-body .switch-form {
+  text-align: center;
+  margin-top: 20px;
+  color: #666666;
+  font-size: 14px;
+}
+
+body.auth-body .switch-form a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+body.auth-body .switch-form a:hover {
+  text-decoration: underline;
+}

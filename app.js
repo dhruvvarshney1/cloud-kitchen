@@ -1,4 +1,6 @@
-import './firebase-config.js';
+import { firebaseServiceMethods } from "./src/services/firebase.js";
+import { messagingMethods } from "./src/features/messaging/messaging-controller.js";
+
 class RestaurantApp {
   constructor() {
     this.currentUser = null;
@@ -13,151 +15,12 @@ class RestaurantApp {
     this.unsubscribeConversations = null;
     this.unsubscribeChat = null;
     this.activeConversation = null; // { id, userId, name }
+  this.navAuthLogoutHandler = null;
 
     this.timeSlots = [
       { id: "lunch", name: "Lunch", time: "13:00 - 14:00" },
       { id: "dinner", name: "Dinner", time: "19:00 - 20:00" },
     ];
-
-    this.orderStatuses = [
-      "Pending",
-      "Confirmed",
-      "Preparing",
-      "Ready",
-      "Delivered",
-    ];
-
-    this.defaultCapacity = {
-      lunch: 50,
-      dinner: 40,
-    };
-
-    this.installPromptEvent = null;
-    this.serviceWorkerRegistration = null;
-    this.messaging = null;
-    this.isMessagingSupported = false;
-    this.isOnline = navigator.onLine;
-    this.foregroundMessagingBound = false;
-    this.pwaListenersAttached = false;
-
-    this.offlineToastVisible = false;
-    this.themeMediaListener = null;
-    this.firebaseInitialized = false;
-    this.firebaseInitPromise = null;
-    this.firebaseApp = null;
-    this.notificationTimeout = null;
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => this.initialize());
-    } else {
-      this.initialize();
-    }
-  }
-
-  async getUserProfile(uid) {
-    if (!uid || !this.db) return null;
-    try {
-      const userDocRef = this.db.collection("users").doc(uid);
-      const doc = await userDocRef.get();
-      return doc.exists ? doc.data() : null;
-    } catch (error) {
-      console.error("Error getting user profile:", error);
-      throw error;
-    }
-  }
-
-  async createUserProfile(uid, data) {
-    if (!uid || !data || !this.db) return;
-    try {
-        const userDocRef = this.db.collection("users").doc(uid);
-        await userDocRef.set(data, { merge: true });
-    } catch (error) {
-        console.error("Error creating user profile:", error);
-        throw error;
-    }
-  }
-
-  async initialize() {
-    console.log("Home-Coming App Initializing...");
-    this.setupThemeToggle();
-    this.setupEventListeners();
-    this.setMinDate();
-    if (document.getElementById("publicScreen")) {
-      this.showScreen("publicScreen");
-    } else if (document.getElementById("loginScreen")) {
-      this.showScreen("loginScreen");
-    }
-    this.detectHostingEnvironment();
-    this.setupPWAEventListeners();
-    this.updateOnlineStatus();
-
-    try {
-      console.log("Checking for Firebase config...");
-      if (
-        !window.firebaseConfig ||
-        !window.firebaseConfig.apiKey.startsWith("AIzaSy")
-      ) {
-        this.showNotification(
-          "Firebase config is missing or invalid.",
-          "error"
-        );
-        console.error("Firebase config is missing or invalid.");
-        return;
-      }
-
-      console.log("Firebase config found. Waiting for Firebase SDK...");
-      const ready = await this.waitForFirebase(5000);
-      if (!ready) {
-        this.showNotification(
-          "Could not load SDK. Refresh the page or check your network.",
-          "error"
-        );
-        return;
-      }
-
-      console.log("Firebase SDK ready. Initializing Firebase app...");
-      const initialized = await this.ensureFirebaseInitialized();
-      if (!initialized) {
-        this.showNotification(
-          "Firebase failed to initialize. Check console for details.",
-          "error"
-        );
-        return;
-      }
-
-  const app = this.firebaseApp || (typeof window.firebase.app === "function" ? window.firebase.app() : null);
-
-      if (window.firebase.isMessagingSupported) {
-        try {
-          this.isMessagingSupported = await window.firebase
-            .isMessagingSupported()
-            .catch(() => false);
-          if (this.isMessagingSupported) {
-            this.messaging = window.firebase.getMessaging(app);
-          }
-        } catch (messagingError) {
-          console.warn("Messaging not supported on this browser.", messagingError);
-          this.isMessagingSupported = false;
-        }
-      }
-
-    await this.registerServiceWorker();
-    this.setupForegroundMessaging();
-      this.refreshNotificationToggle();
-
-      console.log(
-        "Firebase app initialized successfully. Setting up auth listener..."
-      );
-      this.listenToAuthState();
-    } catch (error) {
-      console.error("Firebase initialization failed:", error);
-      this.showNotification("Could not connect to the service.", "error");
-    }
-  }
-
-  // Firebase helper methods
-  waitForFirebase(timeout = 5000) {
-    if (window.firebase) return Promise.resolve(true);
 
     return new Promise((resolve) => {
       const start = Date.now();
@@ -415,6 +278,7 @@ class RestaurantApp {
           }
           // Otherwise, just setup the admin screen (if it exists on the page)
           console.log("User is admin. Loading admin screen.");
+          this.configureNavAuthForUser();
           this.showScreen("adminScreen");
           await this.loadAdminData();
           this.startConversationsListener?.();
@@ -449,6 +313,7 @@ class RestaurantApp {
         if (onLoginPage) {
           // If we are on the login page and the user is null, this is the correct state.
           // The page is already visible, so we just hide the loader and stop.
+          this.configureNavAuthForGuest();
           this.hideLoader();
           console.log("On login page and user is not logged in. UI is correct.");
           return;
@@ -838,14 +703,13 @@ class RestaurantApp {
   updatePublicUIForUser() {
     if (!this.currentUser) return;
 
-    const navLoginBtn = document.getElementById("navLoginBtn");
-    if (navLoginBtn) navLoginBtn.classList.add("hidden");
-
     const publicLogoutBtn = document.getElementById("publicLogoutBtn");
     if (publicLogoutBtn) publicLogoutBtn.classList.remove("hidden");
 
     const navMessagesBtn = document.getElementById("navMessagesBtn");
     if (navMessagesBtn) navMessagesBtn.classList.remove("hidden");
+
+    this.configureNavAuthForUser();
 
     if (typeof this.refreshNotificationToggle === "function") {
       this.refreshNotificationToggle();
@@ -872,9 +736,6 @@ class RestaurantApp {
   }
 
   updatePublicUIForGuest() {
-    const navLoginBtn = document.getElementById("navLoginBtn");
-    if (navLoginBtn) navLoginBtn.classList.remove("hidden");
-
     const publicLogoutBtn = document.getElementById("publicLogoutBtn");
     if (publicLogoutBtn) publicLogoutBtn.classList.add("hidden");
 
@@ -883,6 +744,8 @@ class RestaurantApp {
 
     const navMessagesBtn = document.getElementById("navMessagesBtn");
     if (navMessagesBtn) navMessagesBtn.classList.add("hidden");
+
+    this.configureNavAuthForGuest();
 
     if (typeof this.refreshNotificationToggle === "function") {
       this.refreshNotificationToggle();
@@ -899,6 +762,72 @@ class RestaurantApp {
 
     const scheduledAddress = document.getElementById("scheduled-address");
     if (scheduledAddress) scheduledAddress.value = "";
+  }
+
+  configureNavAuthForUser() {
+    const navAuthBtn = document.getElementById("navAuthBtn");
+    if (!navAuthBtn) {
+      return;
+    }
+
+    const loginHref =
+      navAuthBtn.dataset.loginHref ||
+      navAuthBtn.getAttribute("data-login-href") ||
+      navAuthBtn.getAttribute("href") ||
+      "login.html";
+
+    navAuthBtn.dataset.loginHref = loginHref;
+
+    if (this.navAuthLogoutHandler) {
+      navAuthBtn.removeEventListener("click", this.navAuthLogoutHandler);
+    }
+
+    navAuthBtn.textContent = "Logout";
+    navAuthBtn.classList.remove("hidden");
+    navAuthBtn.setAttribute("href", "#logout");
+    navAuthBtn.setAttribute("role", "button");
+    navAuthBtn.setAttribute("aria-label", "Log out");
+    navAuthBtn.removeAttribute("aria-current");
+
+    this.navAuthLogoutHandler = (event) => {
+      if (event && typeof event.preventDefault === "function") {
+        event.preventDefault();
+      }
+      this.logout();
+    };
+
+    navAuthBtn.addEventListener("click", this.navAuthLogoutHandler);
+  }
+
+  configureNavAuthForGuest() {
+    const navAuthBtn = document.getElementById("navAuthBtn");
+    if (!navAuthBtn) {
+      return;
+    }
+
+    if (this.navAuthLogoutHandler) {
+      navAuthBtn.removeEventListener("click", this.navAuthLogoutHandler);
+      this.navAuthLogoutHandler = null;
+    }
+
+    const loginHref =
+      navAuthBtn.dataset.loginHref ||
+      navAuthBtn.getAttribute("data-login-href") ||
+      navAuthBtn.getAttribute("href") ||
+      "login.html";
+
+    navAuthBtn.dataset.loginHref = loginHref;
+    navAuthBtn.setAttribute("href", loginHref);
+    navAuthBtn.textContent = "Login";
+    navAuthBtn.classList.remove("hidden");
+    navAuthBtn.removeAttribute("role");
+    navAuthBtn.setAttribute("aria-label", "Log in");
+
+    if (document.body?.dataset?.page === "login") {
+      navAuthBtn.setAttribute("aria-current", "page");
+    } else {
+      navAuthBtn.removeAttribute("aria-current");
+    }
   }
 
   showScreen(screenId) {
@@ -934,19 +863,6 @@ class RestaurantApp {
 
   // Event Listeners
   setupEventListeners() {
-    const navLoginBtn = document.getElementById("navLoginBtn");
-    if (navLoginBtn)
-      navLoginBtn.addEventListener("click", (event) => {
-        if (document.getElementById("loginScreen")) {
-          if (event && typeof event.preventDefault === "function") {
-            event.preventDefault();
-          }
-          this.showScreen("loginScreen");
-        } else {
-          const target = new URL("login.html", window.location.href);
-          window.location.href = target.toString();
-        }
-      });
     const navMessagesBtn = document.getElementById("navMessagesBtn");
     if (navMessagesBtn)
       navMessagesBtn.addEventListener("click", (event) => {
@@ -983,110 +899,52 @@ class RestaurantApp {
         this.dismissInstallPrompt(true)
       );
     }
-
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-      loginForm.addEventListener("submit", (e) => {
-        this.handleLogin(e).catch((err) => {
-          console.error("Unhandled login error:", err);
-        });
-      });
-    }
-
-    const registerForm = document.getElementById("registerForm");
-    if (registerForm) {
-      registerForm.addEventListener("submit", (e) => {
-        this.handleRegister(e).catch((err) => {
-          console.error("Unhandled registration error:", err);
-        });
-      });
-    }
-
-    const showRegisterBtn = document.getElementById("showRegisterBtn");
-    if (showRegisterBtn) {
-      showRegisterBtn.addEventListener("click", () =>
-        this.showScreen("registerScreen")
-      );
-    }
-
-    const showLoginBtn = document.getElementById("showLoginBtn");
-    if (showLoginBtn) {
-      showLoginBtn.addEventListener("click", () =>
-        this.showScreen("loginScreen")
-      );
-    }
-
     this.setupLogoutButtons();
     this.setupAdminListeners();
     this.setupModalListeners();
     this.setupPublicLanding();
     this.setupChatListeners();
-    this.setupPasswordVisibilityToggles();
-  }
-
-  setupPasswordVisibilityToggles() {
-    const toggles = document.querySelectorAll("[data-password-toggle]");
-    toggles.forEach((btn) => {
-      if (!btn || btn.dataset.toggleBound === "true") return;
-
-      const targetId = btn.getAttribute("data-password-toggle");
-      if (!targetId) return;
-
-      const input = document.getElementById(targetId);
-      if (!input) return;
-
-      const setState = (visible) => {
-        btn.setAttribute("aria-pressed", visible ? "true" : "false");
-        btn.textContent = visible ? "Hide" : "Show";
-        btn.setAttribute(
-          "aria-label",
-          visible ? "Hide password" : "Show password"
-        );
-      };
-
-      btn.addEventListener("click", () => {
-        const willShow = input.getAttribute("type") === "password";
-        input.setAttribute("type", willShow ? "text" : "password");
-        setState(willShow);
-        if (willShow) {
-          try {
-            input.focus({ preventScroll: true });
-          } catch (_) {
-            input.focus();
-          }
-        }
-      });
-
-      setState(false);
-      btn.dataset.toggleBound = "true";
-    });
   }
 
   setupLogoutButtons() {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => this.logout());
-    }
+    const logoutButtonIds = [
+      "logoutBtn",
+      "publicLogoutBtn",
+      "headerLogoutBtn",
+      "adminLogoutBtn",
+      "adminMenuLogoutBtn",
+      "adminReportsLogoutBtn",
+      "adminMessagingLogoutBtn",
+    ];
 
-    const publicLogoutBtn = document.getElementById("publicLogoutBtn");
-    if (publicLogoutBtn) {
-      publicLogoutBtn.addEventListener("click", () => this.logout());
-    }
+    logoutButtonIds.forEach((id) => {
+      const button = document.getElementById(id);
+      if (!button || button.dataset.boundLogout === "true") {
+        return;
+      }
+
+      button.addEventListener("click", () => this.logout());
+      button.dataset.boundLogout = "true";
+    });
   }
 
   setupAdminListeners() {
-    const adminScreen = document.getElementById("adminScreen");
-    if (!adminScreen) {
+    const isAdminContext = Boolean(
+      document.body?.dataset?.adminPage ||
+        document.getElementById("adminScreen")
+    );
+
+    if (!isAdminContext) {
       return;
     }
 
-    adminScreen
-      .querySelectorAll(".tab-btn")
-      .forEach((btn) =>
-        btn.addEventListener("click", (e) =>
-          this.switchTab(e.target.dataset.tab)
-        )
-      );
+    document
+      .querySelectorAll(".admin-tabs .tab-btn")
+      .forEach((btn) => {
+        const targetTab = btn.dataset.tab;
+        if (!targetTab) return;
+        btn.addEventListener("click", () => this.switchTab(targetTab));
+      });
 
     const orderDateFilter = document.getElementById("orderDateFilter");
     if (orderDateFilter) {
@@ -2277,183 +2135,11 @@ class RestaurantApp {
     }, 5000);
   }
 
-  // ========== Messaging (Admin) ==========
-  startConversationsListener() {
-    if (!this.db) return;
-    if (this.unsubscribeConversations) this.unsubscribeConversations();
-    const convRef = window.firebase.collection(this.db, "conversations");
-    const q = window.firebase.query(convRef);
-    this.unsubscribeConversations = window.firebase.onSnapshot(
-      q,
-      (snap) => {
-        const list = [];
-        snap.forEach((doc) => list.push({ id: doc.id, ...doc.data() }));
-        list.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
-        this.renderConversations(list);
-      },
-      (err) => {
-        console.error("Conversations listener error", err);
-        this.showNotification("Error loading conversations", "error");
-      }
-    );
-  }
-
-  renderConversations(conversations) {
-    const ul = document.getElementById("conversationsList");
-    if (!ul) return;
-    if (!conversations.length) {
-      ul.innerHTML = "<li>No conversations yet</li>";
-      const header = document.getElementById("chatHeader");
-      const msgs = document.getElementById("chatMessages");
-      if (header) header.textContent = "Select a conversation";
-      if (msgs) msgs.innerHTML = "";
-      return;
-    }
-    ul.innerHTML = conversations
-      .map(
-        (c) => `
-                <li data-id="${c.id}" data-user="${c.userId || c.id}" class="${
-          this.activeConversation && this.activeConversation.id === c.id
-            ? "active"
-            : ""
-        }">
-                    <strong>${cSan(
-                      c.userName || c.userEmail || c.userId || c.id
-                    )}</strong><br/>
-                    <span style="font-size:12px; color:var(--color-text-secondary);">${cSan(
-                      c.lastMessage || ""
-                    )}</span>
-                </li>`
-      )
-      .join("");
-    [...ul.querySelectorAll("li")].forEach((li) => {
-      li.addEventListener("click", () => {
-        const id = li.getAttribute("data-id");
-        const userId = li.getAttribute("data-user");
-        this.activeConversation = { id, userId, name: li.textContent.trim() };
-        ul.querySelectorAll("li").forEach((n) => n.classList.remove("active"));
-        li.classList.add("active");
-        document.getElementById("chatHeader").textContent = `Chat with ${cSan(
-          li.querySelector("strong")?.textContent || userId
-        )}`;
-        this.loadChat(userId, "chatMessages");
-      });
-    });
-  }
-
-  loadChat(userId, containerId = "chatMessages") {
-    if (!this.db || !userId) return;
-    if (this.unsubscribeChat) this.unsubscribeChat();
-    const msgsRef = window.firebase.collection(
-      this.db,
-      "conversations",
-      userId,
-      "messages"
-    );
-    const q = window.firebase.query(msgsRef);
-    this.unsubscribeChat = window.firebase.onSnapshot(
-      q,
-      (snap) => {
-        const messages = [];
-        snap.forEach((doc) => messages.push({ id: doc.id, ...doc.data() }));
-        messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-        this.renderChat(messages, containerId);
-      },
-      (err) => {
-        console.error("Chat listener error", err);
-      }
-    );
-  }
-
-  // ========== Messaging (Customer) ==========
-  startCustomerChat() {
-    const notice = document.getElementById("customerChatNotice");
-    if (!this.currentUser) {
-      if (notice) notice.textContent = "Please log in to send messages.";
-      return;
-    }
-    if (notice) notice.textContent = "You are messaging the admin.";
-    const userId = this.currentUser.uid;
-    this.loadChat(userId, "customerChatMessages");
-    // Ensure conversation doc exists and metadata is updated
-    this.ensureConversationDoc(userId, {
-      userId,
-      userName: this.currentUser.name,
-      userEmail: this.currentUser.email,
-      updatedAt: Date.now(),
-    });
-  }
-
-  renderChat(messages, containerId) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const meIsCustomer = containerId === "customerChatMessages";
-    el.innerHTML = messages
-      .map((m) => {
-        const mine = meIsCustomer
-          ? m.sender === "customer"
-          : m.sender === "admin";
-        const meta = new Date(m.timestamp || Date.now()).toLocaleString();
-        return `<div class="msg ${mine ? "me" : "them"}">${cSan(
-          m.text
-        )}<span class="meta">${meta}</span></div>`;
-      })
-      .join("");
-    el.scrollTop = el.scrollHeight;
-  }
-
-  async sendMessage(userId, text, sender) {
-    try {
-      if (!this.db || !userId || !text) return;
-      const msgsRef = window.firebase.collection(
-        this.db,
-        "conversations",
-        userId,
-        "messages"
-      );
-      const payload = { text, sender, timestamp: Date.now() };
-      await window.firebase.addDoc(msgsRef, payload);
-      await this.ensureConversationDoc(userId, {
-        userId,
-        userName: this.currentUser?.name || undefined,
-        userEmail: this.currentUser?.email || undefined,
-        lastMessage: text,
-        updatedAt: Date.now(),
-      });
-    } catch (e) {
-      console.error("sendMessage error", e);
-      this.showNotification("Failed to send message", "error");
-    }
-  }
-
-  async ensureConversationDoc(userId, data) {
-    const convRef = window.firebase.doc(this.db, "conversations", userId);
-    const snap = await window.firebase.getDoc(convRef);
-    if (snap.exists()) {
-      await window.firebase.updateDoc(convRef, data);
-    } else {
-      await window.firebase.setDoc(convRef, data);
-    }
-  }
 }
 
 // Initialize the app
 const app = new RestaurantApp();
-
-// Minimal sanitizer for chat message rendering
-function cSan(str) {
-  return (str || "").replace(
-    /[&<>"']/g,
-    (c) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      }[c])
-  );
-}
+window.app = app;
 
 function setActiveNavLink(selector = "[data-nav]") {
   const links = document.querySelectorAll(selector);

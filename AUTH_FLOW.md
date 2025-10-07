@@ -47,7 +47,7 @@ users/{uid}:
 
 ## App.js Auth State Listener
 
-When `app.js` detects auth state changes:
+When `js/app.js` detects auth state changes:
 
 ### For Admin Users (`role === "admin"`):
 - Shows admin screen with dashboard, menu management, reports, messaging

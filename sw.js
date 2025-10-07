@@ -1,18 +1,27 @@
-const CACHE_NAME = "cloud-kitchen-v2";
+const CACHE_NAME = "cloud-kitchen-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./menu.html",
   "./order.html",
   "./login.html",
-  "./customer/account.html",
+  "./signup.html",
   "./admin/dashboard.html",
   "./admin/menu-management.html",
   "./admin/reports.html",
   "./admin/messaging.html",
-  "./styles.css",
-  "./app.js",
-  "./logo.png"
+  "./css/common.css",
+  "./css/index.css",
+  "./css/menu.css",
+  "./css/order.css",
+  "./css/login.css",
+  "./css/signup.css",
+  "./css/admin.css",
+  "./js/app.js",
+  "./js/firebase-config.js",
+  "./js/messaging.js",
+  "./assets/images/logo.png",
+  "./assets/icons/icon-512x512.png"
 ];
 
 self.addEventListener("install", (event) => {

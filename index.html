@@ -18,8 +18,20 @@
         rel="stylesheet"
       />
       <link rel="manifest" href="manifest.json" />
+<<<<<<< HEAD
       <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
     <link rel="stylesheet" href="styles.css" />
+=======
+      <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-512x512.png" />
+      <link rel="stylesheet" href="css/common.css" />
+      <link rel="stylesheet" href="css/index.css" />
+      <!-- Firebase SDKs -->
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase Config -->
+    <script src="js/firebase-config.js"></script>
+>>>>>>> 558ff72 (refactor: migrate to modular folder structure (core/features/pages/utils), update all HTML/script references, remove legacy js/app.js)
     </head>
     <body data-page="landing">
       <button
@@ -47,7 +59,7 @@
           <div class="py-6 flex flex-col items-center gap-5 text-center">
             <!-- Logo and Company Name -->
             <div class="flex items-center gap-3">
-              <img src="logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+              <img src="assets/images/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
               <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Home-Coming Cloud Kitchen</h1>
             </div>
 
@@ -56,7 +68,7 @@
               <a href="index.html" class="global-nav__link" data-nav aria-current="page">Home</a>
               <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
               <a href="order.html" class="global-nav__link" data-nav>Orders</a>
-              <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
+              <a href="signup.html" class="global-nav__link" data-nav>Account</a>
               <a
                 id="navAuthBtn"
                 class="global-nav__link"
@@ -333,7 +345,12 @@
       <!-- Notification container -->
       <div id="notification"></div>
 
+<<<<<<< HEAD
     <script type="module" src="src/services/theme-toggle.js"></script>
     <script type="module" src="src/services/app-init.js"></script>
+=======
+      <script type="module" src="js/core/app.js"></script>
+      <script type="module" src="js/pages/landing.js"></script>
+>>>>>>> 558ff72 (refactor: migrate to modular folder structure (core/features/pages/utils), update all HTML/script references, remove legacy js/app.js)
     </body>
   </html>

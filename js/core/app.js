@@ -1,5 +1,4 @@
-import { firebaseServiceMethods } from "./src/services/firebase.js";
-import { messagingMethods } from "./src/features/messaging/messaging-controller.js";
+import { messagingMethods } from "../features/messaging/chat-manager.js";
 
 class RestaurantApp {
   constructor() {
@@ -15,12 +14,16 @@ class RestaurantApp {
     this.unsubscribeConversations = null;
     this.unsubscribeChat = null;
     this.activeConversation = null; // { id, userId, name }
-  this.navAuthLogoutHandler = null;
+    this.navAuthLogoutHandler = null;
 
     this.timeSlots = [
       { id: "lunch", name: "Lunch", time: "13:00 - 14:00" },
       { id: "dinner", name: "Dinner", time: "19:00 - 20:00" },
     ];
+  }
+
+  waitForFirebase(timeout = 5000) {
+    if (window.firebase) return Promise.resolve(true);
 
     return new Promise((resolve) => {
       const start = Date.now();
@@ -872,7 +875,7 @@ class RestaurantApp {
           }
           this.showScreen("customerScreen");
         } else {
-          const target = new URL("customer/account.html", window.location.href);
+          const target = new URL("signup.html", window.location.href);
           window.location.href = target.toString();
         }
       });
@@ -2136,6 +2139,8 @@ class RestaurantApp {
   }
 
 }
+
+Object.assign(RestaurantApp.prototype, messagingMethods);
 
 // Initialize the app
 const app = new RestaurantApp();

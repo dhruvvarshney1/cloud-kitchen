@@ -29,7 +29,7 @@ const firebaseConfig = {
 
 ## Step 3: Update Firebase Configuration
 
-1. Open `firebase-config.js` in your project
+1. Open `js/firebase-config.js` in your project
 2. Replace the placeholder values with your actual Firebase config
 3. Save the file
 
@@ -170,10 +170,10 @@ Your database will have these collections:
 ### "Firebase failed to load"
 - Check your internet connection
 - Verify the Firebase SDK scripts are loading (check browser console)
-- Make sure `firebase-config.js` is loaded before `login.js`
+- Make sure `js/firebase-config.js` is loaded before `login.js`
 
 ### "Invalid API key"
-- Double-check your Firebase config in `firebase-config.js`
+- Double-check your Firebase config in `js/firebase-config.js`
 - Ensure you copied the entire config object from Firebase Console
 
 ### "Permission denied" errors

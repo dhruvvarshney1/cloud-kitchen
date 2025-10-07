@@ -1,5 +1,7 @@
 # Firebase
+# Keep real project keys out of source control by ignoring local overrides.
 firebase-config.js
+js/firebase-config.js
 .env
 
 # Dependencies

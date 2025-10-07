@@ -18,14 +18,15 @@
             rel="stylesheet"
         />
         <link rel="manifest" href="manifest.json" />
-        <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
-    <link rel="stylesheet" href="styles.css" />
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-512x512.png" />
+        <link rel="stylesheet" href="css/common.css" />
+        <link rel="stylesheet" href="css/menu.css" />
         <!-- Firebase SDKs -->
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
         <!-- Firebase Config -->
-        <script src="firebase-config.js"></script>
+        <script src="js/firebase-config.js"></script>
     </head>
     <body
         data-page="menu"
@@ -54,7 +55,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="py-6 flex flex-col items-center gap-5 text-center">
                     <div class="flex items-center gap-3">
-                        <img src="logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+                        <img src="assets/images/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
                         <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
                             Home-Coming Cloud Kitchen
                         </h1>
@@ -66,7 +67,7 @@
                             >Menu</a
                         >
                         <a href="order.html" class="global-nav__link" data-nav>Orders</a>
-                        <a href="customer/account.html" class="global-nav__link" data-nav>Account</a>
+                        <a href="signup.html" class="global-nav__link" data-nav>Account</a>
                         <a
                             id="navAuthBtn"
                             class="global-nav__link"
@@ -265,6 +266,7 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
-                <script type="module" src="app.js"></script>
+                                <script type="module" src="js/core/app.js"></script>
+                                <script type="module" src="js/pages/menu.js"></script>
   </body>
 </html>

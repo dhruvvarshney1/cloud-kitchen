@@ -17,10 +17,10 @@
       href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-512x512.png" />
-    <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/signup.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/icon-512x512.png" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/signup.css" />
   </head>
   <body data-page="signup" class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
     <button
@@ -35,20 +35,36 @@
     </button>
 
     <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
+      <button
+        type="button"
+        id="headerLogoutBtn"
+        class="header-logout-btn hidden"
+        aria-label="Log out"
+      >
+        Logout
+      </button>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="py-6 flex flex-col items-center gap-5 text-center">
           <div class="flex items-center gap-3">
-            <img src="assets/images/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+            <img src="./assets/images/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
             <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
               Home-Coming Cloud Kitchen
             </h1>
           </div>
 
           <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="index.html" class="global-nav__link" data-nav>Home</a>
-            <a href="menu.html" class="global-nav__link" data-nav>Menu</a>
-            <a href="order.html" class="global-nav__link" data-nav>Orders</a>
-            <a href="login.html" class="global-nav__link" data-nav>Login</a>
+            <a href="./index.html" class="global-nav__link" data-nav>Home</a>
+            <a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
+            <a
+              id="navAuthBtn"
+              class="global-nav__link"
+              data-nav
+              href="./login.html"
+              data-login-href="./login.html"
+            >
+              Login
+            </a>
           </nav>
         </div>
       </div>
@@ -168,7 +184,7 @@
             <p class="message" id="signupMessage" role="status" aria-live="polite"></p>
             <div class="auth-links">
               <span>Already have an account?</span>
-              <a href="login.html">Log in</a>
+              <a href="./login.html">Log in</a>
             </div>
           </form>
         </div>
@@ -179,7 +195,7 @@
       <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="src/services/theme-toggle.js"></script>
-    <script type="module" src="src/auth/signup.js"></script>
+    <script type="module" src="./src/services/theme-toggle.js"></script>
+    <script type="module" src="./src/auth/signup.js"></script>
   </body>
 </html>

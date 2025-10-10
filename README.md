@@ -3,6 +3,8 @@
 
 Modern static PWA that powers a Firebase-backed ordering, messaging, and admin management experience for a home-cloud kitchen brand.
 
+> **🔥 Recently Migrated to Firebase!** This project now uses Firebase Authentication and Firestore (migrated from Supabase). See `QUICKSTART.md` for a 5-minute setup guide or `FIREBASE_MIGRATION.md` for complete documentation.
+
 ---
 
 ## 🚀 Tech stack at a glance
@@ -116,6 +118,10 @@ No automated tests exist; capture manual QA steps in PR notes and use the Fireba
 ---
 
 ## 📚 Reference docs
-- `AUTH_FLOW.md` – detailed sign-up/login guidance and admin promotion steps.
-- `FIREBASE_SETUP.md` – instructions for configuring Firebase project settings and service credentials.
+- `QUICKSTART.md` – **5-minute Firebase setup guide** (start here!)
+- `FIREBASE_MIGRATION.md` – complete Firebase configuration, security rules, and troubleshooting
+- `MIGRATION_COMPLETE.md` – summary of the Supabase → Firebase migration
+- `AUTH_FLOW.md` – detailed sign-up/login guidance and admin promotion steps
+- `FIREBASE_SETUP.md` – instructions for configuring Firebase project settings and service credentials
+- `IMPLEMENTATION_SUMMARY.md` – overview of completed features and file structure
 

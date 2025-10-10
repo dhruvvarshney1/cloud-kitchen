@@ -42,13 +42,22 @@ if (loginForm) {
 }
 
 function handleError(error) {
-  const { message } = error;
-  if (message.includes('Invalid login credentials')) {
-    showMessage('Invalid email or password', 'error');
-  } else if (message.includes('Email not confirmed')) {
-    showMessage('Please check your email to confirm your account', 'error');
-  } else {
-    showMessage(`Login failed: ${message}`, 'error');
+  const { code, message } = error;
+  
+  switch (code) {
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      showMessage('Invalid email or password', 'error');
+      break;
+    case 'auth/too-many-requests':
+      showMessage('Too many failed attempts. Please try again later.', 'error');
+      break;
+    case 'auth/user-disabled':
+      showMessage('This account has been disabled', 'error');
+      break;
+    default:
+      showMessage(`Login failed: ${message}`, 'error');
   }
 }
 

@@ -3,11 +3,11 @@
 ## What Was Completed
 
 ### 1. Authentication System
-- **Migrated from Firebase to Supabase** for better integration and security
+- **Using Firebase Authentication** for secure and reliable auth
 - **Complete signup flow** with name, phone, address, email, and password
 - **Secure login** with email and password
 - **Logout functionality** available on all pages
-- **Profile management** with user data stored in Supabase
+- **Profile management** with user data stored in Firestore
 
 ### 2. User Interface
 - **Consistent styling** across login and signup pages
@@ -22,23 +22,24 @@
 - **Accessible** with proper ARIA labels
 
 ### 4. Security
-- **Row Level Security (RLS)** policies on all database tables
+- **Firestore Security Rules** protecting all collections
 - **Authentication required** for protected routes
 - **Secure password handling** (minimum 6 characters)
-- **Session management** with automatic logout on token expiration
+- **Session management** with Firebase Auth state listeners
 
 ## File Structure
 
 ```
 src/
+├── config/
+│   └── firebase-config.js  # Firebase project configuration
 ├── services/
-│   ├── supabase.js       # Supabase client configuration
-│   ├── auth.js           # Authentication functions
-│   ├── theme-toggle.js   # Theme switching logic
-│   └── app-init.js       # App initialization and auth state
+│   ├── auth.js             # Authentication functions (Firebase)
+│   ├── theme-toggle.js     # Theme switching logic
+│   └── app-init.js         # App initialization and auth state
 └── auth/
-    ├── login.js          # Login page logic
-    └── signup.js         # Signup page logic
+    ├── login.js            # Login page logic
+    └── signup.js           # Signup page logic
 ```
 
 ## How to Use
@@ -50,12 +51,13 @@ src/
 4. **Log Out**: Click the "Logout" button in the navigation
 
 ### For Developers
-1. **Database Setup**: Run the SQL from `SUPABASE_SETUP.md` in Supabase
-2. **Start Dev Server**: `npm run dev`
-3. **Build for Production**: `npm run build`
+1. **Firebase Setup**: Follow instructions in `FIREBASE_MIGRATION.md`
+2. **Configure**: Update `src/config/firebase-config.js` with your Firebase credentials
+3. **Start Dev Server**: `npx http-server . -p 8080` (or any static server)
+4. **Access**: Open `http://localhost:8080` in your browser
 
 ## Next Steps
 - Add password reset functionality
 - Implement admin dashboard features
 - Add order management system
-- Set up email notifications
+- Set up email notifications with Firebase Cloud Messaging

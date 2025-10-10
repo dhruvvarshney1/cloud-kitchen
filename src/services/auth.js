@@ -1,66 +1,63 @@
-import { supabase } from './supabase.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut as firebaseSignOut,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc 
+} from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js';
+import { firebaseConfig } from '../config/firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 export async function signUp(email, password, userData) {
-  const { data: authData, error: authError } = await supabase.auth.signUp({
-    email,
-    password,
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
+  
+  // Save user profile to Firestore
+  await setDoc(doc(db, 'users', user.uid), {
+    name: userData.name || '',
+    phone: userData.phone || '',
+    address: userData.address || '',
+    role: 'customer',
+    email: email,
+    createdAt: new Date().toISOString()
   });
-
-  if (authError) throw authError;
-
-  if (authData.user) {
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .insert({
-        id: authData.user.id,
-        name: userData.name || '',
-        phone: userData.phone || '',
-        address: userData.address || '',
-        role: 'customer',
-      });
-
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-    }
-  }
-
-  return authData;
+  
+  return userCredential;
 }
 
 export async function signIn(email, password) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) throw error;
-  return data;
+  return await signInWithEmailAndPassword(auth, email, password);
 }
 
 export async function signOut() {
-  const { error } = await supabase.auth.signOut();
-  if (error) throw error;
+  return await firebaseSignOut(auth);
 }
 
 export async function getCurrentUser() {
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error) throw error;
-  return user;
+  return auth.currentUser;
 }
 
 export async function getUserProfile(userId) {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .maybeSingle();
-
-  if (error) throw error;
-  return data;
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  return null;
 }
 
 export function onAuthStateChange(callback) {
-  return supabase.auth.onAuthStateChange((event, session) => {
-    callback(event, session);
-  });
+  return onAuthStateChanged(auth, callback);
 }

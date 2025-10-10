@@ -1,21 +1,20 @@
-import { supabase } from './supabase.js';
-import { signOut, getUserProfile } from './auth.js';
+import { getCurrentUser, getUserProfile, signOut, onAuthStateChange } from './auth.js';
 
 let currentUser = null;
 
 async function initializeAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const user = await getCurrentUser();
 
-  if (session?.user) {
-    await handleAuthUser(session.user);
+  if (user) {
+    await handleAuthUser(user);
   } else {
     handleAuthGuest();
   }
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session?.user) {
-      await handleAuthUser(session.user);
-    } else if (event === 'SIGNED_OUT') {
+  onAuthStateChange(async (user) => {
+    if (user) {
+      await handleAuthUser(user);
+    } else {
       handleAuthGuest();
       const currentPath = window.location.pathname;
       if (currentPath.includes('/admin/') || currentPath.includes('/customer/')) {
@@ -27,7 +26,7 @@ async function initializeAuth() {
 
 async function handleAuthUser(user) {
   try {
-    const profile = await getUserProfile(user.id);
+    const profile = await getUserProfile(user.uid);
     currentUser = { ...user, profile };
 
     updateUIForAuthenticatedUser();

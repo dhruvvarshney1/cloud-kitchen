@@ -75,15 +75,23 @@ if (signupForm) {
 }
 
 function handleError(error) {
-  const { message } = error;
-  if (message.includes('already registered')) {
-    showMessage('Email already registered', 'error');
-  } else if (message.includes('Invalid email')) {
-    showMessage('Invalid email address', 'error');
-  } else if (message.includes('Password')) {
-    showMessage('Password is too weak', 'error');
-  } else {
-    showMessage(`Sign up failed: ${message}`, 'error');
+  const { code, message } = error;
+  
+  switch (code) {
+    case 'auth/email-already-in-use':
+      showMessage('Email already registered', 'error');
+      break;
+    case 'auth/invalid-email':
+      showMessage('Invalid email address', 'error');
+      break;
+    case 'auth/weak-password':
+      showMessage('Password is too weak. Must be at least 6 characters.', 'error');
+      break;
+    case 'auth/operation-not-allowed':
+      showMessage('Email/password accounts are not enabled', 'error');
+      break;
+    default:
+      showMessage(`Sign up failed: ${message}`, 'error');
   }
 }
 

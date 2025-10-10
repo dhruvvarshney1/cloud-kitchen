@@ -15,6 +15,7 @@ class RestaurantApp {
     this.unsubscribeChat = null;
     this.activeConversation = null; // { id, userId, name }
     this.navAuthLogoutHandler = null;
+    this.headerLogoutHandler = null;
 
     this.timeSlots = [
       { id: "lunch", name: "Lunch", time: "13:00 - 14:00" },
@@ -769,6 +770,8 @@ class RestaurantApp {
 
   configureNavAuthForUser() {
     const navAuthBtn = document.getElementById("navAuthBtn");
+    const headerLogoutBtn = document.getElementById("headerLogoutBtn");
+    
     if (!navAuthBtn) {
       return;
     }
@@ -800,10 +803,31 @@ class RestaurantApp {
     };
 
     navAuthBtn.addEventListener("click", this.navAuthLogoutHandler);
+    
+    // Show header logout button and bind the logout handler
+    if (headerLogoutBtn) {
+      headerLogoutBtn.classList.remove("hidden");
+      
+      // Remove any existing listener to avoid duplicates
+      if (this.headerLogoutHandler) {
+        headerLogoutBtn.removeEventListener("click", this.headerLogoutHandler);
+      }
+      
+      this.headerLogoutHandler = (event) => {
+        if (event && typeof event.preventDefault === "function") {
+          event.preventDefault();
+        }
+        this.logout();
+      };
+      
+      headerLogoutBtn.addEventListener("click", this.headerLogoutHandler);
+    }
   }
 
   configureNavAuthForGuest() {
     const navAuthBtn = document.getElementById("navAuthBtn");
+    const headerLogoutBtn = document.getElementById("headerLogoutBtn");
+    
     if (!navAuthBtn) {
       return;
     }
@@ -830,6 +854,16 @@ class RestaurantApp {
       navAuthBtn.setAttribute("aria-current", "page");
     } else {
       navAuthBtn.removeAttribute("aria-current");
+    }
+    
+    // Hide header logout button and remove listener
+    if (headerLogoutBtn) {
+      headerLogoutBtn.classList.add("hidden");
+      
+      if (this.headerLogoutHandler) {
+        headerLogoutBtn.removeEventListener("click", this.headerLogoutHandler);
+        this.headerLogoutHandler = null;
+      }
     }
   }
 

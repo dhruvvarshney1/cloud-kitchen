@@ -27,7 +27,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <!-- Firebase Config -->
-    <script src="../js/firebase-config.js"></script>
+    <script src="../js/auth.js"></script>
   </head>
   <body
     data-page="admin-messaging"
@@ -57,7 +57,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="py-6 flex flex-col items-center gap-5 text-center">
           <div class="flex items-center gap-3">
-            <img src="../assets/images/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
+            <img src="../assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
             <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
               Home-Coming Cloud Kitchen
             </h1>
@@ -194,7 +194,8 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
-    <script type="module" src="../js/core/app.js"></script>
-    <script type="module" src="../js/pages/admin-init.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/app.js"></script>
   </body>
 </html>

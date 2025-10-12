@@ -1,1 +1,8 @@
+/* =============================================================
+	signup.css — Sign-up page helper
+	This file imports `login.css` because signup shares the same
+	layout and styles as the login form. Keep signup-specific
+	overrides here if needed (e.g., extra fields or copy tweaks).
+	============================================================= */
+
 @import url("./login.css");

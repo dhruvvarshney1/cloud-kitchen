@@ -1,1 +1,306 @@
-/* Page-specific styles for menu page */
+/* =============================================================
+	menu.css — Menu page styles
+	Purpose: styles specific to `menu.html` (menu list, filters,
+	menu-item cards, categories). Keep interactive and shared
+	components in `common.css` and use tokens there.
+
+	Typical blocks:
+	- Menu grid and card layout
+	- Filters and sorting controls
+	- Accessibility helpers for keyboard focus
+	============================================================= */
+
+/* =============================================================
+	 CUSTOMER PORTAL & ORDERING BLOCKS
+	 Imported from common.css for menu-specific usage
+	 ============================================================= */
+.customer-layout {
+	display: grid;
+	gap: var(--space-16);
+	padding: var(--space-16);
+	max-width: 1140px;
+	margin: 0 auto;
+}
+
+.customer-hero {
+	background: linear-gradient(135deg, rgba(76, 175, 80, 0.12), rgba(76, 175, 80, 0.04));
+	border: 1px solid rgba(76, 175, 80, 0.18);
+	border-radius: var(--radius-lg);
+	padding: var(--space-24);
+}
+
+.customer-content {
+	background: var(--color-surface);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--color-card-border);
+	padding: var(--space-16);
+}
+
+.orders-grid {
+	display: grid;
+	gap: var(--space-16);
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.order-card {
+	border: 1px solid var(--color-card-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-16);
+	background: var(--color-surface);
+	box-shadow: var(--shadow-sm);
+}
+
+.order-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--space-12);
+}
+
+.order-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: var(--space-12);
+}
+
+.daily-menu-items {
+	display: grid;
+	gap: var(--space-12);
+}
+
+.menu-item {
+	border: 1px solid var(--color-card-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-12);
+	background: var(--color-surface);
+	display: grid;
+	gap: var(--space-8);
+}
+
+.menu-item:hover {
+	border-color: rgba(var(--color-primary-rgb), 0.32);
+	background: rgba(var(--color-primary-rgb), 0.08);
+}
+
+.quantity-selector {
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+}
+
+.order-summary {
+	background: rgba(var(--color-primary-rgb), 0.12);
+	padding: var(--space-16);
+	border-radius: var(--radius-lg);
+	border: 1px solid rgba(var(--color-primary-rgb), 0.28);
+}
+
+.summary-items {
+	display: grid;
+	gap: var(--space-8);
+}
+
+.summary-total {
+	margin-top: var(--space-12);
+	padding-top: var(--space-12);
+	border-top: 1px solid rgba(var(--color-primary-rgb), 0.18);
+	font-weight: var(--font-weight-semibold);
+}
+
+@media (max-width: 600px) {
+	.customer-layout {
+		padding: var(--space-12);
+	}
+
+	.orders-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* =============================================================
+	 MENU PAGE LAYOUT & TYPOGRAPHY
+	 Replaces Tailwind utility usage in menu.html
+	 ============================================================= */
+
+[data-page="menu"] .menu-page {
+	width: min(1140px, 100%);
+	margin: 0 auto;
+	padding: clamp(32px, 6vw, 56px) clamp(16px, 4vw, 32px) clamp(48px, 8vw, 72px);
+	display: grid;
+	gap: clamp(32px, 6vw, 56px);
+}
+
+[data-page="menu"] .menu-header {
+	display: grid;
+	gap: var(--space-16);
+	justify-items: center;
+	text-align: center;
+	padding: clamp(24px, 4vw, 40px) 0;
+}
+
+[data-page="menu"] .menu-header__brand {
+	display: flex;
+	align-items: center;
+	gap: var(--space-12);
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+[data-page="menu"] .menu-header__logo {
+	height: 3rem;
+	width: 3rem;
+	border-radius: var(--radius-lg);
+}
+
+[data-page="menu"] .menu-header__title {
+	font-size: clamp(1.5rem, 3vw, 2.2rem);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+}
+
+[data-page="menu"] .menu-hero {
+	display: grid;
+	gap: var(--space-12);
+	text-align: center;
+}
+
+[data-page="menu"] .menu-hero__heading {
+	font-size: clamp(2rem, 4vw, 3.2rem);
+	color: var(--color-primary);
+	font-weight: var(--font-weight-bold);
+}
+
+[data-page="menu"] .menu-hero__intro {
+	font-size: clamp(1rem, 2.2vw, 1.25rem);
+	margin: 0 auto;
+	max-width: 720px;
+	color: var(--color-text-secondary);
+}
+
+[data-page="menu"] .menu-grid {
+	display: grid;
+	gap: clamp(24px, 5vw, 40px);
+}
+
+@media (min-width: 992px) {
+	[data-page="menu"] .menu-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(32px, 5vw, 48px);
+	}
+}
+
+[data-page="menu"] .menu-column {
+	display: grid;
+	gap: clamp(24px, 4vw, 36px);
+}
+
+[data-page="menu"] .menu-section {
+	display: grid;
+	gap: var(--space-16);
+}
+
+[data-page="menu"] .menu-section__title {
+	font-size: clamp(1.5rem, 2.5vw, 1.8rem);
+	font-weight: var(--font-weight-bold);
+	padding-bottom: var(--space-8);
+	border-bottom: 2px solid rgba(var(--color-primary-rgb), 0.6);
+}
+
+[data-page="menu"] .menu-section__table-wrapper {
+	background: var(--color-surface);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--color-card-border);
+	box-shadow: var(--shadow-md);
+	overflow: hidden;
+}
+
+[data-page="menu"] .menu-section__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+[data-page="menu"] .menu-section__table thead {
+	background: rgba(var(--color-primary-rgb), 0.08);
+}
+
+[data-page="menu"] .menu-section__table th,
+[data-page="menu"] .menu-section__table td {
+	padding: var(--space-12) var(--space-16);
+	text-align: left;
+	vertical-align: top;
+}
+
+[data-page="menu"] .menu-section__table th {
+	font-weight: var(--font-weight-semibold);
+	font-size: var(--font-size-md);
+}
+
+[data-page="menu"] .menu-section__table td:last-child,
+[data-page="menu"] .menu-section__table th:last-child {
+	text-align: right;
+}
+
+[data-page="menu"] .menu-section__table tbody tr {
+	border-top: 1px solid rgba(var(--color-primary-rgb), 0.12);
+	transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+[data-page="menu"] .menu-section__table tbody tr:first-child {
+	border-top: none;
+}
+
+[data-page="menu"] .menu-section__table tbody tr:hover {
+	background: rgba(var(--color-primary-rgb), 0.08);
+}
+
+[data-page="menu"] .menu-section__note {
+	display: block;
+	margin-top: var(--space-6);
+	font-size: 0.85rem;
+	color: var(--color-text-secondary);
+}
+
+[data-page="menu"] .menu-cta {
+	text-align: center;
+	background: rgba(var(--color-primary-rgb), 0.1);
+	color: var(--color-text);
+	padding: clamp(32px, 6vw, 48px);
+	border-radius: var(--radius-lg);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+	display: grid;
+	gap: var(--space-12);
+}
+
+[data-page="menu"] .menu-cta__heading {
+	font-size: clamp(2rem, 3vw, 2.5rem);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-primary);
+}
+
+[data-page="menu"] .menu-cta__subheading {
+	font-size: 1.1rem;
+	color: var(--color-text-secondary);
+}
+
+[data-page="menu"] .menu-cta__contact {
+	font-size: clamp(1.4rem, 3vw, 1.8rem);
+	font-weight: var(--font-weight-semibold);
+}
+
+[data-page="menu"] .menu-cta__link {
+	color: var(--color-primary);
+	font-weight: var(--font-weight-semibold);
+}
+
+[data-page="menu"] .menu-cta__link:hover,
+[data-page="menu"] .menu-cta__link:focus-visible {
+	text-decoration: underline;
+}
+
+[data-page="menu"] .menu-cta__note {
+	font-size: 1.1rem;
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text-secondary);
+}

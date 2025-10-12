@@ -1,1 +1,190 @@
-/* Page-specific styles for order page */
+/* =============================================================
+	order.css — Order scheduling and summary styles
+	Purpose: scoped layout for `order.html`, including hero copy,
+	scheduling controls, timeslot cards, and the summary grid.
+	Tokens and shared components live in common.css.
+	============================================================= */
+
+body[data-page="order"] {
+	min-height: 100vh;
+	background: linear-gradient(
+		140deg,
+		rgba(var(--color-primary-rgb), 0.08),
+		rgba(12, 68, 46, 0.04)
+	),
+	color-mix(in srgb, var(--color-surface) 92%, transparent);
+	color: var(--color-text);
+}
+
+html.dark body[data-page="order"] {
+	background: linear-gradient(
+		140deg,
+		rgba(var(--color-primary-rgb), 0.2),
+		rgba(8, 30, 22, 0.82)
+	),
+	var(--color-background-dark, #0c1d17);
+}
+
+[data-page="order"] .order-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-12);
+	text-align: center;
+	padding: clamp(16px, 3vw, 28px) 0;
+}
+
+[data-page="order"] .order-header__brand {
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+[data-page="order"] .order-header .global-nav {
+	margin: 0 auto;
+}
+
+[data-page="order"] .order-header__logo {
+	height: 3rem;
+	width: 3rem;
+	border-radius: var(--radius-lg);
+}
+
+[data-page="order"] .order-header__title {
+	font-size: clamp(1.5rem, 3vw, 2.2rem);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+}
+
+[data-page="order"] .order-page {
+	width: min(1140px, 100%);
+	margin: 0 auto;
+	padding: clamp(36px, 6vw, 64px) clamp(16px, 4vw, 32px) clamp(56px, 8vw, 88px);
+	display: grid;
+	gap: clamp(32px, 5vw, 48px);
+}
+
+[data-page="order"] .place-order-online-section {
+	display: grid;
+	gap: clamp(24px, 4vw, 40px);
+}
+
+[data-page="order"] .place-order-online-section > h2 {
+	font-size: clamp(2rem, 4vw, 3rem);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-primary);
+}
+
+[data-page="order"] .place-order-online-section > p {
+	font-size: clamp(1rem, 2.2vw, 1.2rem);
+	color: var(--color-text-secondary);
+	line-height: 1.6;
+	max-width: 760px;
+}
+
+[data-page="order"] .timeslots {
+	display: grid;
+	gap: var(--space-16);
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+/* Timeslots get a subtle elevation to stand out as touch targets */
+[data-page="order"] .timeslot {
+	background: var(--color-surface);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--color-card-border);
+	padding: var(--space-20);
+	text-align: center;
+	box-shadow: var(--shadow-sm);
+	transition: transform var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
+}
+
+[data-page="order"] .timeslot:hover,
+[data-page="order"] .timeslot:focus-within {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-md);
+	border-color: rgba(var(--color-primary-rgb), 0.28);
+}
+
+[data-page="order"] .timeslot h4 {
+	font-size: var(--font-size-lg);
+	font-weight: var(--font-weight-semibold);
+	margin-bottom: var(--space-4);
+}
+
+[data-page="order"] .timeslot p {
+	color: var(--color-text-secondary);
+	margin: 0;
+}
+
+[data-page="order"] .order-form {
+	display: grid;
+	gap: clamp(24px, 4vw, 36px);
+}
+
+[data-page="order"] .form-row {
+	display: grid;
+	gap: var(--space-16);
+}
+
+@media (min-width: 768px) {
+	[data-page="order"] .form-row {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+[data-page="order"] .map-embed {
+	margin-top: var(--space-16);
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	box-shadow: var(--shadow-sm);
+}
+
+[data-page="order"] .order-summary {
+	display: grid;
+	gap: var(--space-16);
+	margin-top: var(--space-20);
+}
+
+[data-page="order"] .order-summary h5 {
+	font-size: clamp(1.1rem, 2vw, 1.35rem);
+	font-weight: var(--font-weight-semibold);
+}
+
+[data-page="order"] .summary-items {
+	display: grid;
+	gap: var(--space-12);
+}
+
+[data-page="order"] .summary-totals {
+	display: grid;
+	gap: var(--space-8);
+}
+
+[data-page="order"] .summary-totals > div {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: var(--font-size-sm);
+}
+
+[data-page="order"] .summary-total {
+	margin-top: var(--space-12);
+	padding-top: var(--space-12);
+	border-top: 1px solid rgba(var(--color-primary-rgb), 0.18);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-semibold);
+}
+
+[data-page="order"] .form-actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+[data-page="order"] .btn--full-width {
+	width: 100%;
+}

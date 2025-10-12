@@ -46,70 +46,54 @@
     </button>
 
     <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-      <button
-        type="button"
-        id="headerLogoutBtn"
-        class="header-logout-btn hidden"
-        aria-label="Log out"
-      >
-        Logout
-      </button>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="py-6 flex flex-col items-center gap-5 text-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
             <img src="../assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
             <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
               Home-Coming Cloud Kitchen
             </h1>
           </div>
-
-          <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="../index.html" class="global-nav__link" data-nav>Home</a>
-            <a href="../menu.html" class="global-nav__link" data-nav>Menu</a>
-            <a href="../order.html" class="global-nav__link" data-nav>Orders</a>
-            <a
-              id="navAuthBtn"
-              class="global-nav__link"
-              data-nav
-              href="../login.html"
-              data-login-href="../login.html"
-            >
-              Login
-            </a>
-          </nav>
+          <a
+            id="navAuthBtn"
+            class="global-nav__link"
+            data-nav
+            href="../login.html"
+            data-login-href="../login.html"
+          >
+            Login
+          </a>
         </div>
-      </div>
-    </header>
-
-    <main class="admin-layout">
-      <header class="admin-header">
-        <div class="admin-nav">
-          <div>
-            <p class="overline">Admin Console</p>
-            <h1>Reports &amp; insights</h1>
-          </div>
-          <div class="flex gap-8">
-            <button class="btn btn--outline btn--sm" type="button">
-              Download CSV
-            </button>
-            <button id="adminReportsLogoutBtn" class="btn btn--primary btn--sm" type="button">
-              Sign Out
-            </button>
-          </div>
-        </div>
-        <nav class="admin-tabs" aria-label="Admin sections">
+        <nav class="admin-tabs justify-center" aria-label="Admin sections">
           <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
           <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
           <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
           <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
         </nav>
-      </header>
+      </div>
+    </header>
 
-      <section class="admin-content">
+    <main class="min-h-[calc(100vh-180px)] flex items-center justify-center px-4 py-10">
+      <section class="card w-full max-w-6xl shadow-lg">
+        <div class="card__body admin-layout">
+          <header class="admin-header">
+            <div class="admin-nav">
+              <div>
+                <p class="overline">Admin Console</p>
+                <h1>Reports &amp; insights</h1>
+              </div>
+              <div class="flex gap-8">
+                <button class="btn btn--outline btn--sm" type="button">
+                  Download CSV
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <section class="admin-content">
         <div class="content-header">
           <div>
             <h2>Performance analytics</h2>
-            <p class="text-subtle">Understand demand, retention, and revenue</p>
           </div>
           <div class="filters">
             <label class="sr-only" for="reportRange">Time range</label>
@@ -121,61 +105,18 @@
           </div>
         </div>
 
-        <div class="reports-grid" role="list">
-          <article class="card" role="listitem">
-            <header class="card__header">
-              <h3>Revenue</h3>
-              <span class="status status--success">+11.4%</span>
-            </header>
-            <div class="card__body">
-              <p class="stat-value">₹2,48,300</p>
-              <p class="text-subtle">vs ₹2,23,100 last month</p>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <header class="card__header">
-              <h3>Repeat customers</h3>
-              <span class="status status--info">Stable</span>
-            </header>
-            <div class="card__body">
-              <p class="stat-value">38%</p>
-              <p class="text-subtle">Target 45% by next quarter</p>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <header class="card__header">
-              <h3>Average order value</h3>
-              <span class="status status--warning">Slight dip</span>
-            </header>
-            <div class="card__body">
-              <p class="stat-value">₹417</p>
-              <p class="text-subtle">Plan promotions to lift basket size</p>
-            </div>
-          </article>
-        </div>
+        <div class="reports-grid" role="list" id="reportMetrics"></div>
 
         <section class="orders-container" aria-labelledby="reportHighlights">
           <div class="content-header">
             <div>
               <h2 id="reportHighlights">Highlights</h2>
-              <p class="text-subtle">Weekly insights surfaced from order data</p>
             </div>
           </div>
-          <div class="orders-grid">
-            <article class="order-card">
-              <h4>Top combo of the week</h4>
-              <p>Punjabi Comfort Meal · 92 orders</p>
-              <p class="text-subtle">Recommend pairing with lassi upsell</p>
-            </article>
-            <article class="order-card">
-              <h4>Peak ordering window</h4>
-              <p>12:00 PM – 1:00 PM · +19% order volume</p>
-              <p class="text-subtle">Staff second prep line to reduce delays</p>
-            </article>
-          </div>
+          <div class="orders-grid" id="reportHighlightsList"></div>
         </section>
+          </section>
+        </div>
       </section>
     </main>
 
@@ -186,8 +127,9 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
-    <script src="../js/auth.js"></script>
-    <script src="../js/theme.js"></script>
-    <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/app.js"></script>
   </body>
 </html>

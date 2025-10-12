@@ -59,11 +59,6 @@ class CloudKitchenApp {
   }
 
   setupEventListeners() {
-    // Header logout button
-    const headerLogoutBtn = document.getElementById('headerLogoutBtn');
-    if (headerLogoutBtn) {
-      headerLogoutBtn.addEventListener('click', () => this.handleLogout());
-    }
 
     // Navigation auth button
     const navAuthBtn = document.getElementById('navAuthBtn');
@@ -79,27 +74,19 @@ class CloudKitchenApp {
 
   updateAuthUI() {
     const navAuthBtn = document.getElementById('navAuthBtn');
-    const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+
+    if (!navAuthBtn) {
+      return;
+    }
 
     if (this.currentUser) {
-      // User is logged in
-      if (navAuthBtn) {
-        navAuthBtn.textContent = 'Logout';
-        navAuthBtn.href = '#';
-      }
-      if (headerLogoutBtn) {
-        headerLogoutBtn.classList.remove('hidden');
-      }
-    } else {
-      // User is logged out
-      if (navAuthBtn) {
-        navAuthBtn.textContent = 'Login';
-        navAuthBtn.href = './login.html';
-      }
-      if (headerLogoutBtn) {
-        headerLogoutBtn.classList.add('hidden');
-      }
+      navAuthBtn.textContent = 'Logout';
+      navAuthBtn.href = '#';
+      return;
     }
+
+    navAuthBtn.textContent = 'Login';
+    navAuthBtn.href = './login.html';
   }
 
   async handleLogout() {

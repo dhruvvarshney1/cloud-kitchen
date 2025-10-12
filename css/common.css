@@ -1,183 +1,193 @@
 /* =============================================================
-   DESIGN TOKENS
-   Derived from design-system.css and unified for main stylesheet
-   ============================================================= */
+  DESIGN TOKENS
+  These are the foundational variables used globally. They are
+  grouped for readability: primitive swatches, rgb helpers,
+  semantic tokens (what components should use), spacing, radii,
+  shadows and timings. Change tokens here to influence the whole
+  site. Avoid hard-coding colors in components; prefer semantic
+  tokens so themes and dark mode behave consistently.
+  ============================================================= */
 :root {
   /* Primitive Color Tokens */
-  --color-white: #ffffff;
-  --color-black: #000000;
-  --color-cream-50: #f5fdf5;
-  --color-cream-100: #ffffff;
-  --color-gray-200: #e8f6e8;
-  --color-gray-300: #d3f7d3;
-  --color-gray-400: #b0e5b0;
-  --color-slate-500: #4b8f4a;
-  --color-brown-600: #2f5c2f;
-  --color-charcoal-700: #1f3a1f;
-  --color-charcoal-800: #142714;
-  --color-slate-900: #356d34;
-  --color-teal-300: #8adf8a;
-  --color-teal-400: #5dca5d;
-  --color-teal-500: #357a38;
-  --color-teal-600: #2b6930;
-  --color-teal-700: #225427;
-  --color-teal-800: #133a18;
-  --color-red-400: #ff6b6f;
-  --color-red-500: #d94b50;
-  --color-orange-400: #f5b04c;
-  --color-orange-500: #dd8b21;
+  --color-white: #ffffff; /* White color used for backgrounds and text */
+  --color-black: #000000; /* Black color used for text and shadows */
+  --color-cream-50: #f5fdf5; /* Light cream color for backgrounds */
+  --color-cream-100: #ffffff; /* Slightly brighter cream color */
+  --color-gray-200: #e8f6e8; /* Light gray for subtle backgrounds */
+  --color-gray-300: #d3f7d3; /* Medium gray for secondary elements */
+  --color-gray-400: #b0e5b0; /* Darker gray for borders */
+  --color-slate-500: #4b8f4a; /* Slate green for text */
+  --color-brown-600: #2f5c2f; /* Brownish green for accents */
+  --color-charcoal-700: #1f3a1f; /* Charcoal green for dark themes */
+  --color-charcoal-800: #142714; /* Darker charcoal for backgrounds */
+  --color-slate-900: #356d34; /* Deep slate green for primary text */
+  --color-teal-300: #8adf8a; /* Light teal for highlights */
+  --color-teal-400: #5dca5d; /* Medium teal for buttons */
+  --color-teal-500: #357a38; /* Primary teal for branding */
+  --color-teal-600: #2b6930; /* Dark teal for hover states */
+  --color-teal-700: #225427; /* Darker teal for active states */
+  --color-teal-800: #133a18; /* Deep teal for dark themes */
+  --color-red-400: #ff6b6f; /* Light red for warnings */
+  --color-red-500: #d94b50; /* Primary red for errors */
+  --color-orange-400: #f5b04c; /* Light orange for highlights */
+  --color-orange-500: #dd8b21; /* Primary orange for warnings */
 
   /* RGB versions for opacity control */
-  --color-brown-600-rgb: 47, 92, 47;
-  --color-teal-500-rgb: 53, 122, 56;
-  --color-slate-900-rgb: 53, 109, 52;
-  --color-slate-500-rgb: 75, 143, 74;
-  --color-red-500-rgb: 217, 75, 80;
-  --color-red-400-rgb: 255, 107, 111;
-  --color-orange-500-rgb: 221, 139, 33;
-  --color-orange-400-rgb: 245, 176, 76;
-  --color-primary-rgb: 53, 122, 56;
+  --color-brown-600-rgb: 47, 92, 47; /* RGB for brownish green */
+  --color-teal-500-rgb: 53, 122, 56; /* RGB for primary teal */
+  --color-slate-900-rgb: 53, 109, 52; /* RGB for deep slate green */
+  --color-slate-500-rgb: 75, 143, 74; /* RGB for slate green */
+  --color-red-500-rgb: 217, 75, 80; /* RGB for primary red */
+  --color-red-400-rgb: 255, 107, 111; /* RGB for light red */
+  --color-orange-500-rgb: 221, 139, 33; /* RGB for primary orange */
+  --color-orange-400-rgb: 245, 176, 76; /* RGB for light orange */
+  --color-primary-rgb: 53, 122, 56; /* RGB for primary branding */
 
   /* Background color tokens (Light Mode) */
-  --color-bg-1: rgba(var(--color-primary-rgb), 0.08);
-  --color-bg-2: rgba(221, 139, 33, 0.08);
-  --color-bg-3: rgba(107, 223, 138, 0.12);
-  --color-bg-4: rgba(255, 107, 111, 0.12);
-  --color-bg-5: rgba(75, 143, 74, 0.08);
-  --color-bg-6: rgba(217, 75, 80, 0.08);
-  --color-bg-7: rgba(173, 230, 173, 0.4);
-  --color-bg-8: rgba(81, 166, 122, 0.12);
+  --color-bg-1: rgba(var(--color-primary-rgb), 0.08); /* Light green background */
+  --color-bg-2: rgba(221, 139, 33, 0.08); /* Light orange background */
+  --color-bg-3: rgba(107, 223, 138, 0.12); /* Light teal background */
+  --color-bg-4: rgba(255, 107, 111, 0.12); /* Light red background */
+  --color-bg-5: rgba(75, 143, 74, 0.08); /* Light slate background */
+  --color-bg-6: rgba(217, 75, 80, 0.08); /* Light error background */
+  --color-bg-7: rgba(173, 230, 173, 0.4); /* Light success background */
+  --color-bg-8: rgba(81, 166, 122, 0.12); /* Light muted green */
 
   /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-white);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: rgba(var(--color-slate-500-rgb), 0.8);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.28);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.22);
-  --color-btn-primary-text: var(--color-white);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.15);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: rgba(var(--color-slate-500-rgb), 0.9);
-  --color-focus-ring: rgba(var(--color-primary-rgb), 0.35);
-  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+  --color-background: var(--color-cream-50); /* Default background color */
+  --color-surface: var(--color-white); /* Surface color for cards */
+  --color-text: var(--color-slate-900); /* Primary text color */
+  --color-text-secondary: rgba(var(--color-slate-500-rgb), 0.8); /* Secondary text */
+  --color-primary: var(--color-teal-500); /* Primary brand color */
+  --color-primary-hover: var(--color-teal-600); /* Hover state for primary */
+  --color-primary-active: var(--color-teal-700); /* Active state for primary */
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12); /* Secondary color */
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2); /* Hover state */
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.28); /* Active state */
+  --color-border: rgba(var(--color-brown-600-rgb), 0.22); /* Border color */
+  --color-btn-primary-text: var(--color-white); /* Button text color */
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.15); /* Card border */
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12); /* Inner border */
+  --color-error: var(--color-red-500); /* Error color */
+  --color-success: var(--color-teal-500); /* Success color */
+  --color-warning: var(--color-orange-500); /* Warning color */
+  --color-info: rgba(var(--color-slate-500-rgb), 0.9); /* Info color */
+  --color-focus-ring: rgba(var(--color-primary-rgb), 0.35); /* Focus ring */
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8); /* Select caret */
 
   /* Common style patterns */
-  --focus-ring: 0 0 0 3px var(--color-focus-ring);
-  --focus-outline: 2px solid var(--color-primary);
-  --status-bg-opacity: 0.15;
-  --status-border-opacity: 0.25;
-  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --focus-ring: 0 0 0 3px var(--color-focus-ring); /* Focus ring style */
+  --focus-outline: 2px solid var(--color-primary); /* Focus outline */
+  --status-bg-opacity: 0.15; /* Background opacity for statuses */
+  --status-border-opacity: 0.25; /* Border opacity for statuses */
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Light mode caret */
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Dark mode caret */
 
   /* RGB versions for opacity control */
-  --color-success-rgb: 33, 128, 141;
-  --color-error-rgb: 192, 21, 47;
-  --color-warning-rgb: 168, 75, 47;
-  --color-info-rgb: 98, 108, 113;
+  --color-success-rgb: 33, 128, 141; /* RGB for success */
+  --color-error-rgb: 192, 21, 47; /* RGB for error */
+  --color-warning-rgb: 168, 75, 47; /* RGB for warning */
+  --color-info-rgb: 98, 108, 113; /* RGB for info */
 
   /* Typography */
   --font-family-base: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Helvetica Neue", Arial, sans-serif; /* Base font family */
   --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, monospace;
-  --font-size-xs: 11px;
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 550;
-  --font-weight-bold: 600;
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-  --letter-spacing-tight: -0.01em;
+    Monaco, Consolas, monospace; /* Monospace font family */
+  --font-size-xs: 11px; /* Extra small font size */
+  --font-size-sm: 12px; /* Small font size */
+  --font-size-base: 14px; /* Base font size */
+  --font-size-md: 14px; /* Medium font size */
+  --font-size-lg: 16px; /* Large font size */
+  --font-size-xl: 18px; /* Extra large font size */
+  --font-size-2xl: 20px; /* 2x large font size */
+  --font-size-3xl: 24px; /* 3x large font size */
+  --font-size-4xl: 30px; /* 4x large font size */
+  --font-weight-normal: 400; /* Normal font weight */
+  --font-weight-medium: 500; /* Medium font weight */
+  --font-weight-semibold: 550; /* Semi-bold font weight */
+  --font-weight-bold: 600; /* Bold font weight */
+  --line-height-tight: 1.2; /* Tight line height */
+  --line-height-normal: 1.5; /* Normal line height */
+  --letter-spacing-tight: -0.01em; /* Tight letter spacing */
 
   /* Touch / Safe-area */
-  --touch-target: 48px;
-  --safe-area-top: env(safe-area-inset-top, 0px);
-  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --touch-target: 48px; /* Minimum touch target size */
+  --safe-area-top: env(safe-area-inset-top, 0px); /* Safe area inset top */
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px); /* Safe area inset bottom */
 
   /* Spacing */
-  --space-0: 0;
-  --space-1: 1px;
-  --space-2: 2px;
-  --space-4: 4px;
-  --space-6: 6px;
-  --space-8: 8px;
-  --space-10: 10px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --space-32: 32px;
+  --space-0: 0; /* Zero spacing */
+  --space-1: 1px; /* 1px spacing */
+  --space-2: 2px; /* 2px spacing */
+  --space-4: 4px; /* 4px spacing */
+  --space-6: 6px; /* 6px spacing */
+  --space-8: 8px; /* 8px spacing */
+  --space-10: 10px; /* 10px spacing */
+  --space-12: 12px; /* 12px spacing */
+  --space-16: 16px; /* 16px spacing */
+  --space-20: 20px; /* 20px spacing */
+  --space-24: 24px; /* 24px spacing */
+  --space-32: 32px; /* 32px spacing */
 
   /* Border Radius */
-  --radius-sm: 6px;
-  --radius-base: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
+  --radius-sm: 6px; /* Small border radius */
+  --radius-base: 8px; /* Base border radius */
+  --radius-md: 10px; /* Medium border radius */
+  --radius-lg: 12px; /* Large border radius */
+  --radius-full: 9999px; /* Full border radius */
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02); /* Extra small shadow */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02); /* Small shadow */
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
-    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    0 2px 4px -1px rgba(0, 0, 0, 0.02); /* Medium shadow */
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
-    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    0 4px 6px -2px rgba(0, 0, 0, 0.02); /* Large shadow */
   --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03); /* Small inset shadow */
 
   /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms; /* Fast animation duration */
+  --duration-normal: 250ms; /* Normal animation duration */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1); /* Standard easing */
 
   /* Layout */
-  --container-sm: 640px;
-  --container-md: 768px;
-  --container-lg: 1024px;
-  --container-xl: 1280px;
+  --container-sm: 640px; /* Small container width */
+  --container-md: 768px; /* Medium container width */
+  --container-lg: 1024px; /* Large container width */
+  --container-xl: 1280px; /* Extra large container width */
 }
 
 /* =============================================================
-   BASE TYPOGRAPHY & RESET
-   ============================================================= */
+  BASE TYPOGRAPHY & RESET
+  Small, predictable reset and base typographic rules. This sets
+  up sensible defaults for headings, paragraphs, images, forms,
+  and basic utilities used throughout the site. Do not place
+  page-specific rules here — keep component/page rules in their
+  respective files.
+  ============================================================= */
 html {
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+  font-size: var(--font-size-base); /* Base font size for the document */
+  font-family: var(--font-family-base); /* Default font family */
+  line-height: var(--line-height-normal); /* Default line height */
+  color: var(--color-text); /* Default text color */
+  background-color: var(--color-background); /* Default background color */
+  -webkit-font-smoothing: antialiased; /* Smoother font rendering */
+  box-sizing: border-box; /* Include padding and border in element's total width/height */
 }
 
 body {
-  margin: 0;
-  padding: var(--safe-area-top) 0 var(--safe-area-bottom);
-  min-height: 100vh;
-  background-color: var(--color-background);
+  margin: 0; /* Remove default margin */
+  padding: var(--safe-area-top) 0 var(--safe-area-bottom); /* Add padding for safe areas */
+  min-height: 100vh; /* Ensure body takes up full viewport height */
+  background-color: var(--color-background); /* Set background color */
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+  box-sizing: inherit; /* Inherit box-sizing from html */
 }
 
 h1,
@@ -186,69 +196,72 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0;
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  color: var(--color-text);
-  letter-spacing: var(--letter-spacing-tight);
+  margin: 0; /* Remove default margin */
+  font-weight: var(--font-weight-semibold); /* Use semi-bold font weight */
+  line-height: var(--line-height-tight); /* Tight line height for headings */
+  color: var(--color-text); /* Set text color */
+  letter-spacing: var(--letter-spacing-tight); /* Adjust letter spacing */
 }
 
 h1 {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-4xl); /* Extra large font size for h1 */
 }
 h2 {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-3xl); /* Large font size for h2 */
 }
 h3 {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-2xl); /* Medium-large font size for h3 */
 }
 h4 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-xl); /* Medium font size for h4 */
 }
 
 p {
-  margin: 0;
-  color: var(--color-text-secondary);
+  margin: 0; /* Remove default margin */
+  color: var(--color-text-secondary); /* Use secondary text color */
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit; /* Inherit text color */
+  text-decoration: none; /* Remove underline */
 }
 
 a:hover,
 a:focus-visible {
-  text-decoration: underline;
+  text-decoration: underline; /* Add underline on hover or focus */
 }
 
 img {
-  max-width: 100%;
-  display: block;
+  max-width: 100%; /* Ensure images do not overflow */
+  display: block; /* Treat images as block elements */
 }
 
 button,
 input,
 select,
 textarea {
-  font: inherit;
+  font: inherit; /* Inherit font styles */
 }
 
 button {
-  cursor: pointer;
+  cursor: pointer; /* Show pointer cursor for buttons */
 }
 
 .hidden {
-  display: none !important;
+  display: none !important; /* Completely hide elements */
 }
 
 main {
-  display: block;
+  display: block; /* Ensure main is treated as a block element */
 }
 
 /* =============================================================
-   THEME MODES
-   Consolidated themes.css + app.css for light/dark modes
-   ============================================================= */
+  THEME MODES
+  Light/dark theme token overrides. Components should reference
+  semantic tokens (e.g. --color-surface) so toggling themes simply
+  swaps these values. Adjust only tokens here; component behavior
+  (transitions, focus outlines) belongs to component blocks.
+  ============================================================= */
 [data-color-scheme="light"],
 html:not(.dark) {
   --color-background: var(--color-cream-50);
@@ -307,8 +320,8 @@ html.dark {
 }
 
 html.dark body {
-  background-color: #0f1b10 !important;
-  color: #e4f6e4 !important;
+  background-color: #0f1b10 !important; /* Dark theme body background */
+  color: #e4f6e4 !important; /* Dark theme text color */
 }
 
 html.dark .global-header {
@@ -339,9 +352,13 @@ html:not(.dark) .global-header {
 }
 
 /* =============================================================
-   COMPONENTS
-   Combined components.css with theme toggle adjustments
-   ============================================================= */
+  COMPONENTS
+  Reusable UI primitives (buttons, form-controls, cards, status
+  badges, global navigation, utilities). These are intentionally
+  generic so they can be used across pages (landing, admin,
+  auth). When adding new components, prefer extending these
+  primitives rather than duplicating styles.
+  ============================================================= */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -668,49 +685,6 @@ select.form-control {
   border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.18);
   box-shadow: 0 18px 36px -28px rgba(var(--color-primary-rgb), 0.85);
   backdrop-filter: blur(14px);
-}
-
-.header-logout-btn {
-  position: absolute;
-  top: var(--space-16);
-  right: clamp(12px, 4vw, 32px);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.4rem;
-  border-radius: 999px;
-  border: 1px solid rgba(var(--color-primary-rgb), 0.35);
-  background: linear-gradient(
-    135deg,
-    rgba(var(--color-primary-rgb), 0.86) 0%,
-    rgba(var(--color-primary-rgb), 1) 100%
-  );
-  color: var(--color-white);
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 20px 32px -24px rgba(var(--color-primary-rgb), 0.85);
-  transition: transform var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
-  z-index: 60;
-}
-
-.header-logout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 40px -22px rgba(var(--color-primary-rgb), 0.9);
-}
-
-.header-logout-btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-@media (max-width: 640px) {
-  .header-logout-btn {
-    top: var(--space-12);
-    right: var(--space-12);
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
 }
 
 .global-nav {

@@ -11,7 +11,6 @@
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black" />
       <title>Home-Coming Cloud Kitchen</title>
-      <script src="https://cdn.tailwindcss.com"></script>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
       <link
@@ -28,7 +27,7 @@
       <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
       <!-- Firebase Config -->
       <script src="./js/auth.js"></script>
-      <script src="./js/theme.js"></script>
+  <script src="./js/theme.js"></script>
     </head>
     <body data-page="landing">
       <button
@@ -43,39 +42,27 @@
       </button>
 
       <!-- Header -->
-      <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-        <button
-          type="button"
-          id="headerLogoutBtn"
-          class="header-logout-btn hidden"
-          aria-label="Log out"
-        >
-          Logout
-        </button>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="py-6 flex flex-col items-center gap-5 text-center">
-            <!-- Logo and Company Name -->
-            <div class="flex items-center gap-3">
-              <img src="./assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
-              <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Home-Coming Cloud Kitchen</h1>
-            </div>
-
-            <!-- Global Navigation -->
-            <nav class="global-nav mx-auto" aria-label="Primary navigation">
-              <a href="./index.html" class="global-nav__link" data-nav aria-current="page">Home</a>
-              <a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
-              <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
-              <a
-                id="navAuthBtn"
-                class="global-nav__link"
-                data-nav
-                href="./login.html"
-                data-login-href="./login.html"
-              >
-                Login
-              </a>
-            </nav>
+      <header class="global-header">
+        <div class="container landing-header">
+          <div class="landing-header__brand">
+            <img src="./assets/logo.png" alt="Home-Coming Logo" class="landing-header__logo" />
+            <h1 class="landing-header__title">Home-Coming Cloud Kitchen</h1>
           </div>
+
+          <nav class="global-nav" aria-label="Primary navigation">
+            <a href="./index.html" class="global-nav__link" data-nav aria-current="page">Home</a>
+            <a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
+            <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
+            <a
+              id="navAuthBtn"
+              class="global-nav__link"
+              data-nav
+              href="./login.html"
+              data-login-href="./login.html"
+            >
+              Login
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -116,169 +103,6 @@
         </ol>
       </section>
 
-      <section id="menu" class="home-section">
-        <h2>Our Full Menu</h2>
-        <table class="home-menu-table">
-          <tbody>
-            <tr class="home-menu-category"><td colspan="2">Bowl Specials</td></tr>
-            <tr><td>Rice Bowl</td><td>₹49</td></tr>
-            <tr><td>Daal Bowl</td><td>₹49</td></tr>
-            <tr><td>Curry Bowl</td><td>₹49</td></tr>
-            <tr><td>Aloo Ki Sabji Bowl</td><td>₹49</td></tr>
-            <tr class="home-menu-category"><td colspan="2">Thalis</td></tr>
-            <tr><td>Mini Thali</td><td>₹79</td></tr>
-            <tr><td>Full Thali</td><td>₹119</td></tr>
-            <tr><td>Special Full Thali</td><td>₹139</td></tr>
-            <tr class="home-menu-category"><td colspan="2">Vegetable Dishes</td></tr>
-            <tr><td>Aloo Ki Sabji</td><td>₹39</td></tr>
-            <tr><td>Daal</td><td>₹39</td></tr>
-            <tr><td>Mixed Veg</td><td>₹44</td></tr>
-            <tr><td>Paneer Butter Masala</td><td>₹79</td></tr>
-            <tr><td>Chhole Masala</td><td>₹44</td></tr>
-            <tr class="home-menu-category"><td colspan="2">Snacks</td></tr>
-            <tr><td>Paratha</td><td>₹29</td></tr>
-            <tr><td>Roti</td><td>₹9</td></tr>
-            <tr><td>Poori</td><td>₹12</td></tr>
-            <tr><td>Papad</td><td>₹7</td></tr>
-            <tr><td>Salad Plate (Single)</td><td>₹19</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="order" class="home-section">
-        <h2>Schedule Your Delivery</h2>
-        <p>
-          Choose a time slot, pick from the daily specials, and we'll bring
-          homestyle goodness straight to your doorstep.
-        </p>
-
-        <div class="timeslots">
-          <div class="timeslot">
-            <h4>Lunch</h4>
-            <p>13:00 - 14:00</p>
-          </div>
-          <div class="timeslot">
-            <h4>Dinner</h4>
-            <p>19:00 - 20:00</p>
-          </div>
-        </div>
-
-        <form id="scheduled-order-form" class="order-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="delivery-date" class="form-label"
-                >Select Delivery Date</label
-              >
-              <select
-                id="delivery-date"
-                name="delivery-date"
-                class="form-control"
-                required
-              ></select>
-            </div>
-            <div class="form-group">
-              <label for="delivery-time" class="form-label"
-                >Select Delivery Time Slot</label
-              >
-              <select
-                id="delivery-time"
-                name="delivery-time"
-                class="form-control"
-              ></select>
-            </div>
-          </div>
-
-          <div id="menu-of-the-day" class="card hidden">
-            <div class="card__body">
-              <h4>Menu of the Day</h4>
-              <div id="daily-menu-items" class="daily-menu-items"></div>
-            </div>
-          </div>
-
-          <div id="delivery-details" class="card hidden">
-            <div class="card__body">
-              <h4>Delivery Details</h4>
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label" for="scheduled-name">Name</label>
-                  <input
-                    id="scheduled-name"
-                    class="form-control"
-                    type="text"
-                    name="customer-name"
-                    autocomplete="name"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="scheduled-phone">Phone</label>
-                  <input
-                    id="scheduled-phone"
-                    class="form-control"
-                    type="tel"
-                    name="customer-phone"
-                    autocomplete="tel"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="scheduled-address">Address</label>
-                <textarea
-                  id="scheduled-address"
-                  class="form-control"
-                  name="customer-address"
-                  rows="3"
-                  placeholder="House number, street, landmark"
-                  required
-                ></textarea>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="special-instructions"
-                  >Special Instructions</label
-                >
-                <textarea
-                  id="special-instructions"
-                  class="form-control"
-                  name="special-instructions"
-                  rows="2"
-                  placeholder="Allergies, spice levels, special requests"
-                ></textarea>
-              </div>
-
-              <div class="order-summary">
-                <h5>Order Summary</h5>
-                <div id="summary-items" class="summary-items"></div>
-                <div id="summary-location" class="summary-location"></div>
-                <div class="summary-totals">
-                  <div>
-                    <span>Subtotal:</span>
-                    <span id="subtotal">Rs. 0</span>
-                  </div>
-                  <div>
-                    <span>Delivery Fee:</span>
-                    <span id="delivery-fee">Rs. 0</span>
-                  </div>
-                  <div class="summary-total">
-                    <span>Total:</span>
-                    <span id="total">Rs. 0</span>
-                  </div>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn--primary btn--full-width">
-                Place Order
-              </button>
-            </div>
-          </div>
-        </form>
-
-        <p style="margin-top: 24px; text-align: center;">
-          Or WhatsApp us: <strong>+91 8209XXXXXX</strong>
-        </p>
-      </section>
 
       <section class="home-section">
         <h2>What Our Customers Say</h2>
@@ -328,21 +152,9 @@
         by Dhruv Varshney
       </div>
 
-      <div id="order-modal" class="home-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
-        <div class="home-modal__content">
-          <button type="button" class="home-modal__close" aria-label="Close order confirmation">&times;</button>
-          <h3 id="order-modal-title">Order Confirmed!</h3>
-          <p>Thank you for your order. Your food is on its way!</p>
-          <p>Your Order ID is: <strong id="new-order-id"></strong></p>
-          <p style="font-size: 0.9em">Please use this ID to track your order's progress.</p>
-        </div>
-      </div>
-
       <!-- Notification container -->
       <div id="notification"></div>
 
       <script src="./js/app.js"></script>
-    </body>
-  </html>
     </body>
   </html>

@@ -46,70 +46,54 @@
     </button>
 
     <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-      <button
-        type="button"
-        id="headerLogoutBtn"
-        class="header-logout-btn hidden"
-        aria-label="Log out"
-      >
-        Logout
-      </button>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="py-6 flex flex-col items-center gap-5 text-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
             <img src="../assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
             <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
               Home-Coming Cloud Kitchen
             </h1>
           </div>
-
-          <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="../index.html" class="global-nav__link" data-nav>Home</a>
-            <a href="../menu.html" class="global-nav__link" data-nav>Menu</a>
-            <a href="../order.html" class="global-nav__link" data-nav>Orders</a>
-            <a
-              id="navAuthBtn"
-              class="global-nav__link"
-              data-nav
-              href="../login.html"
-              data-login-href="../login.html"
-            >
-              Login
-            </a>
-          </nav>
+          <a
+            id="navAuthBtn"
+            class="global-nav__link"
+            data-nav
+            href="../login.html"
+            data-login-href="../login.html"
+          >
+            Login
+          </a>
         </div>
-      </div>
-    </header>
-
-    <main class="admin-layout">
-      <header class="admin-header">
-        <div class="admin-nav">
-          <div>
-            <p class="overline">Admin Console</p>
-            <h1>Menu management</h1>
-          </div>
-          <div class="flex gap-8">
-            <button class="btn btn--outline btn--sm" type="button">
-              Draft new menu
-            </button>
-            <button id="adminMenuLogoutBtn" class="btn btn--primary btn--sm" type="button">
-              Sign Out
-            </button>
-          </div>
-        </div>
-        <nav class="admin-tabs" aria-label="Admin sections">
+        <nav class="admin-tabs justify-center" aria-label="Admin sections">
           <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
           <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
           <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
           <a class="tab-btn" data-admin-nav="messaging" href="messaging.html">Messaging</a>
         </nav>
-      </header>
+      </div>
+    </header>
 
-      <section class="admin-content">
+    <main class="min-h-[calc(100vh-180px)] flex items-center justify-center px-4 py-10">
+      <section class="card w-full max-w-6xl shadow-lg">
+        <div class="card__body admin-layout">
+          <header class="admin-header">
+            <div class="admin-nav">
+              <div>
+                <p class="overline">Admin Console</p>
+                <h1>Menu management</h1>
+              </div>
+              <div class="flex gap-8">
+                <button class="btn btn--outline btn--sm" type="button">
+                  Draft new menu
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <section class="admin-content">
         <div class="content-header">
           <div>
             <h2>Active catalogue</h2>
-            <p class="text-subtle">Organize categories, pricing, and availability</p>
           </div>
           <div class="menu-controls">
             <label class="sr-only" for="menuFilter">Filter category</label>
@@ -125,63 +109,18 @@
           </div>
         </div>
 
-        <div class="menu-items-list" role="list">
-          <article class="menu-item-card" role="listitem">
-            <div class="menu-item-info">
-              <h4>Chef&apos;s Thali</h4>
-              <p>Seasonal vegetables, dal, rice, rotis, chutney</p>
-              <span class="status status--success">Available</span>
-            </div>
-            <div class="menu-item-actions">
-              <span class="menu-item-price">₹249</span>
-              <button class="btn btn--outline btn--sm" type="button">Edit</button>
-              <button class="btn btn--outline btn--sm" type="button">Archive</button>
-            </div>
-          </article>
-
-          <article class="menu-item-card" role="listitem">
-            <div class="menu-item-info">
-              <h4>Family Platter</h4>
-              <p>Feeds 4 · includes dessert add-on</p>
-              <span class="status status--warning">Low stock</span>
-            </div>
-            <div class="menu-item-actions">
-              <span class="menu-item-price">₹599</span>
-              <button class="btn btn--outline btn--sm" type="button">Edit</button>
-              <button class="btn btn--outline btn--sm" type="button">Duplicate</button>
-            </div>
-          </article>
-        </div>
+        <div class="menu-items-list" role="list" id="menuItems"></div>
 
         <section class="capacity-grid" aria-labelledby="prepCapacityHeading">
           <div class="content-header">
             <div>
               <h2 id="prepCapacityHeading">Prep capacity</h2>
-              <p class="text-subtle">Balance kitchen load across popular dishes</p>
             </div>
           </div>
-          <article class="capacity-card">
-            <h4>Signature curries</h4>
-            <p>Batch size: 24 portions</p>
-            <div class="capacity-bar">
-              <div class="capacity-fill" style="width: 42%"></div>
-            </div>
-          </article>
-          <article class="capacity-card">
-            <h4>Fresh rotis</h4>
-            <p>Batch size: 120 units</p>
-            <div class="capacity-bar">
-              <div class="capacity-fill" style="width: 68%"></div>
-            </div>
-          </article>
-          <article class="capacity-card">
-            <h4>Regional specials</h4>
-            <p>Batch size: 12 portions</p>
-            <div class="capacity-bar">
-              <div class="capacity-fill" style="width: 30%"></div>
-            </div>
-          </article>
+          <div id="prepCapacity" class="grid gap-16"></div>
         </section>
+          </section>
+        </div>
       </section>
     </main>
 
@@ -192,8 +131,9 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
-    <script src="../js/auth.js"></script>
-    <script src="../js/theme.js"></script>
-    <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/app.js"></script>
   </body>
 </html>

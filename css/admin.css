@@ -1,1 +1,12 @@
-/* Admin-specific styles placeholder; add overrides on top of common.css */
+/* =============================================================
+	admin.css — Admin console styles
+	Purpose: override and extend shared `common.css` to provide
+	admin-specific layout primitives: sidebar, toolbar, metrics grid,
+	tables, and responsive refinements.
+
+	Major sections:
+	- Admin shell & navigation (sidebar, brand, links)
+	- Content area (toolbar, cards, metrics)
+	- Tables, lists, menu-management and insights
+	- Responsive adjustments for smaller screens
+	============================================================= */

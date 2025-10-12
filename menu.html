@@ -11,7 +11,6 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <title>Our Menu | Home-Coming Cloud Kitchen</title>
-        <script src="https://cdn.tailwindcss.com"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -29,10 +28,7 @@
         <!-- Firebase Config -->
         <script src="./js/auth.js"></script>
     </head>
-    <body
-        data-page="menu"
-        class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300"
-    >
+    <body data-page="menu">
         <button
             id="themeToggle"
             class="theme-toggle"
@@ -44,229 +40,211 @@
             <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
         </button>
 
-        <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-            <button
-                type="button"
-                id="headerLogoutBtn"
-                class="header-logout-btn hidden"
-                aria-label="Log out"
-            >
-                Logout
-            </button>
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="py-6 flex flex-col items-center gap-5 text-center">
-                    <div class="flex items-center gap-3">
-                        <img src="./assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
-                            Home-Coming Cloud Kitchen
-                        </h1>
-                    </div>
-
-                    <nav class="global-nav mx-auto" aria-label="Primary navigation">
-                        <a href="./index.html" class="global-nav__link" data-nav>Home</a>
-                        <a href="./menu.html" class="global-nav__link" data-nav aria-current="page"
-                            >Menu</a
-                        >
-                        <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
-                        <a
-                            id="navAuthBtn"
-                            class="global-nav__link"
-                            data-nav
-                            href="./login.html"
-                            data-login-href="./login.html"
-                        >
-                            Login
-                        </a>
-                    </nav>
+        <header class="global-header">
+            <div class="container menu-header">
+                <div class="menu-header__brand">
+                    <img src="./assets/logo.png" alt="Home-Coming Logo" class="menu-header__logo" />
+                    <h1 class="menu-header__title">Home-Coming Cloud Kitchen</h1>
                 </div>
+                <nav class="global-nav" aria-label="Primary navigation">
+                    <a href="./index.html" class="global-nav__link" data-nav>Home</a>
+                    <a href="./menu.html" class="global-nav__link" data-nav aria-current="page">Menu</a>
+                    <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
+                    <a
+                        id="navAuthBtn"
+                        class="global-nav__link"
+                        data-nav
+                        href="./login.html"
+                        data-login-href="./login.html"
+                    >
+                        Login
+                    </a>
+                </nav>
             </div>
         </header>
 
         <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <section class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-bold text-green-700 dark:text-green-400 mb-4">Our Menu</h2>
-            <p class="max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400">
+    <main class="menu-page">
+        <section class="menu-hero">
+            <h2 class="menu-hero__heading">Our Menu</h2>
+            <p class="menu-hero__intro">
                 A taste of home, away from home. Explore our spread of homestyle specials, breads, vegetable dishes, and snacks. Call us for bulk orders or to schedule a daily delivery!
             </p>
         </section>
 
         <!-- Menu Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div class="menu-grid">
 
             <!-- Left Column -->
-            <div class="space-y-8">
+            <div class="menu-column">
                 <!-- Homely Specials -->
-                <div>
-                    <h3 class="menu-title text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">Homely Specials</h3>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-100 dark:bg-gray-700">
+                <section class="menu-section">
+                    <h3 class="menu-section__title">Homely Specials</h3>
+                    <div class="menu-section__table-wrapper">
+                        <table class="menu-section__table">
+                            <thead>
                                 <tr>
-                                    <th class="p-4 font-semibold">Food Item</th>
-                                    <th class="p-4 font-semibold text-right">Price (₹)</th>
+                                    <th>Food Item</th>
+                                    <th>Price (₹)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50">
-                                    <td class="p-4">Veg Franky</td>
-                                    <td class="p-4 text-right">50</td>
+                            <tbody>
+                                <tr>
+                                    <td>Veg Franky</td>
+                                    <td>50</td>
                                 </tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50">
-                                    <td class="p-4">Veg Thali <br><small class="text-gray-500 dark:text-gray-400">Add-ons: (Soya, Chole, Rajma), Dahi (+20)</small></td>
-                                    <td class="p-4 text-right">100</td>
+                                <tr>
+                                    <td>Veg Thali <span class="menu-section__note">Add-ons: (Soya, Chole, Rajma), Dahi (+20)</span></td>
+                                    <td>100</td>
                                 </tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50">
-                                    <td class="p-4">Rice Bowls <br><small class="text-gray-500 dark:text-gray-400">Add-ons: (Rajma, Chole, Kadhi, Dal), Dahi (+20)</small></td>
-                                    <td class="p-4 text-right">60</td>
+                                <tr>
+                                    <td>Rice Bowls <span class="menu-section__note">Add-ons: (Rajma, Chole, Kadhi, Dal), Dahi (+20)</span></td>
+                                    <td>60</td>
                                 </tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50">
-                                    <td class="p-4">Atta Puri Sabzi (4) <br><small class="text-gray-500 dark:text-gray-400">Extra: 7/piece</small></td>
-                                    <td class="p-4 text-right">40</td>
+                                <tr>
+                                    <td>Atta Puri Sabzi (4) <span class="menu-section__note">Extra: 7/piece</span></td>
+                                    <td>40</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
                 <!-- Breads -->
-                <div>
-                    <h3 class="menu-title text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">Breads</h3>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full text-left">
-                           <thead class="bg-gray-100 dark:bg-gray-700">
+                <section class="menu-section">
+                    <h3 class="menu-section__title">Breads</h3>
+                    <div class="menu-section__table-wrapper">
+                        <table class="menu-section__table">
+                           <thead>
                                 <tr>
-                                    <th class="p-4 font-semibold">Item</th>
-                                    <th class="p-4 font-semibold text-right">Price (₹)</th>
+                                    <th>Item</th>
+                                    <th>Price (₹)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Plain Roti</div></td><td class="p-4 text-right">12</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghee Roti / Butter Roti</div></td><td class="p-4 text-right">15</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Plain Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">25</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghee Plain Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">35</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Aloo Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">30</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Aloo-Paneer Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghee Aloo-Paneer Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">55</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghee Aloo Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Gobhi Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">30</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghee Gobhi Paratha <br><small class="text-gray-500 dark:text-gray-400">Add-ons: Dahi (+20), Butter (+10)</small></div></td><td class="p-4 text-right">40</td></tr>
+                            <tbody>
+                                <tr><td>Plain Roti</td><td>12</td></tr>
+                                <tr><td>Ghee Roti / Butter Roti</td><td>15</td></tr>
+                                <tr><td>Plain Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>25</td></tr>
+                                <tr><td>Ghee Plain Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>35</td></tr>
+                                <tr><td>Aloo Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>30</td></tr>
+                                <tr><td>Aloo-Paneer Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>40</td></tr>
+                                <tr><td>Ghee Aloo-Paneer Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>55</td></tr>
+                                <tr><td>Ghee Aloo Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>40</td></tr>
+                                <tr><td>Gobhi Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>30</td></tr>
+                                <tr><td>Ghee Gobhi Paratha <span class="menu-section__note">Add-ons: Dahi (+20), Butter (+10)</span></td><td>40</td></tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
                  <!-- Snacks -->
-                <div>
-                    <h3 class="menu-title text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">Snacks</h3>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-100 dark:bg-gray-700">
+                <section class="menu-section">
+                    <h3 class="menu-section__title">Snacks</h3>
+                    <div class="menu-section__table-wrapper">
+                        <table class="menu-section__table">
+                            <thead>
                                 <tr>
-                                    <th class="p-4 font-semibold">Item</th>
-                                    <th class="p-4 font-semibold text-right">Price (₹)</th>
+                                    <th>Item</th>
+                                    <th>Price (₹)</th>
                                 </tr>
                             </thead>
-                           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Pasta</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Maggi</div></td><td class="p-4 text-right">30</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Veg Sandwiches</div></td><td class="p-4 text-right">30</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Pakore</div></td><td class="p-4 text-right">30</td></tr>
+                           <tbody>
+                                <tr><td>Pasta</td><td>50</td></tr>
+                                <tr><td>Maggi</td><td>30</td></tr>
+                                <tr><td>Veg Sandwiches</td><td>30</td></tr>
+                                <tr><td>Pakore</td><td>30</td></tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
             </div>
 
             <!-- Right Column -->
-            <div class="space-y-8">
+            <div class="menu-column">
                 <!-- Vegetable Dishes -->
-                <div>
-                    <h3 class="menu-title text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">Vegetable Dishes</h3>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full text-left">
-                           <thead class="bg-gray-100 dark:bg-gray-700">
+                <section class="menu-section">
+                    <h3 class="menu-section__title">Vegetable Dishes</h3>
+                    <div class="menu-section__table-wrapper">
+                        <table class="menu-section__table">
+                           <thead>
                                 <tr>
-                                    <th class="p-4 font-semibold">Item</th>
-                                    <th class="p-4 font-semibold text-right">Price (₹)</th>
+                                    <th>Item</th>
+                                    <th>Price (₹)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Paneer Sabzi</div></td><td class="p-4 text-right">70</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Bhindi Sabzi</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Jeera Aloo Sabzi</div></td><td class="p-4 text-right">30</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Baigan Bharta</div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Mix Veg Sabzi</div></td><td class="p-4 text-right">70</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Lauki Sabzi</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Chana Dal Lauki</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Aloo Tamatar</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Kathal Sabzi</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Kaddu Sabzi</div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Bharwa Karela</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Gobhi Bhurji</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Paneer Bhurji</div></td><td class="p-4 text-right">60</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Arbi Sabzi</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Gobhi Aloo</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Aloo Palak</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Methi Aloo</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Beans Aloo</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Capsicum Aloo</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Masala Mushroom</div></td><td class="p-4 text-right">70</td></tr>
+                            <tbody>
+                                <tr><td>Paneer Sabzi</td><td>70</td></tr>
+                                <tr><td>Bhindi Sabzi</td><td>50</td></tr>
+                                <tr><td>Jeera Aloo Sabzi</td><td>30</td></tr>
+                                <tr><td>Baigan Bharta</td><td>40</td></tr>
+                                <tr><td>Mix Veg Sabzi</td><td>70</td></tr>
+                                <tr><td>Lauki Sabzi</td><td>50</td></tr>
+                                <tr><td>Chana Dal Lauki</td><td>50</td></tr>
+                                <tr><td>Aloo Tamatar</td><td>50</td></tr>
+                                <tr><td>Kathal Sabzi</td><td>50</td></tr>
+                                <tr><td>Kaddu Sabzi</td><td>40</td></tr>
+                                <tr><td>Bharwa Karela</td><td>50</td></tr>
+                                <tr><td>Gobhi Bhurji</td><td>50</td></tr>
+                                <tr><td>Paneer Bhurji</td><td>60</td></tr>
+                                <tr><td>Arbi Sabzi</td><td>50</td></tr>
+                                <tr><td>Gobhi Aloo</td><td>50</td></tr>
+                                <tr><td>Aloo Palak</td><td>50</td></tr>
+                                <tr><td>Methi Aloo</td><td>50</td></tr>
+                                <tr><td>Beans Aloo</td><td>50</td></tr>
+                                <tr><td>Capsicum Aloo</td><td>50</td></tr>
+                                <tr><td>Masala Mushroom</td><td>70</td></tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
                  <!-- Bulk Order -->
-                <div>
-                    <h3 class="menu-title text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">Bulk Order (Min 5)</h3>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-100 dark:bg-gray-700">
+                <section class="menu-section">
+                    <h3 class="menu-section__title">Bulk Order (Min 5)</h3>
+                    <div class="menu-section__table-wrapper">
+                        <table class="menu-section__table">
+                            <thead>
                                 <tr>
-                                    <th class="p-4 font-semibold">Item</th>
-                                    <th class="p-4 font-semibold text-right">Price (₹)</th>
+                                    <th>Item</th>
+                                    <th>Price (₹)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Vada Pao</div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Pav Bhaji</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Chole Bhature</div></td><td class="p-4 text-right">60</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Chowmein</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Poha / Upma / Sewei</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Dhokla</div></td><td class="p-4 text-right">50</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Dahi Vada</div></td><td class="p-4 text-right">60</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Ghugni Chaat</div></td><td class="p-4 text-right">40</td></tr>
-                                <tr class="hover:bg-green-50 dark:hover:bg-gray-700/50"><td><div class="p-4">Idli</div></td><td class="p-4 text-right">50</td></tr>
+                            <tbody>
+                                <tr><td>Vada Pao</td><td>40</td></tr>
+                                <tr><td>Pav Bhaji</td><td>50</td></tr>
+                                <tr><td>Chole Bhature</td><td>60</td></tr>
+                                <tr><td>Chowmein</td><td>50</td></tr>
+                                <tr><td>Poha / Upma / Sewei</td><td>50</td></tr>
+                                <tr><td>Dhokla</td><td>50</td></tr>
+                                <tr><td>Dahi Vada</td><td>60</td></tr>
+                                <tr><td>Ghugni Chaat</td><td>40</td></tr>
+                                <tr><td>Idli</td><td>50</td></tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
         
         <!-- Contact/Order Section -->
-        <section class="mt-16 text-center bg-green-100 dark:bg-gray-800 p-8 rounded-lg shadow-inner">
-            <h3 class="text-3xl font-bold text-green-800 dark:text-green-300">Ready to Order?</h3>
-            <p class="text-lg text-gray-700 dark:text-gray-400 mt-2">Customized Home Food Available on Demand!</p>
-            <p class="text-2xl font-bold text-gray-800 dark:text-white mt-4">
-                Call Us @ <a href="tel:9002783349" class="text-green-600 dark:text-green-400 hover:underline">9002783349</a>
+        <section class="menu-cta">
+            <h3 class="menu-cta__heading">Ready to Order?</h3>
+            <p class="menu-cta__subheading">Customized Home Food Available on Demand!</p>
+            <p class="menu-cta__contact">
+                Call Us @ <a href="tel:num" class="menu-cta__link">+91 XXXXXXXXX</a>
             </p>
-            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300 mt-4">Enjoy Your Meal!</p>
+            <p class="menu-cta__note">Enjoy Your Meal!</p>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
-        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-400">
-            <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
-        </div>
+    <footer class="main-footer">
+        <p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
     </footer>
 
     <!-- Notification container -->
     <div id="notification"></div>
 
-    <script src="./js/auth.js"></script>
     <script src="./js/theme.js"></script>
     <script src="./js/app.js"></script>
   </body>

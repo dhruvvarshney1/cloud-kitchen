@@ -1,1 +1,60 @@
-/* Page-specific styles for index (currently inherits from common) */
+/* =============================================================
+	index.css — Landing page styles
+	Purpose: small, page-scoped overrides and utilities used by
+	`index.html`. Most shared primitives live in `common.css`.
+
+	What you'll find here:
+	- Hero and home-section tweaks
+	- Any landing-specific layout helpers
+	Keep this file concise and prefer referencing design tokens
+	from `common.css` instead of adding new values.
+	============================================================= */
+
+body[data-page="landing"] {
+	min-height: 100vh;
+	background: linear-gradient(
+		140deg,
+		rgba(var(--color-primary-rgb), 0.06),
+		rgba(236, 180, 83, 0.04)
+	),
+	color-mix(in srgb, var(--color-surface) 94%, transparent);
+	color: var(--color-text);
+}
+
+html.dark body[data-page="landing"] {
+	background: linear-gradient(
+		140deg,
+		rgba(var(--color-primary-rgb), 0.18),
+		rgba(8, 28, 16, 0.78)
+	),
+	var(--color-background-dark, #0c1d17);
+}
+
+[data-page="landing"] .landing-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-12);
+	text-align: center;
+	padding: clamp(20px, 4vw, 32px) 0;
+}
+
+[data-page="landing"] .landing-header__brand {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-10);
+	flex-wrap: wrap;
+}
+
+[data-page="landing"] .landing-header__logo {
+	height: 3rem;
+	width: 3rem;
+	border-radius: var(--radius-lg);
+}
+
+[data-page="landing"] .landing-header__title {
+	font-size: clamp(1.5rem, 3vw, 2.4rem);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+}

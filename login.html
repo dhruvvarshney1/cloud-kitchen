@@ -10,8 +10,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Login | Home-Coming Cloud Kitchen</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <title>Login | Home-Coming Cloud Kitchen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,12 +20,9 @@
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icon-512x512.png" />
     <link rel="stylesheet" href="./css/common.css" />
-    <link rel="stylesheet" href="./css/login.css" />
+  <link rel="stylesheet" href="./css/login.css" />
   </head>
-  <body
-    data-page="login"
-    class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300"
-  >
+  <body data-page="login">
     <button
       id="themeToggle"
       class="theme-toggle"
@@ -38,40 +34,27 @@
       <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
     </button>
 
-    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
-      <button
-        type="button"
-        id="headerLogoutBtn"
-        class="header-logout-btn hidden"
-        aria-label="Log out"
-      >
-        Logout
-      </button>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="py-6 flex flex-col items-center gap-5 text-center">
-          <div class="flex items-center gap-3">
-            <img src="./assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
-            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
-              Home-Coming Cloud Kitchen
-            </h1>
-          </div>
-
-          <nav class="global-nav mx-auto" aria-label="Primary navigation">
-            <a href="./index.html" class="global-nav__link" data-nav>Home</a>
-            <a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
-            <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
-            <a
-              id="navAuthBtn"
-              class="global-nav__link"
-              data-nav
-              href="./login.html"
-              aria-current="page"
-              data-login-href="./login.html"
-            >
-              Login
-            </a>
-          </nav>
+    <header class="global-header">
+      <div class="container auth-header">
+        <div class="auth-header__brand">
+          <img src="./assets/logo.png" alt="Home-Coming Logo" class="auth-header__logo" />
+          <h1 class="auth-header__title">Home-Coming Cloud Kitchen</h1>
         </div>
+        <nav class="global-nav" aria-label="Primary navigation">
+          <a href="./index.html" class="global-nav__link" data-nav>Home</a>
+          <a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
+          <a href="./order.html" class="global-nav__link" data-nav>Orders</a>
+          <a
+            id="navAuthBtn"
+            class="global-nav__link"
+            data-nav
+            href="./login.html"
+            aria-current="page"
+            data-login-href="./login.html"
+          >
+            Login
+          </a>
+        </nav>
       </div>
     </header>
 

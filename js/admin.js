@@ -145,26 +145,96 @@
   const attachMenuManagement = (db) => {
     const listEl = document.getElementById("menuItems");
     const capacityEl = document.getElementById("prepCapacity");
-    if (!listEl && !capacityEl) return;
+    const formEl = document.getElementById("menuItemForm");
+    const submitBtn = document.getElementById("menuItemSubmit");
+    const feedbackEl = document.getElementById("menuItemFeedback");
+    const focusBtn = document.getElementById("menuItemFormFocus");
+    const dateInput = document.getElementById("menuItemDate");
+
+    if (!listEl && !capacityEl && !formEl) return;
+
+    const setFeedback = (message = "", state = "info") => {
+      if (!feedbackEl) return;
+      feedbackEl.textContent = message;
+      if (message) {
+        feedbackEl.dataset.state = state;
+      } else {
+        delete feedbackEl.dataset.state;
+      }
+    };
+
+    const setDefaultDate = (force = false) => {
+      if (!dateInput) return;
+      if (!force && dateInput.value) return;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const iso = today.toISOString().slice(0, 10);
+      dateInput.value = iso;
+    };
+
+    const asDate = (value) => {
+      if (!value) return null;
+      if (typeof value.toDate === "function") return value.toDate();
+      const parsed = value instanceof Date ? value : new Date(value);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const formatDate = (value) => {
+      const date = asDate(value);
+      if (!date) return "";
+      return new Intl.DateTimeFormat(undefined, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }).format(date);
+    };
 
     const renderMenuItems = (snapshot) => {
       if (!listEl) return;
       listEl.innerHTML = "";
+
+      if (snapshot.empty) {
+        listEl.innerHTML = '<p class="text-subtle">No dishes added yet. Use the form above to publish today\'s menu.</p>';
+        return;
+      }
+
       snapshot.forEach((doc) => {
         const data = doc.data();
         const item = document.createElement("article");
         item.className = "menu-item-card";
         item.setAttribute("role", "listitem");
+
+        const availableLabel = data.availableDate
+          ? formatDate(data.availableDate)
+          : formatDate(data.availableDateString);
+
+        const metaParts = [];
+        if (Array.isArray(data.mealPeriods) && data.mealPeriods.length) {
+          metaParts.push(`${data.mealPeriods.join(" & ")} service`);
+        }
+        if (availableLabel) metaParts.push(availableLabel);
+
+        const capacityTotal = Number.isFinite(data.capacity) ? data.capacity : null;
+        const capacityRemaining = Number.isFinite(data.remainingCapacity)
+          ? data.remainingCapacity
+          : capacityTotal;
+        const capacityLabel = capacityRemaining !== null
+          ? `${capacityRemaining} of ${capacityTotal ?? capacityRemaining} servings available`
+          : "";
+
         item.innerHTML = `
           <div class="menu-item-info">
+            ${metaParts.length ? `<div class="menu-item-meta">${metaParts.map((part) => `<span>${part}</span>`).join("")}</div>` : ""}
             <h4>${data.name || "Menu Item"}</h4>
             <p>${data.description || ""}</p>
             <span class="status ${data.statusClass || "status--info"}">${data.status || ""}</span>
           </div>
           <div class="menu-item-actions">
             <span class="menu-item-price">${data.price || ""}</span>
+            ${capacityLabel ? `<span class="menu-item-capacity">${capacityLabel}</span>` : ""}
           </div>
         `;
+
         listEl.appendChild(item);
       });
     };
@@ -188,6 +258,132 @@
       });
     };
 
+    let suppressResetFeedback = false;
+
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      if (!formEl) return;
+
+      const formData = new FormData(formEl);
+      const name = String(formData.get("name") || "").trim();
+      const priceValue = String(formData.get("price") || "").trim();
+      const description = String(formData.get("description") || "").trim();
+      const availableDate = String(formData.get("availableDate") || "").trim();
+      const isDaily = formData.get("isDaily") !== null;
+      const capacityRaw = String(formData.get("capacity") || "").trim();
+      const mealPeriods = (formData.getAll("mealPeriods") || [])
+        .map((value) => String(value || "").trim())
+        .filter(Boolean);
+
+      if (!name || !priceValue) {
+        setFeedback("Name and price are required.", "error");
+        return;
+      }
+
+      const numericPrice = Number.parseFloat(priceValue);
+      if (Number.isNaN(numericPrice) || numericPrice <= 0) {
+        setFeedback("Enter a valid price greater than zero.", "error");
+        return;
+      }
+
+      const capacityValue = Number.parseInt(capacityRaw, 10);
+      if (Number.isNaN(capacityValue) || capacityValue <= 0) {
+        setFeedback("Set a serving capacity greater than zero.", "error");
+        return;
+      }
+
+      if (!mealPeriods.length) {
+        setFeedback("Select at least one meal session (Lunch or Dinner).", "error");
+        return;
+      }
+
+      submitBtn?.setAttribute("disabled", "true");
+      setFeedback("Saving item...", "info");
+
+      try {
+        const timestamp = window.firebase.firestore.FieldValue.serverTimestamp();
+        const formattedPrice = new Intl.NumberFormat("en-IN", {
+          minimumFractionDigits: Number.isInteger(numericPrice) ? 0 : 2,
+          maximumFractionDigits: 2,
+        }).format(numericPrice);
+
+        const payload = {
+          name,
+          description,
+          price: `Rs. ${formattedPrice}`,
+          priceValue: numericPrice,
+          status: "Available today",
+          statusClass: "status--success",
+          isDailySpecial: Boolean(isDaily),
+          capacity: capacityValue,
+          remainingCapacity: capacityValue,
+          mealPeriods,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+
+        const dateSource = availableDate || dateInput?.value;
+        if (dateSource) {
+          const date = new Date(`${dateSource}T00:00:00`);
+          const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
+          safeDate.setHours(0, 0, 0, 0);
+          const timestampCtor = window.firebase?.firestore?.Timestamp;
+          if (timestampCtor && typeof timestampCtor.fromDate === "function") {
+            payload.availableDate = timestampCtor.fromDate(safeDate);
+          }
+          payload.availableDateString = safeDate.toISOString().slice(0, 10);
+        }
+
+        await db.collection("menuItems").add(payload);
+
+        suppressResetFeedback = true;
+        formEl.reset();
+        window.requestAnimationFrame(() => {
+          suppressResetFeedback = false;
+        });
+        setFeedback("Menu item added to today\'s lineup.", "success");
+      } catch (error) {
+        console.error("Failed to create menu item:", error);
+        setFeedback("Unable to add the menu item right now. Please try again.", "error");
+      } finally {
+        submitBtn?.removeAttribute("disabled");
+      }
+    };
+
+    const handleReset = () => {
+      window.requestAnimationFrame(() => {
+        setDefaultDate(true);
+        if (!suppressResetFeedback) {
+          setFeedback("", "info");
+        }
+      });
+    };
+
+    const handleFocusClick = () => {
+      if (!formEl) return;
+      formEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      const nameInput = formEl.querySelector("input[name='name']");
+      if (nameInput) {
+        nameInput.focus({ preventScroll: true });
+      }
+    };
+
+    if (formEl) {
+      formEl.addEventListener("submit", handleSubmit);
+      formEl.addEventListener("reset", handleReset);
+      state.unsubscribers.push(() => {
+        formEl.removeEventListener("submit", handleSubmit);
+        formEl.removeEventListener("reset", handleReset);
+      });
+      setDefaultDate(true);
+      setFeedback("", "info");
+    }
+
+    if (focusBtn && formEl) {
+      focusBtn.addEventListener("click", handleFocusClick);
+      state.unsubscribers.push(() => focusBtn.removeEventListener("click", handleFocusClick));
+    }
+
     state.unsubscribers.push(
       db.collection("menuItems").orderBy("name").onSnapshot(renderMenuItems),
       db.collection("prepCapacity").orderBy("label").onSnapshot(renderCapacity)
@@ -198,86 +394,344 @@
     const listEl = document.getElementById("conversationList");
     const headerEl = document.getElementById("chatHeader");
     const messagesEl = document.getElementById("chatMessages");
-    if (!listEl || !headerEl || !messagesEl) return;
+    const filterEl = document.getElementById("conversationFilter");
+    const formEl = document.getElementById("adminChatForm");
+    const messageInput = document.getElementById("adminChatMessage");
+    const sendBtn = document.getElementById("adminChatSend");
+    const draftBtn = document.getElementById("adminChatDraft");
 
+    if (!listEl || !headerEl || !messagesEl || !formEl || !messageInput || !sendBtn) return;
+
+    const draftPrefix = "hk-admin-chat-draft:";
     let activeConversationId = null;
+    let activeConversationData = null;
+    let conversationDocs = [];
+    let messageUnsub = null;
+    let conversationUnsub = null;
+
+    const getStatusClass = (status) => {
+      if (!status) return "status status--info";
+      const normalized = String(status).toLowerCase();
+      if (normalized.includes("archived")) return "status status--warning";
+      if (normalized.includes("reply")) return "status status--success";
+      if (normalized.includes("open")) return "status status--info";
+      return "status status--info";
+    };
+
+    const asDate = (value) => {
+      if (!value) return null;
+      if (typeof value.toDate === "function") {
+        return value.toDate();
+      }
+      const date = value instanceof Date ? value : new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    };
+
+    const formatDateTime = (value) => {
+      if (window.app && typeof window.app.formatDateTime === "function") {
+        return window.app.formatDateTime(value) || "";
+      }
+      const date = asDate(value);
+      if (!date) return "";
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(date);
+    };
+
+    const formatRelative = (value) => {
+      const date = asDate(value);
+      if (!date) return "";
+      const diffMs = Date.now() - date.getTime();
+      const diffMinutes = Math.floor(diffMs / 60000);
+      if (diffMinutes < 1) return "Just now";
+      if (diffMinutes < 60) return `${diffMinutes}m ago`;
+      const diffHours = Math.floor(diffMinutes / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      const diffDays = Math.floor(diffHours / 24);
+      return `${diffDays}d ago`;
+    };
+
+    const saveDraft = () => {
+      if (!activeConversationId) return;
+      const value = messageInput.value;
+      if (!value) {
+        localStorage.removeItem(`${draftPrefix}${activeConversationId}`);
+      } else {
+        localStorage.setItem(`${draftPrefix}${activeConversationId}`, value);
+      }
+    };
+
+    const loadDraft = (conversationId) => {
+      const stored = localStorage.getItem(`${draftPrefix}${conversationId}`);
+      if (stored !== null) {
+        messageInput.value = stored;
+      } else {
+        messageInput.value = "";
+      }
+    };
+
+    const clearActiveSubscriptions = () => {
+      if (typeof messageUnsub === "function") {
+        messageUnsub();
+      }
+      if (typeof conversationUnsub === "function") {
+        conversationUnsub();
+      }
+      messageUnsub = null;
+      conversationUnsub = null;
+    };
 
     const renderMessages = (conversationId) => {
       if (!conversationId) {
-        messagesEl.innerHTML = "";
-        headerEl.innerHTML = "";
+        messagesEl.innerHTML = '<p class="text-subtle">Select a conversation to view the thread.</p>';
         return;
       }
 
-      const unsub = db
-        .collection("conversations")
-        .doc(conversationId)
+      const conversationRef = db.collection("conversations").doc(conversationId);
+      clearActiveSubscriptions();
+
+      conversationUnsub = conversationRef.onSnapshot(
+        (doc) => {
+          if (doc.exists) {
+            activeConversationData = doc.data();
+            updateChatHeader(activeConversationData);
+          }
+        },
+        (error) => {
+          console.error("Conversation listener error:", error);
+        }
+      );
+
+      messageUnsub = conversationRef
         .collection("messages")
         .orderBy("sentAt")
-        .onSnapshot((snapshot) => {
-          messagesEl.innerHTML = "";
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            const msg = document.createElement("div");
-            msg.className = `msg ${data.from === "admin" ? "me" : "them"}`;
-            msg.innerHTML = `
-              <p>${data.body || ""}</p>
-              <span class="meta">${data.sentAt?.toDate?.().toLocaleString?.() || ""}</span>
-            `;
-            messagesEl.appendChild(msg);
-          });
-          messagesEl.scrollTop = messagesEl.scrollHeight;
-        });
+        .onSnapshot(
+          async (snapshot) => {
+            messagesEl.innerHTML = "";
 
-      state.unsubscribers.push(unsub);
+            if (snapshot.empty) {
+              messagesEl.innerHTML = '<p class="text-subtle">No messages yet. Send a reply to get started.</p>';
+            } else {
+              snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const wrapper = document.createElement("div");
+                wrapper.className = `msg ${data.from === "admin" ? "me" : "them"}`;
+
+                const body = document.createElement("p");
+                body.textContent = data.body || "";
+
+                const meta = document.createElement("span");
+                meta.className = "meta";
+                meta.textContent = formatDateTime(data.sentAt);
+
+                wrapper.append(body, meta);
+                messagesEl.appendChild(wrapper);
+              });
+              messagesEl.scrollTop = messagesEl.scrollHeight;
+            }
+
+            const changes = typeof snapshot.docChanges === "function" ? snapshot.docChanges() : [];
+            const hasNewCustomerMsg = changes.some(
+              (change) => change.type === "added" && change.doc.data()?.from !== "admin"
+            );
+
+            if (hasNewCustomerMsg) {
+              await markConversationRead(conversationId);
+            }
+          },
+          (error) => {
+            console.error("Messages listener error:", error);
+            messagesEl.innerHTML = '<p class="text-subtle">Unable to load messages right now.</p>';
+          }
+        );
     };
 
-    const renderConversationList = (snapshot) => {
+    const selectConversation = (conversationId, data) => {
+      if (!conversationId) {
+        activeConversationId = null;
+        activeConversationData = null;
+        clearActiveSubscriptions();
+        updateChatHeader(null);
+        renderMessages(null);
+        return;
+      }
+
+      activeConversationId = conversationId;
+      activeConversationData = data || null;
+      updateChatHeader(activeConversationData);
+      renderMessages(conversationId);
+      markConversationRead(conversationId);
+      loadDraft(conversationId);
+
+      listEl.querySelectorAll("li").forEach((item) => {
+        const isActive = item.dataset.conversationId === conversationId;
+        item.classList.toggle("active", isActive);
+        if (isActive) {
+          item.classList.remove("unread");
+        }
+      });
+    };
+
+    const renderConversationList = () => {
+      const filter = filterEl ? filterEl.value : "open";
       listEl.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
+
+      const filtered = conversationDocs.filter((doc) => {
+        const data = doc.data() || {};
+        if (filter === "unread") {
+          return Boolean(data.unreadByAdmin);
+        }
+        if (filter === "archived") {
+          return String(data.status || "").toLowerCase().includes("archived");
+        }
+        return !String(data.status || "").toLowerCase().includes("archived");
+      });
+
+      if (!filtered.length) {
+        listEl.innerHTML = '<li class="text-subtle">No conversations to show.</li>';
+        clearActiveSubscriptions();
+        updateChatHeader(null);
+        messagesEl.innerHTML = '<p class="text-subtle">Select a conversation to view the thread.</p>';
+        activeConversationId = null;
+        activeConversationData = null;
+        return;
+      }
+
+      filtered.forEach((doc) => {
+        const data = doc.data() || {};
         const item = document.createElement("li");
+        item.dataset.conversationId = doc.id;
+        if (data.unreadByAdmin) item.classList.add("unread");
+
         item.innerHTML = `
-          <h3>${data.customerName || "Customer"}</h3>
-          <p>${data.lastMessage || ""}</p>
-          <span class="status">${data.status || ""}</span>
-        `;
-        item.addEventListener("click", () => {
-          activeConversationId = doc.id;
-          listEl.querySelectorAll("li").forEach((li) => li.classList.remove("active"));
-          item.classList.add("active");
-          headerEl.innerHTML = `
+          <div class="flex justify-between items-start gap-8">
             <div>
-              <h2>${data.customerName || "Conversation"}</h2>
-              <p class="text-subtle">${data.meta || ""}</p>
+              <h3>${data.customerName || "Customer"}</h3>
+              <p class="text-subtle">${data.customerEmail || ""}</p>
             </div>
-          `;
-          renderMessages(activeConversationId);
+            <span class="text-subtle">${formatRelative(data.lastMessageAt || data.updatedAt)}</span>
+          </div>
+          <p class="conversation-preview">${data.lastMessage || "No messages yet"}</p>
+          <span class="${getStatusClass(data.status)}">${data.status || "open"}</span>
+        `;
+
+        item.addEventListener("click", () => {
+          selectConversation(doc.id, data);
         });
+
         listEl.appendChild(item);
       });
 
-      if (!activeConversationId && snapshot.docs.length) {
-        const first = snapshot.docs[0];
-        activeConversationId = first.id;
-        const firstData = first.data();
-        headerEl.innerHTML = `
-          <div>
-            <h2>${firstData.customerName || "Conversation"}</h2>
-            <p class="text-subtle">${firstData.meta || ""}</p>
-          </div>
-        `;
-        renderMessages(first.id);
-        listEl.firstElementChild?.classList.add("active");
+      const stillVisible = filtered.some((doc) => doc.id === activeConversationId);
+      if (!activeConversationId || !stillVisible) {
+        const firstDoc = filtered[0];
+        selectConversation(firstDoc.id, firstDoc.data() || {});
+      } else {
+        const currentDoc = filtered.find((doc) => doc.id === activeConversationId);
+        if (currentDoc) {
+          activeConversationData = currentDoc.data() || {};
+          updateChatHeader(activeConversationData);
+          listEl.querySelectorAll("li").forEach((item) => {
+            const isActive = item.dataset.conversationId === activeConversationId;
+            item.classList.toggle("active", isActive);
+            if (isActive && !activeConversationData.unreadByAdmin) {
+              item.classList.remove("unread");
+            }
+          });
+        }
       }
     };
+
+    const handleSend = async (event) => {
+      event.preventDefault();
+      if (!activeConversationId) return;
+
+      const body = messageInput.value.trim();
+      if (!body) return;
+
+      sendBtn.disabled = true;
+
+      try {
+        const conversationRef = db.collection("conversations").doc(activeConversationId);
+        const timestamp = window.firebase.firestore.FieldValue.serverTimestamp();
+
+        await conversationRef.collection("messages").add({
+          body,
+          from: "admin",
+          sentAt: timestamp,
+        });
+
+        await conversationRef.set(
+          {
+            lastMessage: body,
+            lastSender: "admin",
+            status: "replied",
+            meta: "Kitchen replied just now",
+            lastMessageAt: timestamp,
+            updatedAt: timestamp,
+            unreadByCustomer: true,
+            unreadByAdmin: false,
+          },
+          { merge: true }
+        );
+
+        messageInput.value = "";
+        localStorage.removeItem(`${draftPrefix}${activeConversationId}`);
+      } catch (error) {
+        console.error("Failed to send admin reply:", error);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    };
+
+    const handleDraftClick = (event) => {
+      event.preventDefault();
+      if (!activeConversationId) return;
+      saveDraft();
+      draftBtn.textContent = "Draft saved";
+      draftBtn.disabled = true;
+      setTimeout(() => {
+        draftBtn.textContent = "Save draft";
+        draftBtn.disabled = false;
+      }, 1500);
+    };
+
+    if (filterEl) {
+      filterEl.addEventListener("change", renderConversationList);
+    }
+
+    formEl.addEventListener("submit", handleSend);
+    messageInput.addEventListener("input", saveDraft);
+    if (draftBtn) {
+      draftBtn.addEventListener("click", handleDraftClick);
+    }
+
+    state.unsubscribers.push(() => {
+      clearActiveSubscriptions();
+      if (filterEl) filterEl.removeEventListener("change", renderConversationList);
+      formEl.removeEventListener("submit", handleSend);
+      messageInput.removeEventListener("input", saveDraft);
+      if (draftBtn) draftBtn.removeEventListener("click", handleDraftClick);
+    });
 
     state.unsubscribers.push(
       db
         .collection("conversations")
         .orderBy("updatedAt", "desc")
-        .limit(25)
-        .onSnapshot(renderConversationList)
+        .limit(50)
+        .onSnapshot(
+          (snapshot) => {
+            conversationDocs = snapshot.docs;
+            renderConversationList();
+          },
+          (error) => {
+            console.error("Conversation list listener error:", error);
+            listEl.innerHTML = '<li class="text-subtle">Unable to load conversations.</li>';
+          }
+        )
     );
   };
 

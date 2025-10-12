@@ -1,36 +1,35 @@
 # Home-Coming Cloud Kitchen – AI Guide
 
-## Quick orientation
-- Static PWA served by vanilla HTML/JS; run with any static server (`npx http-server .` or `python -m http.server`). Loading via `file://` breaks Firebase auth despite the warning surfaced by `detectHostingEnvironment()`.
-- `js/app.js` (~2.5k LOC) is loaded on every page and instantiates `window.app = new RestaurantApp()` so inline handlers in HTML can call methods directly.
-- `package.json` lists Vite but there's no bundler flow; treat dependencies as tooling-only and commit plain JS/CSS.
+## Orientation
+- Static PWA served from vanilla HTML/CSS/JS; run via `npx http-server .` or `python -m http.server 8080`. Loading with `file://` breaks Firebase auth (see `detectHostingEnvironment` in `src/services/firebase.js`).
+- `js/app.js` (~2.5k LOC) bootstraps `window.app = new RestaurantApp()` on every page so inline handlers defined in HTML keep working.
+- Tooling packages in `package.json` (e.g. Vite) are unused at runtime—commit plain JS/CSS outputs.
 
-## Bootstrapping & routing cues
-- Pages declare context through `body` attributes (`data-page="landing"`, `data-admin-page="dashboard"`, etc.). `DOMContentLoaded` hooks in `js/app.js` branch on these flags, so preserve them when creating new templates.
-- Admin HTML uses inline listeners (e.g. `<select onchange="app.updateOrderStatus(...)">`); keep method names and argument order stable when refactoring the class.
+## Page bootstrapping patterns
+- All templates set `body.dataset.page` or `body.dataset.adminPage`; `RestaurantApp.initializePage()` branches on those values. Preserve existing data attributes when adding pages.
+- Admin pages (`admin/*.html`) rely on inline listeners such as `<select onchange="app.updateOrderStatus(...)">`; method names/argument order are contractually stable.
+- Standalone auth screens live under `/auth` (`login.html`, `signup.html`) and load modular scripts (`auth/login.js`, `auth/signup.js`). Keep redirects aligned with `AUTH_FLOW.md` when touching them.
 
-## Firebase & auth
-- Main app pages load Firebase compat SDK v8 from CDN plus `js/firebase-config.js`, which defines `window.firebaseConfig` used by `RestaurantApp.ensureFirebaseInitialized()` to cache `auth`/`db` on the instance.
-- Standalone login/signup pages rely on modular SDK v10 (`auth/*.js`); successful login reads `users/{uid}` to decide redirects. Elevate admins by setting `role: "admin"` manually per `AUTH_FLOW.md`.
-- Push messaging requires adding `vapidKey` to `window.firebaseConfig`; without it, `handleNotificationOptIn()` logs an error and FCM token storage never runs.
+## Firebase integration
+- Customer/admin pages load compat v8 SDK from CDN plus `js/firebase-config.js`; `RestaurantApp.ensureFirebaseInitialized()` caches `auth`/`db` and retries for ~10s if globals lag.
+- Auth pages use modular v10 SDK; after `signInWithEmailAndPassword`, `auth/login.js` fetches `users/{uid}` to decide between `admin/dashboard.html` and `index.html`.
+- Push messaging hinges on `window.firebaseConfig.vapidKey`. Without it `handleNotificationOptIn()` logs errors and skips saving tokens to `users/{uid}.messagingTokens`.
 
-## Data flows
-- Orders persist to Firestore `orders` documents with price strings prefixed by `"Rs."`; admin summaries parse those strings, so keep the format or update parsing helpers (`formatOrderPrice`, `createOrderCardHTML`).
-- `loadMenuForDateTime()` queries the `menuItems` collection and falls back to hard-coded defaults when empty; extend both Firestore data and fallback lists when adding menu items.
-- Chat data lives under `conversations/{userId}/messages`; `ensureConversationDoc()` updates the parent document's summary fields and must stay in sync with any schema changes.
+## Core data flows
+- Orders land in Firestore `orders` with `"Rs."`-prefixed price strings; parsing helpers such as `formatOrderPrice` and `createOrderCardHTML` expect that format.
+- `loadMenuForDateTime()` queries `menuItems`; when empty it falls back to in-file defaults. Update both Firestore data and defaults when adding dishes.
+- Chat data sits under `conversations/{userId}` with messages in `messages` subcollections. `ensureConversationDoc()` maintains summary fields (`lastMessage`, `updatedAt`) required by admin messaging UI.
 
-## Module split
-- `src/services/firebase.js` holds legacy compat helpers while `js/messaging.js` exports the active messaging mixin. Keep them aligned with `RestaurantApp` when touching Firebase/messaging flows.
-- Helpers expect compat-style globals (`window.firebase.collection`, `addDoc`, etc.). If you introduce modular imports, wrap them so both compat callers and the extracted modules continue to work.
+## Code organization
+- `js/messaging.js` exports a mixin merged into `RestaurantApp`; keep DOM class names and template builders in sync across both files.
+- Legacy helpers live in `src/services/firebase.js`; new work should respect compat-style APIs (`window.firebase.firestore()`). Wrap modular imports if you introduce them so existing code keeps running.
+- Service worker logic in `js/app.js` (see `registerServiceWorker`) expects root `sw.js`. Update `sw.js` `ASSETS` and `manifest.json` whenever adding/removing routes.
 
-## UI & styling
-- `css/common.css` centralizes tokens, components, and dark-mode rules; Tailwind utilities from CDN are additive. Theme toggling updates `<meta name="theme-color">` and `data-color-scheme`, so new UI should read CSS variables instead of hard-coding colors.
-- Form hooks target specific IDs (`#scheduled-order-form`, `#delivery-date`, `#daily-menu-items`); update the corresponding setup methods (`initializeOrderForm`, `updateOrderSummary`) if you change markup.
+## UI & theming
+- `css/common.css` defines design tokens and dark-mode rules. Theme toggle updates `<meta name="theme-color">` and `document.documentElement.dataset.colorScheme`; new UI should read CSS variables instead of hard-coding colors.
+- Forms and summaries rely on specific element IDs (e.g. `scheduled-order-form`, `delivery-date`, `daily-menu-items`). Adjust corresponding setup methods like `initializeOrderForm` when changing markup.
 
-## PWA considerations
-- `registerServiceWorker()` expects `sw.js` at project root; keep the `ASSETS` array aligned with real pages when adding/removing routes to avoid stale caches.
-- Push opt-in stores tokens on `users/{uid}.messagingTokens`; call `requestMessagingToken()` instead of hitting Firebase Messaging manually.
-
-## Developer workflows
-- Serve locally over HTTP to exercise auth, orders, and messaging end-to-end. Walk through login → order placement → admin dashboard → messaging to verify `listenToAuthState()` reattaches listeners and cleans up correctly.
-- No automated tests yet; document manual test cases in PRs and lean on Firebase console to inspect `orders`, `menuItems`, and `conversations` when debugging.
+## Developer workflow
+- Configure Firebase creds in `js/firebase-config.js` (compat pages) and `auth/firebase-config.js` (modular auth). `QUICKSTART.md` walks through setup; `FIREBASE_MIGRATION.md` documents the full context.
+- Manual QA path: signup/login → place order on `order.html` → confirm admin dashboard updates → send chat message → verify service worker registration prompts refresh.
+- No automated tests; document manual scenarios and inspect `orders`, `menuItems`, `conversations` via Firebase console while debugging.

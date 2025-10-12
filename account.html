@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta name="theme-color" content="#4CAF50" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title>My Account | Home-Coming Cloud Kitchen</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="apple-touch-icon" sizes="180x180" href="./assets/icon-512x512.png" />
+		<link rel="stylesheet" href="./css/common.css" />
+		<link rel="stylesheet" href="./css/account.css" />
+		<!-- Firebase SDKs -->
+		<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+		<!-- Firebase Config -->
+		<script src="./js/auth.js"></script>
+	</head>
+	<body data-page="account">
+		<button
+			id="themeToggle"
+			class="theme-toggle"
+			type="button"
+			aria-pressed="false"
+			aria-label="Switch to dark mode"
+			title="Switch to dark mode"
+		>
+			<span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+		</button>
+
+		<header class="global-header">
+			<div class="container account-header">
+				<div class="account-header__brand">
+					<img src="./assets/logo.png" alt="Home-Coming Logo" class="account-header__logo" />
+					<h1 class="account-header__title">Home-Coming Cloud Kitchen</h1>
+				</div>
+				<nav class="global-nav" aria-label="Primary navigation">
+					<a href="./index.html" class="global-nav__link" data-nav>Home</a>
+					<a href="./menu.html" class="global-nav__link" data-nav>Menu</a>
+					<a href="./order.html" class="global-nav__link" data-nav>Orders</a>
+					<a
+						id="navAuthBtn"
+						class="global-nav__link"
+						data-nav
+						href="./login.html"
+						data-login-href="./login.html"
+					>
+						Login
+					</a>
+				</nav>
+			</div>
+		</header>
+
+		<main class="account-page">
+			<section class="account-hero">
+				<div>
+					<p class="overline">My Account</p>
+					<h2 id="accountGreeting">Hello there!</h2>
+					<p class="account-hero__copy">
+						Review your delivery details and reach out to the kitchen team directly when you need help.
+					</p>
+				</div>
+				<dl class="account-hero__meta">
+					<div>
+						<dt>Email</dt>
+						<dd id="accountEmailValue">—</dd>
+					</div>
+					<div>
+						<dt>Member since</dt>
+						<dd id="accountMemberSince">—</dd>
+					</div>
+				</dl>
+			</section>
+
+			<p id="accountAuthFeedback" class="account-message" role="status"></p>
+
+			<section class="account-content">
+				<article class="card account-card">
+					<div class="card__body account-card__body">
+						<header class="account-card__header">
+							<div>
+								<h3>Delivery profile</h3>
+								<p class="text-subtle">Keep your contact details current so we can deliver right on time.</p>
+							</div>
+						</header>
+
+						<form id="accountProfileForm" class="account-form" novalidate>
+							<fieldset id="accountProfileFieldset" disabled>
+								<div class="account-form-grid account-form-grid--two">
+									<div class="form-group">
+										<label class="form-label" for="accountName">Full name</label>
+										<input
+											class="form-control"
+											type="text"
+											id="accountName"
+											name="name"
+											autocomplete="name"
+											required
+										/>
+									</div>
+									<div class="form-group">
+										<label class="form-label" for="accountPhone">Mobile number</label>
+										<input
+											class="form-control"
+											type="tel"
+											id="accountPhone"
+											name="phone"
+											autocomplete="tel"
+											required
+										/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="form-label" for="accountAddress">Delivery address</label>
+									<textarea
+										class="form-control"
+										id="accountAddress"
+										name="address"
+										rows="3"
+										placeholder="House number, street, landmark"
+										required
+									></textarea>
+								</div>
+								<div class="account-form-actions">
+									<button type="submit" class="btn btn--primary">Save changes</button>
+								</div>
+							</fieldset>
+							<p class="account-message" id="accountProfileFeedback" role="status" aria-live="polite"></p>
+						</form>
+					</div>
+				</article>
+
+				<article class="card account-card">
+					<div class="card__body account-card__body">
+						<header class="account-card__header">
+							<div>
+								<h3>Message the kitchen</h3>
+								<p class="text-subtle">Need to change an order or share feedback? Chat with us directly.</p>
+							</div>
+						</header>
+
+						<div class="chat-pane chat-pane--account" aria-live="polite">
+							<div class="chat-messages" id="accountChatMessages"></div>
+							<form id="accountChatForm" class="chat-input-row" aria-label="Message the kitchen" novalidate>
+								<label class="sr-only" for="accountChatInput">Message</label>
+								<textarea
+									id="accountChatInput"
+									class="form-control"
+									name="message"
+									rows="3"
+									placeholder="Type your message to the kitchen team..."
+									required
+								></textarea>
+								<div class="account-chat-actions">
+									<button type="submit" class="btn btn--secondary" id="accountChatSend">Send</button>
+								</div>
+							</form>
+						</div>
+						<p class="account-message" id="accountChatFeedback" role="status" aria-live="polite"></p>
+					</div>
+				</article>
+			</section>
+		</main>
+
+		<footer class="main-footer">
+			<p>© 2025 Home-Coming Cloud Kitchen. All rights reserved.</p>
+		</footer>
+
+		<script src="./js/theme.js"></script>
+		<script src="./js/app.js"></script>
+	</body>
+</html>

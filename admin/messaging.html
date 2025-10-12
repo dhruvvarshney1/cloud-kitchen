@@ -11,7 +11,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>Messaging | Home-Coming Cloud Kitchen</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -29,11 +28,7 @@
     <!-- Firebase Config -->
     <script src="../js/auth.js"></script>
   </head>
-  <body
-    data-page="admin-messaging"
-    data-admin-page="messaging"
-    class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300"
-  >
+  <body data-page="admin-messaging" data-admin-page="messaging" class="admin-shell">
     <button
       id="themeToggle"
       class="theme-toggle"
@@ -45,14 +40,12 @@
       <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
     </button>
 
-    <header class="global-header bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <img src="../assets/logo.png" alt="Home-Coming Logo" class="h-12 w-12 rounded-lg" />
-            <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
-              Home-Coming Cloud Kitchen
-            </h1>
+  <header class="global-header admin-app-header">
+      <div class="admin-header__inner">
+        <div class="admin-header__top">
+          <div class="admin-brand">
+            <img src="../assets/logo.png" alt="Home-Coming Logo" class="admin-brand__logo" />
+            <h1 class="admin-brand__title">Home-Coming Cloud Kitchen</h1>
           </div>
           <a
             id="navAuthBtn"
@@ -64,7 +57,7 @@
             Login
           </a>
         </div>
-        <nav class="admin-tabs justify-center" aria-label="Admin sections">
+        <nav class="admin-tabs" aria-label="Admin sections">
           <a class="tab-btn" data-admin-nav="dashboard" href="dashboard.html">Dashboard</a>
           <a class="tab-btn" data-admin-nav="menu" href="menu-management.html">Menu</a>
           <a class="tab-btn" data-admin-nav="reports" href="reports.html">Reports</a>
@@ -73,8 +66,8 @@
       </div>
     </header>
 
-    <main class="min-h-[calc(100vh-180px)] flex items-center justify-center px-4 py-10">
-      <section class="card w-full max-w-6xl shadow-lg">
+    <main class="admin-main">
+      <section class="card admin-card">
         <div class="card__body admin-layout">
           <header class="admin-header">
             <div class="admin-nav">
@@ -82,7 +75,7 @@
                 <p class="overline">Admin Console</p>
                 <h1>Customer messaging</h1>
               </div>
-              <div class="flex gap-8">
+              <div class="admin-header__actions">
                 <button class="btn btn--outline btn--sm" type="button">
                   Compose broadcast
                 </button>
@@ -113,20 +106,20 @@
           <section class="chat-pane" aria-label="Message thread">
             <header class="chat-header" id="chatHeader"></header>
             <div class="chat-messages" id="chatMessages"></div>
-            <form class="chat-input-row" aria-label="Reply to customer">
-              <label class="sr-only" for="chatMessage">Message</label>
+            <form id="adminChatForm" class="chat-input-row" aria-label="Reply to customer">
+              <label class="sr-only" for="adminChatMessage">Message</label>
               <textarea
-                id="chatMessage"
+                id="adminChatMessage"
                 class="form-control"
                 rows="3"
                 placeholder="Type your reply..."
                 required
               ></textarea>
-              <div class="flex flex-col gap-8">
-                <button class="btn btn--secondary" type="button">
+              <div class="chat-actions">
+                <button class="btn btn--secondary" type="button" id="adminChatDraft">
                   Save draft
                 </button>
-                <button class="btn btn--primary" type="submit">Send reply</button>
+                <button class="btn btn--primary" type="submit" id="adminChatSend">Send reply</button>
               </div>
             </form>
           </section>

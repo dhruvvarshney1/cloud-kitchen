@@ -1,8 +1,141 @@
 /* =============================================================
-	signup.css — Sign-up page helper
-	This file imports `login.css` because signup shares the same
-	layout and styles as the login form. Keep signup-specific
-	overrides here if needed (e.g., extra fields or copy tweaks).
-	============================================================= */
+  signup.css — Sign up page styles
+  Purpose: Layout refinements for signup experience powered by
+  design tokens in common.css. Handles header alignment, hero content,
+  and responsive card layout.
+  ============================================================= */
 
-@import url("./login.css");
+body[data-page="signup"] {
+  min-height: 100vh;
+  background: linear-gradient(
+      135deg,
+      rgba(var(--color-primary-rgb), 0.08),
+      rgba(25, 74, 55, 0.04)
+    ),
+    color-mix(in srgb, var(--color-surface) 92%, transparent);
+  color: var(--color-text);
+}
+
+html.dark body[data-page="signup"] {
+  background: linear-gradient(
+      135deg,
+      rgba(var(--color-primary-rgb), 0.16),
+      rgba(10, 36, 26, 0.66)
+    ),
+    var(--color-background-dark, #0b1b14);
+}
+
+[data-page="signup"] .signup-header {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+[data-page="signup"] .signup-header__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+[data-page="signup"] .signup-header__inner {
+  padding: clamp(20px, 4vw, 32px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-20);
+  text-align: center;
+}
+
+[data-page="signup"] .signup-header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+[data-page="signup"] .signup-header__logo {
+  height: 3rem;
+  width: 3rem;
+  border-radius: var(--radius-lg);
+}
+
+[data-page="signup"] .signup-header__title {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+[data-page="signup"] .signup-header .global-nav {
+  margin: 0 auto;
+}
+
+[data-page="signup"] .auth-main {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 80px) clamp(16px, 4vw, 32px) clamp(64px, 10vw, 96px);
+  display: grid;
+  gap: clamp(32px, 6vw, 48px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  [data-page="signup"] .auth-main {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 480px);
+  }
+}
+
+[data-page="signup"] .auth-hero {
+  display: grid;
+  gap: var(--space-16);
+  text-align: center;
+}
+
+[data-page="signup"] .auth-hero h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+[data-page="signup"] .auth-hero p {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+[data-page="signup"] .auth-meta {
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  [data-page="signup"] .auth-hero {
+    text-align: left;
+  }
+
+  [data-page="signup"] .auth-meta {
+    justify-content: flex-start;
+  }
+}
+
+[data-page="signup"] .auth-card {
+  width: 100%;
+  justify-self: center;
+}
+
+@media (min-width: 900px) {
+  [data-page="signup"] .auth-card {
+    justify-self: stretch;
+  }
+}
+
+[data-page="signup"] .auth-card .card__body {
+  gap: var(--space-20);
+}
+
+[data-page="signup"] .auth-form {
+  gap: var(--space-20);
+}
+
+[data-page="signup"] .main-footer {
+  margin-top: clamp(32px, 6vw, 48px);
+}

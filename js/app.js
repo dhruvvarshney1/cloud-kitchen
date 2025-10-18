@@ -188,6 +188,19 @@ class CloudKitchenApp {
         await this.handleLogin(e.target);
       });
     }
+
+    // Setup password toggle
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePasswordBtn && passwordInput) {
+      togglePasswordBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        togglePasswordBtn.textContent = isPassword ? 'Hide' : 'Show';
+        togglePasswordBtn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+      });
+    }
   }
 
   initSignupPage() {
@@ -198,6 +211,32 @@ class CloudKitchenApp {
         await this.handleSignup(e.target);
       });
     }
+
+    // Setup password toggle for signup password
+    const toggleSignupPasswordBtn = document.getElementById('toggleSignupPassword');
+    const signupPasswordInput = document.getElementById('signupPassword');
+    
+    if (toggleSignupPasswordBtn && signupPasswordInput) {
+      toggleSignupPasswordBtn.addEventListener('click', () => {
+        const isPassword = signupPasswordInput.type === 'password';
+        signupPasswordInput.type = isPassword ? 'text' : 'password';
+        toggleSignupPasswordBtn.textContent = isPassword ? 'Hide' : 'Show';
+        toggleSignupPasswordBtn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+      });
+    }
+
+    // Setup password toggle for confirm password
+    const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    if (toggleConfirmPasswordBtn && confirmPasswordInput) {
+      toggleConfirmPasswordBtn.addEventListener('click', () => {
+        const isPassword = confirmPasswordInput.type === 'password';
+        confirmPasswordInput.type = isPassword ? 'text' : 'password';
+        toggleConfirmPasswordBtn.textContent = isPassword ? 'Hide' : 'Show';
+        toggleConfirmPasswordBtn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+      });
+    }
   }
 
   initMenuPage() {
@@ -206,6 +245,73 @@ class CloudKitchenApp {
 
   initOrderPage() {
     this.loadOrderForm();
+    
+    const orderForm = document.getElementById('scheduled-order-form');
+    if (orderForm) {
+      orderForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await this.handleOrderSubmit(orderForm);
+      });
+    }
+
+    // Auto-fill customer details from profile after auth is ready
+    this.waitForAuthThenAutoFill();
+  }
+
+  async waitForAuthThenAutoFill() {
+    // If auth is already ready, auto-fill immediately
+    if (this.authStateReady) {
+      if (this.currentUser) {
+        await this.autoFillOrderDetails();
+      }
+      return;
+    }
+
+    // Otherwise, wait up to 3 seconds for auth state
+    const startTime = Date.now();
+    const checkInterval = setInterval(() => {
+      if (this.authStateReady || Date.now() - startTime > 3000) {
+        clearInterval(checkInterval);
+        if (this.currentUser) {
+          this.autoFillOrderDetails();
+        }
+      }
+    }, 100);
+  }
+
+  async autoFillOrderDetails() {
+    if (!this.currentUser) {
+      return;
+    }
+
+    try {
+      const profile = typeof getUserProfile === 'function'
+        ? await getUserProfile(this.currentUser.uid)
+        : null;
+
+      if (profile) {
+        const nameInput = document.getElementById('scheduled-name');
+        const phoneInput = document.getElementById('scheduled-phone');
+        const addressInput = document.getElementById('scheduled-address');
+
+        if (nameInput && profile.name) {
+          nameInput.value = profile.name;
+        }
+        if (phoneInput && profile.phone) {
+          phoneInput.value = profile.phone;
+        }
+        if (addressInput && profile.address) {
+          addressInput.value = profile.address;
+        }
+      } else {
+        // Profile not found - user needs to complete their profile
+        console.warn('User profile not found. User may need to complete their profile.');
+      }
+    } catch (error) {
+      console.error('Error auto-filling order details:', error);
+      // Show subtle notification that auto-fill failed
+      this.showMessage('Could not load your saved details. Please enter manually.', 'info');
+    }
   }
 
   initAdminPage() {
@@ -1397,6 +1503,167 @@ class CloudKitchenApp {
 
     updateTimeAvailability();
     renderMenu();
+  }
+
+  async handleOrderSubmit(form) {
+    if (!this.currentUser) {
+      this.showMessage('Please log in to place an order.', 'warning');
+      return;
+    }
+
+    const firestore = this.getFirestore();
+    if (!firestore) {
+      this.showMessage('Unable to process your order. Please try again.', 'error');
+      return;
+    }
+
+    // Collect form data
+    const deliveryDate = document.getElementById('delivery-date')?.value;
+    const deliveryTime = document.getElementById('delivery-time')?.value;
+    const customerName = document.getElementById('scheduled-name')?.value.trim();
+    const customerPhone = document.getElementById('scheduled-phone')?.value.trim();
+    const customerAddress = document.getElementById('scheduled-address')?.value.trim();
+    const customerPreferences = document.getElementById('scheduled-preferences')?.value.trim();
+    const orderNotes = document.getElementById('order-notes')?.value.trim();
+
+    // Validate required fields
+    if (!deliveryDate || !deliveryTime || !customerName || !customerPhone || !customerAddress) {
+      this.showMessage('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    // Get selected items and calculate total
+    const selections = this.orderMenuData.selection || {};
+    const selectedItems = [];
+    let subtotal = 0;
+
+    Object.entries(selections).forEach(([itemId, selectionData]) => {
+      if (selectionData.quantity && selectionData.quantity > 0) {
+        const lineTotal = selectionData.priceValue * selectionData.quantity;
+        selectedItems.push({
+          itemId,
+          quantity: selectionData.quantity,
+          priceValue: selectionData.priceValue,
+          lineTotal
+        });
+        subtotal += lineTotal;
+      }
+    });
+
+    if (selectedItems.length === 0) {
+      this.showMessage('Please select at least one dish.', 'error');
+      return;
+    }
+
+    const DELIVERY_FEE = 30;
+    const total = subtotal + DELIVERY_FEE;
+
+    // Disable submit button
+    const submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    this.showMessage('Processing your order...');
+
+    try {
+      const timestamp = window.firebase.firestore.FieldValue.serverTimestamp();
+      const orderNumber = Math.floor(100000 + Math.random() * 900000);
+
+      const orderPayload = {
+        userId: this.currentUser.uid,
+        customerName,
+        customerPhone,
+        customerAddress,
+        customerPreferences,
+        orderNotes,
+        deliveryDate,
+        deliveryTime,
+        selectedItems,
+        subtotal,
+        deliveryFee: DELIVERY_FEE,
+        total,
+        status: 'Pending',
+        orderNumber,
+        createdAt: timestamp,
+        updatedAt: timestamp
+      };
+
+      // Save order to Firestore
+      await firestore.collection('orders').add(orderPayload);
+
+      // Decrement remaining capacity for each selected item using batch write
+      // This ensures atomic updates - all succeed or all fail together
+      const batch = firestore.batch();
+      for (const item of selectedItems) {
+        const itemRef = firestore.collection('menuItems').doc(item.itemId);
+        batch.update(itemRef, {
+          remainingCapacity: window.firebase.firestore.FieldValue.increment(-item.quantity)
+        });
+      }
+      
+      // Commit all capacity updates atomically
+      await batch.commit();
+
+      this.showMessage('Order placed successfully! Your order number is #' + orderNumber, 'success');
+      
+      // Show confirmation modal
+      this.showOrderConfirmationModal(orderNumber, total, deliveryDate, deliveryTime);
+      
+      // Reset form after a short delay
+      setTimeout(() => {
+        form.reset();
+        window.location.href = './index.html';
+      }, 3000);
+    } catch (error) {
+      console.error('Order submission error:', error);
+      this.showMessage('Unable to place order. Please try again.', 'error');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  }
+
+  showOrderConfirmationModal(orderNumber, total, deliveryDate, deliveryTime) {
+    const modal = document.getElementById('orderConfirmationModal');
+    if (!modal) return;
+
+    // Format delivery date
+    const dateLabel = this.formatFullDate(deliveryDate) || deliveryDate;
+
+    // Populate modal fields
+    const orderNumberEl = document.getElementById('confirmationOrderNumber');
+    if (orderNumberEl) orderNumberEl.textContent = '#' + orderNumber;
+
+    const totalEl = document.getElementById('confirmationTotal');
+    if (totalEl) totalEl.textContent = this.formatCurrency(total) || `₹${total.toFixed(2)}`;
+
+    const dateEl = document.getElementById('confirmationDeliveryDate');
+    if (dateEl) dateEl.textContent = dateLabel;
+
+    const timeEl = document.getElementById('confirmationDeliveryTime');
+    if (timeEl) {
+      const timeLabel = deliveryTime === 'Lunch' ? 'Lunch (13:00 - 14:00)' : 'Dinner (19:00 - 20:00)';
+      timeEl.textContent = timeLabel;
+    }
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Setup close button
+    const closeBtn = document.getElementById('closeConfirmationBtn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        window.location.href = './index.html';
+      });
+    }
+
+    // Close modal on backdrop click
+    const backdrop = modal.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        window.location.href = './index.html';
+      });
+    }
   }
 
   handleAuthError(error) {

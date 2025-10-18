@@ -13,6 +13,24 @@
     state.unsubscribers = [];
   };
 
+  const handleOrderStatusChange = async (db, orderId, newStatus) => {
+    if (!orderId || !newStatus) return;
+
+    try {
+      const timestamp = window.firebase.firestore.FieldValue.serverTimestamp();
+      
+      await db.collection("orders").doc(orderId).update({
+        status: newStatus,
+        updatedAt: timestamp
+      });
+
+      console.log(`Order ${orderId} status updated to: ${newStatus}`);
+    } catch (error) {
+      console.error("Failed to update order status:", error);
+      alert("Failed to update order status. Please try again.");
+    }
+  };
+
   const formatOrdersSummary = (orders) => {
     if (!orders.length) return "";
     const counts = orders.reduce(
@@ -92,15 +110,51 @@
 
           const footer = document.createElement("footer");
           footer.className = "order-footer";
-          const statusSpan = document.createElement("span");
-          statusSpan.className = "status";
-          const status = (order.status || "").toLowerCase();
-          if (status.includes("ready")) statusSpan.classList.add("status--success");
-          else if (status.includes("prepar")) statusSpan.classList.add("status--warning");
-          else if (status.includes("pending")) statusSpan.classList.add("status--info");
-          statusSpan.textContent = order.status || "";
+          
+          // Create status dropdown
+          const statusSelect = document.createElement("select");
+          statusSelect.className = "order-status-select";
+          statusSelect.dataset.orderId = order.id;
+          
+          const statusOptions = [
+            { value: "Pending", label: "Pending", class: "status--info" },
+            { value: "Confirmed", label: "Confirmed", class: "status--info" },
+            { value: "Preparing", label: "Preparing", class: "status--warning" },
+            { value: "Prepared", label: "Prepared", class: "status--success" },
+            { value: "Out for Delivery", label: "Out for Delivery", class: "status--warning" },
+            { value: "Delivered", label: "Delivered", class: "status--success" },
+            { value: "Cancelled", label: "Cancelled", class: "status--error" }
+          ];
+          
+          const currentStatus = order.status || "Pending";
+          statusOptions.forEach((option) => {
+            const optionEl = document.createElement("option");
+            optionEl.value = option.value;
+            optionEl.textContent = option.label;
+            if (option.value === currentStatus) {
+              optionEl.selected = true;
+            }
+            statusSelect.appendChild(optionEl);
+          });
+          
+          // Add change event listener
+          statusSelect.addEventListener("change", (e) => {
+            handleOrderStatusChange(db, order.id, e.target.value);
+          });
+          
+          // Add status indicator class
+          const status = (currentStatus || "").toLowerCase();
+          if (status.includes("delivered") || status.includes("prepared")) {
+            statusSelect.classList.add("status--success");
+          } else if (status.includes("prepar") || status.includes("delivery")) {
+            statusSelect.classList.add("status--warning");
+          } else if (status.includes("cancelled")) {
+            statusSelect.classList.add("status--error");
+          } else {
+            statusSelect.classList.add("status--info");
+          }
 
-          footer.appendChild(statusSpan);
+          footer.appendChild(statusSelect);
 
           card.append(header, customer, footer);
           ordersListEl.appendChild(card);
@@ -144,14 +198,13 @@
 
   const attachMenuManagement = (db) => {
     const listEl = document.getElementById("menuItems");
-    const capacityEl = document.getElementById("prepCapacity");
     const formEl = document.getElementById("menuItemForm");
     const submitBtn = document.getElementById("menuItemSubmit");
     const feedbackEl = document.getElementById("menuItemFeedback");
     const focusBtn = document.getElementById("menuItemFormFocus");
     const dateInput = document.getElementById("menuItemDate");
 
-    if (!listEl && !capacityEl && !formEl) return;
+    if (!listEl && !formEl) return;
 
     const setFeedback = (message = "", state = "info") => {
       if (!feedbackEl) return;
@@ -198,8 +251,58 @@
         return;
       }
 
+      // Filter items: keep only yesterday onwards (yesterday + today + future)
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      const yesterdayKey = yesterday.toISOString().slice(0, 10);
+      const cutoffTime = yesterday.getTime();
+
+      const filteredItems = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
+        let itemDate = null;
+
+        // Get the date from availableDate or availableDateString
+        if (data.availableDate) {
+          itemDate = typeof data.availableDate.toDate === 'function' 
+            ? data.availableDate.toDate() 
+            : new Date(data.availableDate);
+        } else if (data.availableDateString) {
+          itemDate = new Date(`${data.availableDateString}T00:00:00`);
+        }
+
+        // Only include items from yesterday onwards
+        if (itemDate && itemDate.getTime() >= cutoffTime) {
+          filteredItems.push({ id: doc.id, ...data });
+        }
+      });
+
+      if (filteredItems.length === 0) {
+        listEl.innerHTML = '<p class="text-subtle">No upcoming dishes. Add items for tomorrow or later.</p>';
+        return;
+      }
+
+      // Sort by date, then by name
+      filteredItems.sort((a, b) => {
+        const getTime = (item) => {
+          if (item.availableDate) {
+            return typeof item.availableDate.toDate === 'function'
+              ? item.availableDate.toDate().getTime()
+              : new Date(item.availableDate).getTime();
+          }
+          return new Date(`${item.availableDateString || '9999-12-31'}T00:00:00`).getTime();
+        };
+        const timeA = getTime(a);
+        const timeB = getTime(b);
+        if (timeA !== timeB) return timeA - timeB;
+        return (a.name || '').localeCompare(b.name || '');
+      });
+
+      filteredItems.forEach((data) => {
         const item = document.createElement("article");
         item.className = "menu-item-card";
         item.setAttribute("role", "listitem");
@@ -385,8 +488,7 @@
     }
 
     state.unsubscribers.push(
-      db.collection("menuItems").orderBy("name").onSnapshot(renderMenuItems),
-      db.collection("prepCapacity").orderBy("label").onSnapshot(renderCapacity)
+      db.collection("menuItems").orderBy("name").onSnapshot(renderMenuItems)
     );
   };
 
@@ -800,8 +902,6 @@
       attachMenuManagement(db);
     } else if (page === "messaging") {
       attachMessaging(db);
-    } else if (page === "reports") {
-      attachReports(db);
     }
   };
 

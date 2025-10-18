@@ -26,7 +26,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <!-- Firebase Config -->
-  <script src="./js/auth.js"></script>
+  <script src="./js/auth.js" defer></script>
   </head>
   <body data-page="order">
     <a
@@ -243,7 +243,45 @@
     <!-- Notification container -->
     <div id="notification"></div>
 
+    <!-- Order confirmation modal -->
+    <div id="orderConfirmationModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Order Confirmed! 🎉</h2>
+        </div>
+        <div class="modal-body">
+          <div class="confirmation-icon">✓</div>
+          <p class="confirmation-message">Your order has been placed successfully!</p>
+          <div class="confirmation-details">
+            <div class="detail-row">
+              <span class="detail-label">Order Number:</span>
+              <span class="detail-value" id="confirmationOrderNumber">#-</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Total Amount:</span>
+              <span class="detail-value" id="confirmationTotal">₹0</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Delivery Date:</span>
+              <span class="detail-value" id="confirmationDeliveryDate">-</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Delivery Time:</span>
+              <span class="detail-value" id="confirmationDeliveryTime">-</span>
+            </div>
+          </div>
+          <p class="confirmation-note">We'll send you updates on your order. You can track your order in your account.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn--primary btn--full-width" id="closeConfirmationBtn">
+            Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/theme.js"></script>
-    <script src="./js/app.js"></script>
+    <script src="./js/app.js" defer></script>
   </body>
 </html>
